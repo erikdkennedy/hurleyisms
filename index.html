@@ -15,6 +15,11 @@
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="css/styles.css">
 
+        <!-- ICONS -->
+        <link rel="icon" type="image/x-icon" href="img/favicon.ico" sizes="32x32" />
+        <link rel="apple-touch-icon" sizes="120x120" href="img/apple-touch-icon-120.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon-180.png" />
+
         <!-- FONTS -->
         <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
 
@@ -47,8 +52,8 @@
             </header>
             <div class="submit__container">
                 <div class="form-control">
-                    <label for="the-line">The Line</label>
-                    <textarea id="the-line" placeholder="Give me that look you did 5 shots ago– it was amazing!"></textarea>
+                    <label for="the-line">The Line <span class="form-control__label-hint"><span class="char-remaining"></span> characters remaining</span></label>
+                    <textarea id="the-line" placeholder="Give me that look you did 5 shots ago– it was amazing!" maxlength=250></textarea>
                 </div>
                 <div class="form-control form-control--audience">
                     <p class="form-control__label">The Audience <span class="form-control__label-hint">Select all that apply</span></p>

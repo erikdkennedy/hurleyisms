@@ -22,6 +22,13 @@ $tablet-padding: 20px;
 			 HTML ELEMENTS
 *****************************************/
 
+
+html,
+body,
+section {
+	height: 100%;
+}
+
 body {
 	font-family: "Roboto", sans-serif;
 	font-size: 17px;
@@ -234,17 +241,18 @@ section {
 		padding-bottom: 3px;
 	}
 
-		.error {
-			font-size: 15px;
-			font-weight: 600;
-			color: $red;
-		}
-
 		.form-control__label-hint {
 			float: right;
 			font-size: 15px;
 			line-height: 25px;
 			opacity: .3;
+		}
+
+		.error {
+			font-size: 15px;
+			font-weight: 600;
+			color: $red;
+			opacity: 1;
 		}
 
 	input[type=text] {
@@ -302,7 +310,6 @@ section {
 section.splash {
 	position: relative;
 	padding: $mobile-padding;
-	height: 100vh;
 }
 
 	.splash__title {
@@ -489,7 +496,6 @@ section.splash {
 
 section.lines {
 	position: relative;
-	height: 100vh;
 }
 
 	.lines__header {

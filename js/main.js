@@ -103,6 +103,21 @@ $(document).ready(function() {
 	var lastRepaintTime;
 	var charCountOfDisplayedLines;
 
+	function displayTextareaCharRemaining() {
+		var $textarea = $("section.submit textarea");
+		var charLimit = $textarea.attr("maxlength");
+		var charTyped = $textarea.val().length;
+		var charRemaining = charLimit - charTyped;
+		var noCharRemaining = charRemaining < 1;
+
+		$("section.submit .char-remaining").text(charRemaining);
+		$("section.submit label[for=the-line] .form-control__label-hint")
+				.toggleClass("error", noCharRemaining);
+	}
+
+	//submit-a-line init
+	displayTextareaCharRemaining();
+
 
 
 
@@ -145,6 +160,11 @@ $(document).ready(function() {
 	//close this page
 	$("section.submit a.close").click(function() {
 		changeScreen("splash");
+	});
+
+	//type a line
+	$("section.submit textarea").keyup(function() {
+		displayTextareaCharRemaining();
 	});
 
 	//submit a line
@@ -389,6 +409,7 @@ $(document).ready(function() {
 	$("section.lines a.close").click(function() {
 		changeScreen("splash");
 		resetProgressBar();
+		$(".pause").removeClass("is-paused");
 	});
 
 	//click thumbs up/down

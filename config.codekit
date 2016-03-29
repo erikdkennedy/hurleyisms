@@ -54,6 +54,28 @@
 		"shouldRunBless": 0,
 		"useLibsass": 0
 		},
+	"\/img\/apple-touch-icon-120.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 850,
+		"inputAbbreviatedPath": "\/img\/apple-touch-icon-120.png",
+		"outputAbbreviatedPath": "\/img\/apple-touch-icon-120.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/img\/apple-touch-icon-180.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 1458,
+		"inputAbbreviatedPath": "\/img\/apple-touch-icon-180.png",
+		"outputAbbreviatedPath": "\/img\/apple-touch-icon-180.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
 	"\/img\/close.png": {
 		"fileType": 32768,
 		"ignore": 0,
@@ -61,6 +83,17 @@
 		"initialSize": 289,
 		"inputAbbreviatedPath": "\/img\/close.png",
 		"outputAbbreviatedPath": "\/img\/close.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/img\/favicon.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 156,
+		"inputAbbreviatedPath": "\/img\/favicon.png",
+		"outputAbbreviatedPath": "\/img\/favicon.png",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"processed": 0

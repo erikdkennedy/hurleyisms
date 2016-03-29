@@ -4,6 +4,11 @@
 /*****************************************
 			 HTML ELEMENTS
 *****************************************/
+html,
+body,
+section {
+  height: 100%; }
+
 body {
   font-family: "Roboto", sans-serif;
   font-size: 17px; }
@@ -150,15 +155,16 @@ section {
     display: block;
     margin: 0;
     padding-bottom: 3px; }
-  .form-control .error, .form-control--setting .error {
-    font-size: 15px;
-    font-weight: 600;
-    color: #BA3D48; }
   .form-control .form-control__label-hint, .form-control--setting .form-control__label-hint {
     float: right;
     font-size: 15px;
     line-height: 25px;
     opacity: .3; }
+  .form-control .error, .form-control--setting .error {
+    font-size: 15px;
+    font-weight: 600;
+    color: #BA3D48;
+    opacity: 1; }
   .form-control input[type=text], .form-control--setting input[type=text] {
     width: 100%;
     height: 44px; }
@@ -195,8 +201,7 @@ section {
 *****************************************/
 section.splash {
   position: relative;
-  padding: 5px;
-  height: 100vh; }
+  padding: 5px; }
 
 .splash__title {
   text-indent: 100%;
@@ -350,8 +355,7 @@ section.splash {
     text-align: center; }
 
 section.lines {
-  position: relative;
-  height: 100vh; }
+  position: relative; }
 
 .lines__header {
   display: -webkit-box;
