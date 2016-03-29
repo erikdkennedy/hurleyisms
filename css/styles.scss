@@ -489,7 +489,6 @@ section.splash {
 
 section.lines {
 	position: relative;
-	margin-bottom: 90px;
 	height: 100vh;
 }
 
@@ -516,12 +515,13 @@ section.lines {
 		}
 
 	#lines {
-		margin: -15px auto 0;
+		margin: -15px auto 86px;
 		max-width: 800px;
 		padding: 0 15px;
 
 		@media ($tablet) {
 			margin-top: 0;
+			margin-bottom: 0;
 			padding: 15px;
 		}
 	}
@@ -669,8 +669,13 @@ section.lines {
 				}
 			}
 
-			.prev > img {
-				right: 15px;
+			.prev {
+				pointer-events: none;
+
+				> img {
+					right: 15px;
+					visibility: hidden;
+				}
 			}
 
 			.next > img {
@@ -698,7 +703,7 @@ section.lines {
 		left: 0;
 		right: 0;
 		height: 10px;
-		background-color: rgba(black, .1);
+		background-color: #ddd;
 	}
 
 		#progress-bar__fill {

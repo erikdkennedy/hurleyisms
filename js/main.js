@@ -271,20 +271,33 @@ $(document).ready(function() {
 	}
 
 	function determineIfNoMoreLinesFit($lastLine) {
-		var lastLineBounds = $lastLine[0].getBoundingClientRect();
-		var footerContentHeight = $(".lines__footer").height() + $("#progress-bar").height();
-		var heightForLines = window.innerHeight - footerContentHeight;
-
-		if ((lastLineBounds.bottom) > heightForLines) {
-
+		if (lineOverlapsFooter($lastLine)) {
 			if (isMobile()) {
-				//TODO fit mobile line
+				shrinkLineUntilItFits($lastLine);
 			} else {
 				$lastLine.remove();
 			}
 			return true;
 		} else {
 			return false;
+		}
+	}
+
+	function lineOverlapsFooter($line) {
+		var lastLineBounds = $line[0].getBoundingClientRect();
+		var footerContentHeight = $(".lines__footer").height() + $("#progress-bar").height();
+		var heightForLines = window.innerHeight - footerContentHeight;
+
+		return lastLineBounds.bottom > heightForLines;
+	}
+
+	function shrinkLineUntilItFits($line) {
+		var fontSizeString = $line.children(".line__text").css("font-size");
+		var fontSize = parseInt(fontSizeString, 10);
+
+		while (lineOverlapsFooter($line)) {
+			fontSize -= 2;
+			$line.children(".line__text").css("font-size", fontSize);
 		}
 	}
 
@@ -321,7 +334,7 @@ $(document).ready(function() {
 
 		if (newPercentage > 100) {
 			newPercentage = 0;
-			flipToNextPage();
+			displayNewPageOfLines();
 		}
 
 		var newPercentageString = newPercentage + "%";
@@ -342,14 +355,34 @@ $(document).ready(function() {
 		return oldPercentage + delta;
 	}
 
-	function flipToNextPage() {
+	function displayNewPageOfLines() {
 		resetLineRatings();
+		removeLineResizing();
 		writeNewLines();
 		scrollToElement( $("body") );
 	}
 
 	function resetLineRatings() {
 		$(".thumbs-up.active, .thumbs-down.active").removeClass("active");
+	}
+
+	function removeLineResizing() {
+		$("#lines .line__text").removeAttr("style");
+	}
+
+	//swipe left (mobile)
+	$(window).on("swipeleft", function() {
+		flipToNextPage();
+	});
+
+	function flipToNextPage() {
+		resetProgressBar();
+		$progressBarFill.width(0);
+		displayNewPageOfLines();
+
+		if (!$(".pause").hasClass("is-paused")) {
+			startProgressBar();
+		}
 	}
 
 	//stop this session
@@ -372,8 +405,6 @@ $(document).ready(function() {
 		progressBarSpeed = $(this).val();
 	});
 
-	//TODO previous page - add event listener
-
 	//pause session
 	$(".pause").click(function() {
 		$(this).toggleClass("is-paused");
@@ -387,12 +418,6 @@ $(document).ready(function() {
 
 	//flip to next page
 	$(".next").click(function() {
-		resetProgressBar();
-		$progressBarFill.width(0);
 		flipToNextPage();
-
-		if (!$(".pause").hasClass("is-paused")) {
-			startProgressBar();
-		}
 	});
 });

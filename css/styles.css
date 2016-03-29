@@ -351,7 +351,6 @@ section.splash {
 
 section.lines {
   position: relative;
-  margin-bottom: 90px;
   height: 100vh; }
 
 .lines__header {
@@ -382,12 +381,13 @@ section.lines {
   height: 40px; }
 
 #lines {
-  margin: -15px auto 0;
+  margin: -15px auto 86px;
   max-width: 800px;
   padding: 0 15px; }
   @media (min-width: 569px) {
     #lines {
       margin-top: 0;
+      margin-bottom: 0;
       padding: 15px; } }
 
 .line {
@@ -530,8 +530,11 @@ section.lines {
       -webkit-transform: translateY(-50%);
               transform: translateY(-50%); }
 
-  .prev > img {
-    right: 15px; }
+  .prev {
+    pointer-events: none; }
+    .prev > img {
+      right: 15px;
+      visibility: hidden; }
 
   .next > img {
     left: 15px;
@@ -551,7 +554,7 @@ section.lines {
   left: 0;
   right: 0;
   height: 10px;
-  background-color: rgba(0, 0, 0, 0.1); }
+  background-color: #ddd; }
 
 #progress-bar__fill {
   height: 100%;
