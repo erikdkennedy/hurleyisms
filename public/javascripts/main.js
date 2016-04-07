@@ -2,8 +2,12 @@ $(document).ready(function() {
 	/*****************************************
 				  HELPERS & INIT
 	*****************************************/
-
     var cachedLines = [];
+    $.getJSON('http://localhost:3000/data', function (data) {
+        cachedLines = data;
+        
+    });
+   
 
 	var audienceTypes = {
 		MEN: 0,
@@ -47,12 +51,8 @@ $(document).ready(function() {
 	//start session button
 	$("a.begin-session").click(function() {
 		audience = Number($(this).attr("data-audience-type"));
-		$.getJSON('http://localhost:3000/data', function (data) {
-		    cachedLines = data;
-		    changeScreen("lines");
-		    startPlay();
-		});
-		
+		changeScreen("lines");
+		startPlay();
 	});
 
 	//flip rating switch

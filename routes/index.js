@@ -9,8 +9,7 @@ router.get('/', function(req, res, next) {
 router.get('/data', function (req, res) {
     console.log("got here");
     Lines.find({}, function(err,results){
-        console.log(results);
-        res.json(results);
+          res.json(results);
     });
    
 });
