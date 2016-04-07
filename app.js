@@ -56,5 +56,9 @@ app.use(function(err, req, res, next) {
   });
 });
 
-
+//Load initial data
+function load(){
+    require('./models/loaddefaults');
+}
+}
 module.exports = app;
