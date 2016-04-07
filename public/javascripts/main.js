@@ -3,12 +3,9 @@ $(document).ready(function() {
 				  HELPERS & INIT
 	*****************************************/
     var cachedLines = [];
-    $.getJSON('http://localhost:3000/data', function (data) {
-        cachedLines = data;
-        
-    });
-   
-
+    
+    var profanity = false;
+    
 	var audienceTypes = {
 		MEN: 0,
 		WOMEN: 1,
@@ -41,9 +38,21 @@ $(document).ready(function() {
 	//submit-a-line init
 	displayTextareaCharRemaining();
 
-
-
-
+    /*****************************************
+                   DataAccess 
+    *****************************************/
+	function updateCache(callback)
+	{
+	    $.getJSON('http://localhost:3000/data/' + audience + '/' + profanity, function (data) {
+	        cachedLines = data;
+	        callback();
+	    });
+	}
+	function sendLine(line, callback) {
+	    $.post('http://localhost:3000/data/',line, function (data) {
+	        callback();
+	    });
+	}
 	/*****************************************
 			   LISTENERS - SPLASH
 	*****************************************/
@@ -51,13 +60,17 @@ $(document).ready(function() {
 	//start session button
 	$("a.begin-session").click(function() {
 		audience = Number($(this).attr("data-audience-type"));
-		changeScreen("lines");
-		startPlay();
+		updateCache(function () {
+		    changeScreen("lines");
+		    startPlay();
+		});
+		
 	});
 
 	//flip rating switch
 	$(".switch").click(function() {
-		$(this).toggleClass("active");
+	    $(this).toggleClass("active");
+	    profanity = $(this).hasClass("active");
 	});
 
 	//new line btn
@@ -106,13 +119,26 @@ $(document).ready(function() {
 		}
 
 		if ($(".error").length === 0) {
-			resetSubmitForm();
+		    sendNewLine(function () {
+		        resetSubmitForm();
+		    });
 		} else {
 			var $firstError = $(".error").first();
 			scrollToElement($firstError);
 		}
+		
 	});
-
+	function sendNewLine(callback)
+	{
+	    var line = {};
+	    line.line = $("#the-line").val();
+	    line.men = $('#audience-men').is(':checked');
+	    line.women = $('#audience-woman').is(':checked');
+	    line.kids = $('#audience-kids').is(':checked');
+	    line.profanity = $('#switch-pg').hasClass("active");
+	    line.author = $("#your-name").val();
+	    sendLine(line, callback);
+	}
 	function resetSubmitForm() {
 		$(".line-added").addClass("fade-in");
 		$("#the-line").val("");
@@ -166,14 +192,14 @@ $(document).ready(function() {
 
 		var $divForLine = $("main .line").first();
 
-		for (var i=0; i<maxNumLines; i++) {
+		for (var i=0; i<maxNumLines && i<cachedLines.length; i++) {
 			var line;
 
 			while (1) {
 				line = getRandomLine(); //TODO filter by audience, profanity, and rating
 
-				if (objNotInArray(line.id, usedIDs)) {
-					usedIDs.push(line.id);
+				if (objNotInArray(line._id, usedIDs)) {
+					usedIDs.push(line._id);
 					lines.push(line);
 					break;
 				}

@@ -6,12 +6,30 @@ var Lines = mongoose.model('Line');
 router.get('/', function(req, res, next) {
     res.sendFile('public/index.html');
 });
-router.get('/data', function (req, res) {
+router.get('/data/:audience/:profanity', function (req, res) {
     console.log("got here");
-    Lines.find({}, function(err,results){
-          res.json(results);
+    console.log("audience " + req.params.audience);
+    query = { kids: true };
+    switch(Number(req.params.audience))
+    {
+        case 0:
+            query = { men: true };
+            console.log("men");
+            break;
+        case 1:
+            query = { women: true };
+            console.log("women");
+            break;
+        case 2:
+            query = { kids: true };
+            console.log("kids");
+    }
+    var profanity = JSON.parse(req.params.profanity);
+    query.profanity = profanity;
+    Lines.find(query, function(err,results){
+        console.log("query returned "+results.length)
+        res.json(results);
     });
-   
 });
 router.post('/data', function (req, res) {
     console.log('we got to the post');
