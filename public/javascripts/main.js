@@ -43,13 +43,18 @@ $(document).ready(function() {
     *****************************************/
 	function updateCache(callback)
 	{
-	    $.getJSON('http://localhost:3000/data/' + audience + '/' + profanity, function (data) {
+	    $.getJSON('/data/' + audience + '/' + profanity, function (data) {
 	        cachedLines = data;
 	        callback();
 	    });
 	}
 	function sendLine(line, callback) {
-	    $.post('http://localhost:3000/data/',line, function (data) {
+	    $.post('/add',line, function (data) {
+	        callback();
+	    });
+	}
+	function rate(id, rating, callback) {
+	    $.getJSON('/rate/' + id + '/' + rating, function (data) {
 	        callback();
 	    });
 	}
@@ -132,9 +137,9 @@ $(document).ready(function() {
 	{
 	    var line = {};
 	    line.line = $("#the-line").val();
-	    line.men = $('#audience-men').is(':checked');
-	    line.women = $('#audience-woman').is(':checked');
-	    line.kids = $('#audience-kids').is(':checked');
+	    line.men = $('#audience-men').is(":checked");
+	    line.women = $('#audience-women').is(":checked");
+	    line.kids = $('#audience-kids').is(":checked");
 	    line.profanity = $('#switch-pg').hasClass("active");
 	    line.author = $("#your-name").val();
 	    sendLine(line, callback);
@@ -237,6 +242,7 @@ $(document).ready(function() {
 	function writeLineToDiv(line, $div) {
 		$div.find(".line__text").html(line.line);
 		$div.find(".line__byline .author").text(line.author);
+		$div.attr("name", line._id);
 	}
 
 	function determineIfNoMoreLinesFit($lastLine) {
@@ -363,11 +369,15 @@ $(document).ready(function() {
 
 	//click thumbs up/down
 	$(document).on("click", ".thumbs-up, .thumbs-down", function() {
-		$(this).toggleClass("active");
-
-		if ($(this).hasClass("active")) {
-			$(this).siblings(".btn.active").removeClass("active");
-		}
+	    var id = $(this).parents(".line").attr("name");
+	    var rating = $(this).hasClass("thumbs-up");
+	    var elem = $(this);
+	    rate(id, rating, function () {
+	        elem.toggleClass("active");
+	        if (elem.hasClass("active")) {
+	            elem.siblings(".btn.active").removeClass("active");
+	        }
+	    });
 	});
 
 	//change speed

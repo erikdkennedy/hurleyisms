@@ -7,7 +7,7 @@ var lineSchema = new mongoose.Schema(
     kids: Boolean,
     profanity: Boolean,
     rating: { type: Number, "default": 0 },
-    author: {type: String, required:true}
+    author: {type: String}
 });
 console.log("defining schema");
 mongoose.model('Line', lineSchema);

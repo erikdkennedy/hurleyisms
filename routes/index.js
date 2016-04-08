@@ -31,15 +31,24 @@ router.get('/data/:audience/:profanity', function (req, res) {
         res.json(results);
     });
 });
-router.post('/data', function (req, res) {
-    console.log('we got to the post');
+router.post('/add', function (req, res) {
+    console.log("vote called");
     Lines.create(req.body, function (err, result) {
         console.log("err:" + err);
         console.log("result:" + result);
         sendJSONresponse(res, 200, result)
     });
 });
-
+router.get('/rate/:lineid/:vote', function (req, res) {
+    console.log("vote called");
+    Lines.findById(req.params.lineid).exec(function (err, line) {
+        if (req.params.vote === "true") line.rating++;
+        else line.rating--;
+        line.save(function (err, line) {
+            sendJSONresponse(res, 200, line);
+        });
+    });
+});
 var sendJSONresponse = function (res, status, content) {
     res.status(status);
     res.json(content);
