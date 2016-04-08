@@ -1,6 +1,7 @@
 ﻿var mongoose = require('mongoose');
 var gracefulShutdown;
-var dbURI = 'mongodb://hurleyisms_user:BWgxm%cLA!6I@52.38.68.79:27017/hurleyisms';
+//var dbURI = 'mongodb://hurleyisms_user:BWgxm%cLA!6I@52.38.68.79:27017/hurleyisms';
+var dbURI = process.env.MONGODBSTRING;
 mongoose.connect(dbURI);
 mongoose.connection.on('connected', function () {
     console.log('Mongoose connected to ' + dbURI);
