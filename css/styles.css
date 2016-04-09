@@ -564,3 +564,32 @@ section.lines {
   height: 100%;
   width: 0%;
   background-color: #FFA100; }
+
+/*****************************************
+			   ADMIN PAGE
+*****************************************/
+#admin-table {
+  border-collapse: collapse; }
+  #admin-table th {
+    text-align: left; }
+  #admin-table th,
+  #admin-table td {
+    border: 1px solid #ddd; }
+  #admin-table .btn, #admin-table .btn--green, #admin-table .form-control .checkbox-list input[type=checkbox] + label, .form-control .checkbox-list #admin-table input[type=checkbox] + label, #admin-table .form-control--setting .checkbox-list input[type=checkbox] + label, .form-control--setting .checkbox-list #admin-table input[type=checkbox] + label {
+    padding: 5px 10px;
+    height: 35px;
+    letter-spacing: 0;
+    opacity: .8; }
+    #admin-table .btn:hover, #admin-table .btn--green:hover, #admin-table .form-control .checkbox-list input[type=checkbox] + label:hover, .form-control .checkbox-list #admin-table input[type=checkbox] + label:hover, #admin-table .form-control--setting .checkbox-list input[type=checkbox] + label:hover, .form-control--setting .checkbox-list #admin-table input[type=checkbox] + label:hover {
+      opacity: 1; }
+    #admin-table .btn:first-child, #admin-table .btn--green:first-child, #admin-table .form-control .checkbox-list input[type=checkbox] + label:first-child, .form-control .checkbox-list #admin-table input[type=checkbox] + label:first-child, #admin-table .form-control--setting .checkbox-list input[type=checkbox] + label:first-child, .form-control--setting .checkbox-list #admin-table input[type=checkbox] + label:first-child {
+      background-color: #308cbb; }
+      #admin-table .btn:first-child.active, #admin-table .btn--green:first-child.active, #admin-table .form-control .checkbox-list input[type=checkbox] + label:first-child.active, .form-control .checkbox-list #admin-table input[type=checkbox] + label:first-child.active, #admin-table .form-control--setting .checkbox-list input[type=checkbox] + label:first-child.active, .form-control--setting .checkbox-list #admin-table input[type=checkbox] + label:first-child.active {
+        background-color: #51B87C;
+        opacity: 1; }
+    #admin-table .btn:last-child, #admin-table .btn--green:last-child, #admin-table .form-control .checkbox-list input[type=checkbox] + label:last-child, .form-control .checkbox-list #admin-table input[type=checkbox] + label:last-child, #admin-table .form-control--setting .checkbox-list input[type=checkbox] + label:last-child, .form-control--setting .checkbox-list #admin-table input[type=checkbox] + label:last-child {
+      background-color: #BA3D48; }
+  #admin-table label {
+    display: inline-block;
+    height: 100%;
+    width: 100%; }

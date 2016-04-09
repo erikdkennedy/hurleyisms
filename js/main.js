@@ -442,3 +442,32 @@ $(document).ready(function() {
 		flipToNextPage();
 	});
 });
+
+
+
+/*****************************************
+			   ADMIN PAGE
+*****************************************/
+
+//click "Approve"
+$("#admin-table .btn:first-child").click(function() {
+	$(this).toggleClass("active");
+
+	if ($(this).hasClass("active")) {
+		$(this).text("Approved");
+	} else {
+		$(this).text("Approve");
+	}
+});
+
+//click "Delete"
+$("#admin-table .btn:last-child").click(function() {
+	window.confirm("Delete this line?  This cannot be undone.");
+});
+
+//TODO click editable field
+
+//ban IP address
+$("#admin-table .ban-ip").click(function() {
+	window.confirm("Ban this IP?  This will also delete all this IP's lines, and cannot be undone.");
+});

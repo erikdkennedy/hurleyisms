@@ -717,3 +717,52 @@ section.lines {
 			width: 0%;
 			background-color: $gold;
 		}
+
+
+
+/*****************************************
+			   ADMIN PAGE
+*****************************************/
+
+#admin-table {
+	border-collapse: collapse;
+
+	th {
+		text-align: left;
+	}
+
+	th,
+	td {
+		border: 1px solid #ddd;
+	}
+
+	.btn {
+		padding: 5px 10px;
+		height: 35px;
+		letter-spacing: 0;
+		opacity: .8;
+
+		&:hover {
+			opacity: 1;
+		}
+
+		&:first-child {
+			background-color: $blue;
+
+			&.active {
+				background-color: $green;
+				opacity: 1;
+			}
+		}
+
+		&:last-child {
+			background-color: $red;
+		}
+	}
+
+	label {
+		display: inline-block;
+		height: 100%;
+		width: 100%;
+	}
+}
