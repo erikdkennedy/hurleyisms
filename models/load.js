@@ -24,7 +24,7 @@ rl.on('line', function (lineText) {
 });
 
 rl.on('close', function () {
-    console.log("Adding "+len(cachedLines)+" lines")
+    console.log("Adding "+cachedLines.length+" lines")
     lineModel.create(cachedLines, function (err, result) {
         console.log("Added Lines ");
         process.exit();
