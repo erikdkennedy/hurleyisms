@@ -2,12 +2,12 @@
 var lineSchema = new mongoose.Schema(
 {
     line: { type: String, required: true },
-    men: Boolean,
-    women: Boolean,
-    kids: Boolean,
-    profanity: Boolean,
+    men: { type: Boolean, require: true },
+    women: { type: Boolean, require: true },
+    kids: { type: Boolean, require: true },
+    profanity: { type: Boolean, require: true },
     rating: { type: Number, "default": 0 },
-    author: {type: String}
+    author: String,
+    dateadded: { type: Date, "default": Date.now }
 });
-console.log("defining schema");
 mongoose.model('Line', lineSchema);

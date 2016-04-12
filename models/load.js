@@ -2,33 +2,34 @@
 require('./db.js');
 var mongoose = require('mongoose');
 var lineModel = mongoose.model('Line');
+const readline = require('readline');
+const fs = require('fs');
+cachedLines = [];
+const rl = readline.createInterface({
+    input: fs.createReadStream("models/hurleyisms.tsv")
+});
 
-var cachedLines = [];
-
-var fs = require('fs');
-var readline = require('readline');
-
-var filename = 'models/hurleyisms.tsv';
-readline.createInterface({
-    input: fs.createReadStream(filename),
-    terminal: false
-}).on('line', function(lineText) {
-   console.log(lineText);
+rl.on('line', function (lineText) {
     var parts = lineText.split("\t");
-    console.log(parts.length)
-    if(parts.length>=7){
-	    line.line = parts[1];
-	    line.men = parts[2].indexOf("X") > -1;
-	    line.women = parts[3].indexOf("X") > -1;
-	    line.kids = parts[4].indexOf("X") > -1;
-	    line.profanity = parts[5].indexOf("X") > -1;
-	    line.author = parts[6];
-	}
-	console.log(parts);
+    if (parts.length >= 21) {
+        line = {};
+        line.line = parts[0];
+        line.men = parts[1].indexOf("X") > -1;
+        line.women = parts[2].indexOf("X") > -1;
+        line.kids = parts[3].indexOf("X") > -1;
+        line.profanity = parts[4].indexOf("X") > -1;
+        line.author = parts[5];
+        cachedLines.push(line);
+    }
 });
 
-lineModel.create(cachedLines, function (err, result) {
-    console.log("Added Lines ");
-    process.exit();
+rl.on('close', function () {
+    console.log("Adding "+len(cachedLines)+" lines")
+    lineModel.create(cachedLines, function (err, result) {
+        console.log("Added Lines ");
+        process.exit();
+    });
 });
+
+
 
