@@ -8,17 +8,29 @@ cachedLines = [];
 const rl = readline.createInterface({
     input: fs.createReadStream("models/hurleyisms.tsv")
 });
-
+function modifyline(line)
+{
+	if(line.indexOf("]") > -1 && line.indexOf("]") > -1)
+	{
+	console.log(line);
+	line = line.replace("[", "<br/><I>-");
+	line = line.replace("]", "</I>");
+	console.log(line);
+	}
+	return line;
+}
 rl.on('line', function (lineText) {
     var parts = lineText.split("\t");
-    if (parts.length >= 21) {
+    if (parts.length >= 1 && !isNaN(parseFloat(parts[0]))) {
+    	//console.log(lineText);
+    	//console.log(parts.length)
         line = {};
-        line.line = parts[0];
-        line.men = parts[1].indexOf("X") > -1;
-        line.women = parts[2].indexOf("X") > -1;
-        line.kids = parts[3].indexOf("X") > -1;
-        line.profanity = parts[4].indexOf("X") > -1;
-        line.author = parts[5];
+        line.line = modifyline(parts[1]);
+        line.men = parts[2].indexOf("X") > -1;
+        line.women = parts[3].indexOf("X") > -1;
+        line.kids = parts[4].indexOf("X") > -1;
+        line.profanity = parts[5].indexOf("X") > -1;
+        line.author = parts[6];
         cachedLines.push(line);
     }
 });
@@ -27,9 +39,11 @@ rl.on('close', function () {
     console.log("Adding "+cachedLines.length+" lines")
     lineModel.create(cachedLines, function (err, result) {
         console.log("Added Lines ");
+        console.log(err);
         process.exit();
     });
 });
+
 
 
 
