@@ -43,10 +43,10 @@
                     <th>Submitted</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
+            <tbody >
+                <tr ng-repeat="line in Lines">
                     <td><a href="#" class="btn">Approve</a> <a href="#" class="btn">Delete</a></td>
-                    <td>Flare your right nostril...<br/><br/>Wait, you did both.  Just the right one</td>
+                    <td>{ Line.line }</td>
                     <td><label><input type="checkbox" checked></label></td>
                     <td><label><input type="checkbox"></label></td>
                     <td><label><input type="checkbox"></label></td>
@@ -80,6 +80,7 @@
             </tbody>
         </table>
         <script src="javascripts/vendor/jquery-1.11.1.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js">
         <script src="javascripts/admin.js"></script>
     </body>
 </html>
