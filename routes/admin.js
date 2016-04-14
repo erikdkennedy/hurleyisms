@@ -2,11 +2,19 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var Lines = mongoose.model('Line');
-/* GET home page. */
-router.get('/', function(req, res, next) {
-    res.sendFile('public/index.html');
-});
+var path = require('path');
+var passport = require('passport');
+var DigestStrategy = require('passport-http').DigestStrategy
 
+router.get('/', function (req, res, next) {
+    res.sendFile(path.join(__dirname,'../public','admin.html'));
+});
+router.get('/data', function (req, res) {
+    lines.find({}, { sort: { dateadded: -1 } }, function (err, allLines) {
+        res.json(allLines);
+    });
+});
+// ****************OLD *******************
 router.get('/data/:audience/:profanity', function (req, res) {
     console.log("got here");
     console.log("audience " + req.params.audience);

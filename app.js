@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 require('./models/db');
 var routes = require('./routes/index');
+var admin = require('./routes/admin');
 var users = require('./routes/users');
 var passport = require('passport');
 var DigestStrategy = require('passport-http').DigestStrategy
@@ -25,6 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use('/', routes);
+app.use('/admin', admin);
 app.use('/users', users);
 
 // catch 404 and forward to error handler
@@ -60,10 +62,11 @@ app.use(function(err, req, res, next) {
 
 
 passport.use(new DigestStrategy({ qop: 'auth' },
-  function(username, done) {
+  function (username, done) {
+      console.log(username);
     var adminuser = process.env.USERNAME;
     var password = process.env.PASSWORD;
-    if(username !== adminuser) throw "password/user is incorrect";
+    if (username !== adminuser) return done({ error: "username not found" });
     return done(null,adminuser, password);
   },
   function(params, done) {
