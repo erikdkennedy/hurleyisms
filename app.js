@@ -7,7 +7,8 @@ var bodyParser = require('body-parser');
 require('./models/db');
 var routes = require('./routes/index');
 var users = require('./routes/users');
-
+var passport = require('passport');
+var DigestStrategy = require('passport-http').DigestStrategy
 var app = express();
 
 // view engine setup
@@ -21,7 +22,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(passport.initialize());
+app.use(passport.session());
 app.use('/', routes);
 app.use('/users', users);
 
@@ -55,5 +57,20 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
+
+passport.use(new DigestStrategy({ qop: 'auth' },
+  function(username, done) {
+    var adminuser = process.env.USERNAME;
+    var password = process.env.PASSWORD;
+    if(username !== adminuser) throw "password/user is incorrect";
+    return done(null,adminuser, password);
+  },
+  function(params, done) {
+    // validate nonces as necessary
+    done(null, true)
+  }
+));
+
 
 module.exports = app;

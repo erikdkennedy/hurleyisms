@@ -3,11 +3,14 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var Lines = mongoose.model('Line');
 var path = require('path');
+var passport = require('passport');
+var DigestStrategy = require('passport-http').DigestStrategy
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
     res.sendFile('public/index.html');
 });
-router.get('/admin', function (req, res, next) {
+router.get('/admin',passport.authenticate('digest', { session: false }), function (req, res, next) {
     res.sendFile(path.join(__dirname,'../public','admin.html'));
 });
 router.get('/data/:audience/:profanity', function (req, res) {
