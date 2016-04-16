@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿<!DOCTYPE html ng-app="hurleyisms">
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
@@ -25,7 +25,7 @@
 
         <script src="javascripts/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
     </head>
-    <body>
+    <body ng-controller="AdminController">
 
         <h1><img src="images/hurleyisms.png" alt="Hurleyisms"></h1>
 
@@ -46,7 +46,7 @@
             <tbody >
                 <tr ng-repeat="line in Lines">
                     <td><a href="#" class="btn">Approve</a> <a href="#" class="btn">Delete</a></td>
-                    <td>{ Line.line }</td>
+                    <td>{{ test }}</td>
                     <td><label><input type="checkbox" checked></label></td>
                     <td><label><input type="checkbox"></label></td>
                     <td><label><input type="checkbox"></label></td>
@@ -80,7 +80,7 @@
             </tbody>
         </table>
         <script src="javascripts/vendor/jquery-1.11.1.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
         <script src="javascripts/admin.js"></script>
     </body>
 </html>
