@@ -1,8 +1,8 @@
-﻿<!DOCTYPE html ng-app="hurleyisms">
+﻿<!DOCTYPE html >
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" > <!--<![endif]-->
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -24,12 +24,15 @@
         <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
 
         <script src="javascripts/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+        <script src="javascripts/vendor/jquery-1.11.1.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+        <script src="javascripts/admin.js"></script>
     </head>
-    <body ng-controller="AdminController">
+    <body ng-app="hurleyisms" >
 
         <h1><img src="images/hurleyisms.png" alt="Hurleyisms"></h1>
 
-        <table id="admin-table">
+        <table id="admin-table" ng-controller="AdminController">
             <thead>
                 <tr>
                     <th>Status</th>
@@ -44,43 +47,19 @@
                 </tr>
             </thead>
             <tbody >
-                <tr ng-repeat="line in Lines">
-                    <td><a href="#" class="btn">Approve</a> <a href="#" class="btn">Delete</a></td>
-                    <td>{{ test }}</td>
-                    <td><label><input type="checkbox" checked></label></td>
-                    <td><label><input type="checkbox"></label></td>
-                    <td><label><input type="checkbox"></label></td>
-                    <td><label><input type="checkbox" checked></label></td>
-                    <td>Peter Hurley</td>
-                    <td>12.345.67.890 <a href="#" class="ban-ip">ban</a></td>
-                    <td>12:34 PM on 1/23/2016</td>
-                </tr>
-                <tr>
-                    <td><a href="#" class="btn">Approve</a> <a href="#" class="btn">Delete</a></td>
-                    <td>Don't get ahead of yourself– you'll get ahead of me!</td>
-                    <td><label><input type="checkbox"></label></td>
-                    <td><label><input type="checkbox" checked></label></td>
-                    <td><label><input type="checkbox"></label></td>
-                    <td><label><input type="checkbox" checked></label></td>
-                    <td>Peter Hurley</td>
-                    <td>12.345.67.890 <a href="#" class="ban-ip">ban</a></td>
-                    <td>12:34 PM on 1/23/2016</td>
-                </tr>
-                <tr>
-                    <td><a href="#" class="btn">Approve</a> <a href="#" class="btn">Delete</a></td>
-                    <td>Look like you WON the marathon.<br/><br/>Now look like you LOST the marathon.</td>
-                    <td><label><input type="checkbox"></label></td>
-                    <td><label><input type="checkbox"></label></td>
-                    <td><label><input type="checkbox" checked></label></td>
-                    <td><label><input type="checkbox" checked></label></td>
-                    <td>Peter Hurley</td>
-                    <td>12.345.67.890 <a href="#" class="ban-ip">ban</a></td>
-                    <td>12:34 PM on 1/23/2016</td>
+                <tr ng-repeat="l in Lines" ng-hide="l.approved">
+                    <td><a href="#" class="btn" ng-click="Approve(l)">Approve</a>
+                    <a href="#" class="btn" ng-click="Delete(l)">Delete</a></td>
+                    <td>{{ l.line }}</td>
+                    <td><label><input type="checkbox" ng-model="l.men" ng-change="Update(l)"></label></td>
+                    <td><label><input type="checkbox" ng-model="l.women" ng-change="Update(l)"></label></td>
+                    <td><label><input type="checkbox" ng-model="l.kids" ng-change="Update(l)"></label></td>
+                    <td><label><input type="checkbox" ng-model="l.profanity" ng-change="Update(l)"></label></td>
+                    <td>{{ l.author }}</td>
+                    <td>{{ l.ipaddress }} <a href="#" class="ban-ip">ban</a></td>
+                    <td>{{ l.dateadded }}</td>
                 </tr>
             </tbody>
         </table>
-        <script src="javascripts/vendor/jquery-1.11.1.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
-        <script src="javascripts/admin.js"></script>
     </body>
 </html>

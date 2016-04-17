@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
-var Lines = mongoose.model('Line');
+var lines = mongoose.model('Line');
 var path = require('path');
 var passport = require('passport');
 var DigestStrategy = require('passport-http').DigestStrategy
@@ -10,54 +10,43 @@ router.get('/', function (req, res, next) {
     res.sendFile(path.join(__dirname,'../public','admin.html'));
 });
 router.get('/data', function (req, res) {
-    lines.find({}, { sort: { dateadded: -1 } }, function (err, allLines) {
+    lines.find({}).sort({ dateadded: -1 }).exec(function (err, allLines) {
+        console.log(allLines);
+        console.log(err);
         res.json(allLines);
     });
 });
-// ****************OLD *******************
-router.get('/data/:audience/:profanity', function (req, res) {
-    console.log("got here");
-    console.log("audience " + req.params.audience);
-    query = { kids: true };
-    switch(Number(req.params.audience))
-    {
-        case 0:
-            query = { men: true };
-            console.log("men");
-            break;
-        case 1:
-            query = { women: true };
-            console.log("women");
-            break;
-        case 2:
-            query = { kids: true };
-            console.log("kids");
-    }
-    var profanity = JSON.parse(req.params.profanity);
-    query.profanity = profanity;
-    Lines.find(query, function(err,results){
-        console.log("query returned "+results.length)
-        res.json(results);
+router.get('/:id/approve', function (req, res) {
+    var id = req.params.id;
+    console.log("call to approve "+id);
+    lines.findByIdAndUpdate(id,{ $set:{approved : true}}, function (err, line) {
+        console.log(line);
+        sendJSONresponse(res, 200, line);
     });
 });
-router.post('/add', function (req, res) {
-    console.log("vote called");
-    Lines.create(req.body, function (err, result) {
-        console.log("err:" + err);
-        console.log("result:" + result);
-        sendJSONresponse(res, 200, result)
+router.get('/:id/delete', function (req, res) {
+    var id = req.params.id;
+    console.log("call to delete " + id);
+    lines.findByIdAndRemove(id, function () {
+        sendJSONresponse(res, 200, { status: "success" });
     });
 });
-router.get('/rate/:lineid/:vote', function (req, res) {
-    console.log("vote called");
-    Lines.findById(req.params.lineid).exec(function (err, line) {
-        if (req.params.vote === "true") line.rating++;
-        else line.rating--;
-        line.save(function (err, line) {
-            sendJSONresponse(res, 200, line);
-        });
+router.post('/update', function (req, res) {
+    var line = req.body;
+    console.log("call to update " + line._id);
+    console.log(line);
+    var id = line._id;
+    //strip the ID and v
+    delete line._id;
+    delete line.v;
+    lines.findByIdAndUpdate(id, { $set: line }, function (err, line) {
+        console.log(err);
+        console.log(line);
+        sendJSONresponse(res, 200, line);
     });
 });
+
+
 var sendJSONresponse = function (res, status, content) {
     res.status(status);
     res.json(content);

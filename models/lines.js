@@ -8,6 +8,8 @@ var lineSchema = new mongoose.Schema(
     profanity: { type: Boolean, require: true },
     rating: { type: Number, "default": 0 },
     author: String,
-    dateadded: { type: Date, "default": Date.now }
+    dateadded: { type: Date, "default": Date.now },
+    ipaddress: { type: String, "default": "" },
+    approved:{type:Boolean, required: true, "default":false}
 });
 mongoose.model('Line', lineSchema);
