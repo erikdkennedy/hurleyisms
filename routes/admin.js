@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var lines = mongoose.model('Line');
+var banlist = mongoose.model('Banlist');
 var path = require('path');
 var passport = require('passport');
 var DigestStrategy = require('passport-http').DigestStrategy
@@ -29,6 +30,15 @@ router.get('/:id/delete', function (req, res) {
     console.log("call to delete " + id);
     lines.findByIdAndRemove(id, function () {
         sendJSONresponse(res, 200, { status: "success" });
+    });
+});
+router.post('/ban', function (req, res) {
+    var line = req.body;
+    console.log("call to ban " + line.ipaddress);
+    banlist.create({ ipaddress: line.ipaddress }, function (err, bannedip) {
+        lines.remove({ ipaddress: line.ipaddress }, function (err) {
+            sendJSONresponse(res, 200, { status: "success" });
+        });
     });
 });
 router.post('/update', function (req, res) {

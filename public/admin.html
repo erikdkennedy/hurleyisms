@@ -56,7 +56,7 @@
                     <td><label><input type="checkbox" ng-model="l.kids" ng-change="Update(l)"></label></td>
                     <td><label><input type="checkbox" ng-model="l.profanity" ng-change="Update(l)"></label></td>
                     <td>{{ l.author }}</td>
-                    <td>{{ l.ipaddress }} <a href="#" class="ban-ip">ban</a></td>
+                    <td>{{ l.ipaddress }} <a href="#" class="ban-ip" ng-click="Ban(l)">ban</a></td>
                     <td>{{ l.dateadded }}</td>
                 </tr>
             </tbody>
