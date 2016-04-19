@@ -9,7 +9,7 @@ var routes = require('./routes/index');
 var admin = require('./routes/admin');
 var users = require('./routes/users');
 var passport = require('passport');
-var DigestStrategy = require('passport-http').DigestStrategy
+var BasicStrategy = require('passport-http').BasicStrategy
 var app = express();
 
 // view engine setup
@@ -61,17 +61,19 @@ app.use(function(err, req, res, next) {
 });
 
 
-passport.use(new DigestStrategy({ qop: 'auth' },
-  function (username, done) {
-      console.log(username);
-    var adminuser = process.env.USERNAME;
-    var password = process.env.PASSWORD;
-    if (username !== adminuser) return done({ error: "username not found" });
-    return done(null,adminuser, password);
-  },
-  function(params, done) {
-    // validate nonces as necessary
-    done(null, true)
+passport.use(new BasicStrategy(
+  function(userid, password, done) {
+    console.log(userid);
+    console.log(password);
+    if(userid === process.env.ADMINUSER &&  password === process.env.ADMINPASSWORD){
+      
+    }
+    User.findOne({ username: userid }, function (err, user) {
+      if (err) { return done(err); }
+      if (!user) { return done(null, false); }
+      if (!user.verifyPassword(password)) { return done(null, false); }
+      return done(null, user);
+    });
   }
 ));
 

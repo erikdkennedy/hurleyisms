@@ -5,9 +5,9 @@ var lines = mongoose.model('Line');
 var banlist = mongoose.model('Banlist');
 var path = require('path');
 var passport = require('passport');
-var DigestStrategy = require('passport-http').DigestStrategy
 
-router.get('/', function (req, res, next) {
+
+router.get('/', passport.authenticate('basic', { session: false }), function (req, res, next) {
     res.sendFile(path.join(__dirname,'../public','admin.html'));
 });
 router.get('/data', function (req, res) {
