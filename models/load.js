@@ -32,6 +32,7 @@ rl.on('line', function (lineText) {
         line.profanity = parts[5].indexOf("X") > -1;
         line.author = parts[6];
         line.ipaddress = "4.2.2.1";
+        line.approved = true;
         cachedLines.push(line);
     }
 });

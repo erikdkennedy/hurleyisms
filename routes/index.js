@@ -31,6 +31,8 @@ router.get('/data/:audience/:profanity', function (req, res) {
         query = { $or: [query, { profanity: profanityOn }] };
     }
     else query.profanity = false;
+    //only show approved
+    query.approved = true;
     console.log(query);
     Lines.find(query, function(err,results){
         console.log("query returned "+results.length)
