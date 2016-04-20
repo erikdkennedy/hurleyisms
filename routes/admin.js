@@ -12,7 +12,6 @@ router.get('/', passport.authenticate('basic', { session: false }), function (re
 });
 router.get('/data', function (req, res) {
     lines.find({}).sort({ dateadded: -1 }).exec(function (err, allLines) {
-        console.log(allLines);
         console.log(err);
         res.json(allLines);
     });

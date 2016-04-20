@@ -26,8 +26,12 @@ router.get('/data/:audience/:profanity', function (req, res) {
             query = { kids: true };
             console.log("kids");
     }
-    var profanity = JSON.parse(req.params.profanity);
-    query.profanity = profanity;
+    var profanityOn = JSON.parse(req.params.profanity);
+    if (profanityOn) {
+        query = { $or: [query, { profanity: profanityOn }] };
+    }
+    else query.profanity = false;
+    console.log(query);
     Lines.find(query, function(err,results){
         console.log("query returned "+results.length)
         res.json(results);

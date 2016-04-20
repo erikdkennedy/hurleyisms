@@ -65,15 +65,14 @@ passport.use(new BasicStrategy(
   function(userid, password, done) {
     console.log(userid);
     console.log(password);
-    if(userid === process.env.ADMINUSER &&  password === process.env.ADMINPASSWORD){
-      
+    if (userid === process.env.ADMINUSER && password === process.env.ADMINPASSWORD) {
+        console.log("password verified");
+        return done(null, { name: "hurley" });
     }
-    User.findOne({ username: userid }, function (err, user) {
-      if (err) { return done(err); }
-      if (!user) { return done(null, false); }
-      if (!user.verifyPassword(password)) { return done(null, false); }
-      return done(null, user);
-    });
+    else {
+        console.log("password rejected");
+        return done(null, false);
+    }
   }
 ));
 
