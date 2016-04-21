@@ -6,8 +6,10 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 require('./models/db');
 var routes = require('./routes/index');
+var admin = require('./routes/admin');
 var users = require('./routes/users');
-
+var passport = require('passport');
+var BasicStrategy = require('passport-http').BasicStrategy
 var app = express();
 
 // view engine setup
@@ -21,8 +23,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(passport.initialize());
+app.use(passport.session());
 app.use('/', routes);
+app.use('/admin', admin);
 app.use('/users', users);
 
 // catch 404 and forward to error handler
@@ -55,5 +59,22 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
+
+passport.use(new BasicStrategy(
+  function(userid, password, done) {
+    console.log(userid);
+    console.log(password);
+    if (userid === process.env.ADMINUSER && password === process.env.ADMINPASSWORD) {
+        console.log("password verified");
+        return done(null, { name: "hurley" });
+    }
+    else {
+        console.log("password rejected");
+        return done(null, false);
+    }
+  }
+));
+
 
 module.exports = app;
