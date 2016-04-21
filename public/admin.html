@@ -50,7 +50,11 @@
                 <tr ng-repeat="l in Lines" ng-hide="l.approved">
                     <td><a href="#" class="btn" ng-click="Approve(l)">Approve</a>
                     <a href="#" class="btn" ng-click="Delete(l)">Delete</a></td>
-                    <td>{{ l.line }}</td>
+                    <td >
+                    <span ng-hide="l.edit" ng-click="l.edit = true">{{ l.line }}</span>
+                    <input type="textbox" ng-show="l.edit" ng-model="l.line"/>
+                    <a href="#" class="btn" ng-show="l.edit" ng-click="Update(l)">Save</a>
+                    </td>
                     <td><label><input type="checkbox" ng-model="l.men" ng-change="Update(l)"></label></td>
                     <td><label><input type="checkbox" ng-model="l.women" ng-change="Update(l)"></label></td>
                     <td><label><input type="checkbox" ng-model="l.kids" ng-change="Update(l)"></label></td>

@@ -11,7 +11,7 @@ router.get('/', passport.authenticate('basic', { session: false }), function (re
     res.sendFile(path.join(__dirname,'../public','admin.html'));
 });
 router.get('/data', function (req, res) {
-    lines.find({}).sort({ dateadded: -1 }).exec(function (err, allLines) {
+    lines.find({ approved: false}).sort({ dateadded: -1 }).exec(function (err, allLines) {
         console.log(err);
         res.json(allLines);
     });
@@ -48,6 +48,7 @@ router.post('/update', function (req, res) {
     //strip the ID and v
     delete line._id;
     delete line.v;
+    line.line = modifyline(line.line);
     lines.findByIdAndUpdate(id, { $set: line }, function (err, line) {
         console.log(err);
         console.log(line);
@@ -55,7 +56,17 @@ router.post('/update', function (req, res) {
     });
 });
 
-
+function modifyline(line)
+{
+    if(line.indexOf("]") > -1 && line.indexOf("]") > -1)
+    {
+    console.log(line);
+    line = line.replace("[", "<br/><I>-");
+    line = line.replace("]", "</I>");
+    console.log(line);
+    }
+    return line;
+}
 var sendJSONresponse = function (res, status, content) {
     res.status(status);
     res.json(content);

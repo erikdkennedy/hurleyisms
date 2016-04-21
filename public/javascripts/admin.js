@@ -18,8 +18,9 @@ angular.module('hurleyisms', [])
           });
       }
       $scope.Update = function (line) {
+          if(line.edit) delete line.edit;
           $http.post('admin/update', line).then(function (data) {
-              line = data.data;
+              $scope.GetLines();
           });
       }
       $scope.Ban = function (line) {
