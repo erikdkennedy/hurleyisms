@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-      "load" : "node ./models/load.js"
-      
+    "load": "node ./models/load.js",
+    "remove-all-lines": "node ./models/removelines"
   },
   "dependencies": {
     "angular": "^1.5.3",
@@ -16,6 +16,8 @@
     "jade": "~1.11.0",
     "mongoose": "^4.4.11",
     "morgan": "~1.6.1",
+    "passport": "^0.3.2",
+    "passport-http": "^0.3.0",
     "serve-favicon": "~2.3.0"
   }
 }

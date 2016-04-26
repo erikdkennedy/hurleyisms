@@ -37,3 +37,4 @@ process.on('SIGTERM', function () {
     });
 });
 require('./lines');
+require('./banlist');
