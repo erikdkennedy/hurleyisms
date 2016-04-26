@@ -561,6 +561,10 @@ section.lines {
 				opacity: .4;
 			}
 
+			.line__vote-buttons {
+				display: none;
+			}
+
 			.line__vote-buttons .btn {
 				@include ir;
 

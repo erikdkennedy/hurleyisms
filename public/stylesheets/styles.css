@@ -426,6 +426,9 @@ section.lines {
   font-size: 20px;
   opacity: .4; }
 
+.line__vote-buttons {
+  display: none; }
+
 .line__vote-buttons .btn, .line__vote-buttons .btn--green, .line__vote-buttons .form-control .checkbox-list input[type=checkbox] + label, .form-control .checkbox-list .line__vote-buttons input[type=checkbox] + label, .line__vote-buttons .form-control--setting .checkbox-list input[type=checkbox] + label, .form-control--setting .checkbox-list .line__vote-buttons input[type=checkbox] + label {
   text-indent: 100%;
   white-space: nowrap;
