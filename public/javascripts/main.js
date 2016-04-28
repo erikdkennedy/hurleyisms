@@ -325,7 +325,7 @@ $(document).ready(function() {
 		var timeSinceLastRepaint = currentTime - lastRepaintTime;
 
 		var oldPercentage = $progressBarFill.width() / $progressBar.width() * 100;
-		var magicConstant = isMobile() ? .7 : 1.7;
+		var magicConstant = isMobile() ? .5 : 0.8;
 		var delta = magicConstant*progressBarSpeed*timeSinceLastRepaint/charCountOfDisplayedLines;
 		return oldPercentage + delta;
 	}
