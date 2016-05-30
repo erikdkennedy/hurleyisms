@@ -8,6 +8,7 @@ require('./models/db');
 var routes = require('./routes/index');
 var admin = require('./routes/admin');
 var users = require('./routes/users');
+var appRoute = require('./routes/app');
 var passport = require('passport');
 var BasicStrategy = require('passport-http').BasicStrategy
 var app = express();
@@ -25,7 +26,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
+
+// ROUTING SECTION
 app.use('/', routes);
+app.use('/app', appRoute);
 app.use('/admin', admin);
 app.use('/users', users);
 
