@@ -119,6 +119,39 @@
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
+	"\/public\/images\/card-1.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 17244,
+		"inputAbbreviatedPath": "\/public\/images\/card-1.png",
+		"outputAbbreviatedPath": "\/public\/images\/card-1.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/public\/images\/card-2.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 12085,
+		"inputAbbreviatedPath": "\/public\/images\/card-2.png",
+		"outputAbbreviatedPath": "\/public\/images\/card-2.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/public\/images\/card-3.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 15599,
+		"inputAbbreviatedPath": "\/public\/images\/card-3.png",
+		"outputAbbreviatedPath": "\/public\/images\/card-3.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
 	"\/public\/images\/close.png": {
 		"fileType": 32768,
 		"ignore": 0,
@@ -130,6 +163,39 @@
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
+	"\/public\/images\/devices\/laptop.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 36368,
+		"inputAbbreviatedPath": "\/public\/images\/devices\/laptop.png",
+		"outputAbbreviatedPath": "\/public\/images\/devices\/laptop.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/public\/images\/devices\/phone.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 13639,
+		"inputAbbreviatedPath": "\/public\/images\/devices\/phone.png",
+		"outputAbbreviatedPath": "\/public\/images\/devices\/phone.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/public\/images\/devices\/tablet.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 19833,
+		"inputAbbreviatedPath": "\/public\/images\/devices\/tablet.png",
+		"outputAbbreviatedPath": "\/public\/images\/devices\/tablet.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
 	"\/public\/images\/favicon.png": {
 		"fileType": 32768,
 		"ignore": 0,
@@ -137,6 +203,17 @@
 		"initialSize": 156,
 		"inputAbbreviatedPath": "\/public\/images\/favicon.png",
 		"outputAbbreviatedPath": "\/public\/images\/favicon.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/public\/images\/headshots\/1.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 29309,
+		"inputAbbreviatedPath": "\/public\/images\/headshots\/1.png",
+		"outputAbbreviatedPath": "\/public\/images\/headshots\/1.png",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"processed": 0
@@ -218,6 +295,28 @@
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
+	"\/public\/images\/peter-hurley-sm.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 142518,
+		"inputAbbreviatedPath": "\/public\/images\/peter-hurley-sm.png",
+		"outputAbbreviatedPath": "\/public\/images\/peter-hurley-sm.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/public\/images\/peter-hurley.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 475348,
+		"inputAbbreviatedPath": "\/public\/images\/peter-hurley.png",
+		"outputAbbreviatedPath": "\/public\/images\/peter-hurley.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
 	"\/public\/images\/play.png": {
 		"fileType": 32768,
 		"ignore": 0,
@@ -236,6 +335,28 @@
 		"initialSize": 599,
 		"inputAbbreviatedPath": "\/public\/images\/prev.png",
 		"outputAbbreviatedPath": "\/public\/images\/prev.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/public\/images\/smile-sm.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 155520,
+		"inputAbbreviatedPath": "\/public\/images\/smile-sm.png",
+		"outputAbbreviatedPath": "\/public\/images\/smile-sm.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/public\/images\/smile.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 604725,
+		"inputAbbreviatedPath": "\/public\/images\/smile.png",
+		"outputAbbreviatedPath": "\/public\/images\/smile.png",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"processed": 0
@@ -388,23 +509,37 @@
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
-	"\/public\/stylesheets\/normalize.css": {
-		"fileType": 16,
-		"ignore": 0,
+	"\/public\/stylesheets\/normalize.scss": {
+		"createSourceMap": 0,
+		"debugStyle": 0,
+		"decimalPrecision": 10,
+		"fileType": 4,
+		"ignore": 1,
 		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/public\/stylesheets\/normalize.css",
-		"outputAbbreviatedPath": "No Output Path",
+		"inputAbbreviatedPath": "\/public\/stylesheets\/normalize.scss",
+		"outputAbbreviatedPath": "\/public\/stylesheets\/normalize.css",
 		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 0,
+		"shouldRunAutoprefixer": 1,
+		"shouldRunBless": 0,
+		"useLibsass": 0
 		},
-	"\/public\/stylesheets\/normalize.min.css": {
-		"fileType": 16,
-		"ignore": 0,
+	"\/public\/stylesheets\/reset.scss": {
+		"createSourceMap": 0,
+		"debugStyle": 0,
+		"decimalPrecision": 10,
+		"fileType": 4,
+		"ignore": 1,
 		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/public\/stylesheets\/normalize.min.css",
-		"outputAbbreviatedPath": "No Output Path",
+		"inputAbbreviatedPath": "\/public\/stylesheets\/reset.scss",
+		"outputAbbreviatedPath": "\/public\/stylesheets\/reset.css",
 		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 0,
+		"shouldRunAutoprefixer": 1,
+		"shouldRunBless": 0,
+		"useLibsass": 0
 		},
 	"\/public\/stylesheets\/style.css": {
 		"fileType": 16,
@@ -435,7 +570,7 @@
 		"outputAbbreviatedPath": "\/public\/stylesheets\/styles.css",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
+		"outputStyle": 3,
 		"shouldRunAutoprefixer": 1,
 		"shouldRunBless": 0,
 		"useLibsass": 0
@@ -530,7 +665,7 @@
 	"iconImageName": "harddrive_brown"
 	},
 "projectSettings": {
-	"alwaysUseExternalServer": 0,
+	"alwaysUseExternalServer": 1,
 	"animateCSSInjections": 1,
 	"autoApplyPSLanguageSettingsStyle": 0,
 	"autoprefixerBrowserString": "> 1%, last 2 versions, Firefox ESR, Opera 12.1",
@@ -684,7 +819,7 @@
 	"coffeeMinifyOutput": 1,
 	"coffeeOutputStyle": 0,
 	"coffeeSyntaxCheckerStyle": 1,
-	"externalServerAddress": "http:\/\/localhost:8888",
+	"externalServerAddress": "http:\/\/localhost:3000",
 	"externalServerPreviewPathAddition": "",
 	"genericWebpageFileExtensionsString": "html, htm, shtml, shtm, xhtml, php, jsp, asp, aspx, erb, ctp",
 	"hamlAutoOutputPathEnabled": 1,

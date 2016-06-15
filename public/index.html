@@ -11,8 +11,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!-- STYLESHEETS -->
-        <link rel="stylesheet" href="stylesheets/normalize.min.css">
-        <link rel="stylesheet" href="stylesheets/main.css">
         <link rel="stylesheet" href="stylesheets/styles.css">
 
         <!-- ICONS -->
@@ -27,65 +25,119 @@
     </head>
     <body class="marketing-page">
         <!-- HEADER -->
-        <header>
-            <img src="images/logo-small.png" alt="Hurleyisms">
-            <a href="" class="btn">Log In</a>
+        <header class="marketing-header">
+            <img src="images/hurleyisms-xsm.png" alt="Hurleyisms">
+            <a href="" class="btn btn--sm">Log In</a>
         </header>
 
         <!-- SPLASH -->
         <div class="splash">
+            <div class="splash__media-wrapper">
+                <img src="images/smile.png">
+            </div>
             <div class="splash__content-wrapper">
                 <h1>Be the funniest photographer on the block</h1>
-                <a href="" class="btn">Start Hurleyisms</a>
+                <a href="app" class="btn btn--red btn--sm-to-lg">Start Hurleyisms</a>
             </div>
         </div>
 
         <!-- FEATURE 1 -->
-        <div class="feature feature--reverse">
-            <div class="feature__illustration">
-                <div class="feature__illustration__card"></div>
-                <div class="feature__illustration__card"></div>
-                <div class="feature__illustration__card"></div>
-            </div>
-            <div class="feature__text">
-                <h2>Over 1000 Hilarious Lines</h2>
-                <p>Hurleyisms is a database of 1000+ hilarious lines to drop on your photography subjects.  Get your subjects laughing, and snap killer photos as their faces glow.  No need to go to clown school– Hurleyisms does the funny for you.</p>
+        <div id="feature-1" class="feature feature--reverse">
+            <div class="content-width">
+                <div class="feature__illustration">
+                    <img src="images/card-1.png">
+                    <img src="images/card-2.png">
+                    <img src="images/card-3.png">
+                </div>
+                <div class="feature__text">
+                    <h2>Over 1000 Hilarious Lines</h2>
+                    <p>Hurleyisms is a database of 1000+ hilarious lines to drop on your photography subjects.  Get your subjects laughing, and snap killer photos as their faces glow.  No need to go to clown school– Hurleyisms does the funny <em>for</em> you.</p>
+                </div>
             </div>
         </div>
 
         <!-- FEATURE 2 -->
-        <div class="feature">
-            <div class="feature__illustration">
-                <div class="feature__illustration__device feature__illustration__device--laptop"></div>
-                <div class="feature__illustration__device feature__illustration__device--tablet"></div>
-                <div class="feature__illustration__device feature__illustration__device--mobile"></div>
-            </div>
-            <div class="feature__text">
-                <h2>Phone, Tablet, or Laptop</h2>
-                <p>Use Hurleyisms on any iPhone, iPad, Android, or computer.  Attach a phone or tablet to your tripod, or keep your laptop nearby in the studio.  Hurleyisms goes with your flow.</p>
+        <div id="feature-2" class="feature">
+            <div class="content-width">
+                <div class="feature__illustration">
+                    <div class="devices-wrapper">
+                        <img src="images/devices/laptop.png">
+                        <img src="images/devices/tablet.png">
+                        <img src="images/devices/phone.png">
+                    </div>
+                </div>
+                <div class="feature__text">
+                    <h2>Phone, Tablet, or Laptop</h2>
+                    <p>Use Hurleyisms on any iPhone, iPad, Android, or computer.  Attach a phone or tablet to your tripod, or keep your laptop nearby in the studio.  Hurleyisms goes with your flow.</p>
+                </div>
             </div>
         </div>
 
         <!-- FEATURE 3 -->
-        <div class="feature feature--reverse">
-            <div class="feature__illustration">
-            </div>
-            <div class="feature__text">
-                <h2>Created by the <em>infamous</em> Peter Hurley</h2>
-                <p>Hurleyisms is the brainchild of master headshot photographer Peter Hurley.  Peter has dedicated his life to helping others take the best possible headshots.</p>
+        <div id="feature-3" class="feature feature--reverse">
+            <div class="content-width">
+                <div class="feature__illustration">
+                    <img src="images/peter-hurley.png">
+                </div>
+                <div class="feature__text">
+                    <h2>Created by the <em>infamous</em> Peter Hurley</h2>
+                    <p>Hurleyisms is the brainchild of master headshot photographer Peter Hurley.  Peter has dedicated his life to helping others take the best possible headshots.</p>
+                </div>
             </div>
         </div>
 
         <!-- GALLERY -->
         <div class="gallery">
-            <div class="gallery__overlay">
-                <h2>“The proof is in the pudding, baby.”</h2>
-                <h3>Unedited headshots from our users</h3>
+            <div class="content-width">
+                <div class="gallery__images">
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                    <a href="#" class="gallery__image"><img src="images/headshots/1.png"></a>
+                </div>
+                <div class="gallery__overlay">
+                    <h2>“The <strong>proof</strong> is in the <strong>pudding</strong>, baby.”</h2>
+                    <h3><strong>Unedited</strong> headshots from our users</h3>
+                </div>
             </div>
         </div>
 
         <!-- YOUTUBE & CTA -->
-        <a href="" class="btn">Try Hurleyisms Free</a>
+        <div class="final-cta">
+            <a href="" class="btn btn--sm-to-lg btn--red">Try Hurleyisms Free</a>
+        </div>
 
         <!-- FOOTER -->
         <footer>
