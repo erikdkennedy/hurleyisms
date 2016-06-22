@@ -45,18 +45,18 @@ $(document).ready(function() {
     *****************************************/
 	function updateCache(callback)
 	{
-	    $.getJSON('/data/' + audience + '/' + profanity, function (data) {
+	    $.getJSON('app/data/' + audience + '/' + profanity, function (data) {
 	        cachedLines = data;
 	        callback();
 	    });
 	}
 	function sendLine(line, callback) {
-	    $.post('/add',line, function (data) {
+	    $.post('app/add',line, function (data) {
 	        callback();
 	    });
 	}
 	function rate(id, rating, callback) {
-	    $.getJSON('/rate/' + id + '/' + rating, function (data) {
+	    $.getJSON('app/rate/' + id + '/' + rating, function (data) {
 	        callback();
 	    });
 	}
