@@ -3,9 +3,9 @@ $(document).ready(function() {
 				  HELPERS & INIT
 	*****************************************/
     var cachedLines = [];
-    
+
     var profanity = false;
-    
+
 	var audienceTypes = {
 		MEN: 0,
 		WOMEN: 1,
@@ -38,8 +38,10 @@ $(document).ready(function() {
 	//submit-a-line init
 	displayTextareaCharRemaining();
 
+
+
     /*****************************************
-                   DataAccess 
+                   DataAccess
     *****************************************/
 	function updateCache(callback)
 	{
@@ -58,6 +60,9 @@ $(document).ready(function() {
 	        callback();
 	    });
 	}
+
+
+
 	/*****************************************
 			   LISTENERS - SPLASH
 	*****************************************/
@@ -69,7 +74,6 @@ $(document).ready(function() {
 		    changeScreen("lines");
 		    startPlay();
 		});
-		
 	});
 
 	//flip rating switch
@@ -78,9 +82,16 @@ $(document).ready(function() {
 	    profanity = $(this).hasClass("active");
 	});
 
-	//new line btn
+	//click "new line" btn
 	$(".btn.add-line").click(function() {
 		changeScreen("submit");
+
+		//TODO remove... should be handled elsewhere
+		if (isLoggedIn()) {
+			enableLineSubmissionControls();
+		} else {
+			disableLineSubmissionControls();
+		}
 	});
 
 	function changeScreen(screenName) {
@@ -92,11 +103,42 @@ $(document).ready(function() {
 		}
 	}
 
+	function isLoggedIn() {
+		return $("body").hasClass("is-logged-in");
+	}
+
+	function enableLineSubmissionControls() {
+		var $page = $("section.submit");
+
+		$page.find("input, textarea").removeAttr("disabled");
+		$page.find(".btn--green").removeAttr("disabled");
+		$page.find(".switch").removeClass("disabled");
+	}
+
+	function disableLineSubmissionControls() {
+		var $page = $("section.submit");
+
+		$page.find("input, textarea").attr("disabled", true);
+		$page.find(".btn--green").attr("disabled", true);
+		$page.find(".switch").addClass("disabled");
+	}
+
 
 
 	/*****************************************
 			   LISTENERS - SUBMIT
 	*****************************************/
+
+	//switch logged in/out -- TODO: remove this
+	$(document).keyup(function(e) {
+		if (e.keyCode === 76) {
+			if (isLoggedIn()) {
+				enableLineSubmissionControls();
+			} else {
+				disableLineSubmissionControls();
+			}
+		}
+	});
 
 	//close this page
 	$("section.submit a.close").click(function() {
@@ -131,8 +173,8 @@ $(document).ready(function() {
 			var $firstError = $(".error").first();
 			scrollToElement($firstError);
 		}
-		
 	});
+
 	function sendNewLine(callback)
 	{
 	    var line = {};
@@ -325,7 +367,7 @@ $(document).ready(function() {
 		var timeSinceLastRepaint = currentTime - lastRepaintTime;
 
 		var oldPercentage = $progressBarFill.width() / $progressBar.width() * 100;
-		var magicConstant = isMobile() ? .5 : 1.0;
+		var magicConstant = isMobile() ? 0.5 : 1.0;
 		var delta = magicConstant*progressBarSpeed*timeSinceLastRepaint/charCountOfDisplayedLines;
 		return oldPercentage + delta;
 	}

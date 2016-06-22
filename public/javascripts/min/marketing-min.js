@@ -1,0 +1,1 @@
+$(document).ready(function(){$(window).scroll(function(){$(window).scrollTop()+.35*$(window).height()>$("#card-1").offset().top&&$(".card").addClass("flipped"),$(window).scrollTop()+.75*$(window).height()>$("#device-img-1").offset().top&&$(".device-img").addClass("slide-in")})});

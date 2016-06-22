@@ -152,6 +152,17 @@
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
+	"\/public\/images\/check.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 508,
+		"inputAbbreviatedPath": "\/public\/images\/check.png",
+		"outputAbbreviatedPath": "\/public\/images\/check.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
 	"\/public\/images\/close.png": {
 		"fileType": 32768,
 		"ignore": 0,
@@ -207,6 +218,28 @@
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
+	"\/public\/images\/gear-white.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 487,
+		"inputAbbreviatedPath": "\/public\/images\/gear-white.png",
+		"outputAbbreviatedPath": "\/public\/images\/gear-white.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/public\/images\/gear.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 856,
+		"inputAbbreviatedPath": "\/public\/images\/gear.png",
+		"outputAbbreviatedPath": "\/public\/images\/gear.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
 	"\/public\/images\/headshots\/1.png": {
 		"fileType": 32768,
 		"ignore": 0,
@@ -218,13 +251,123 @@
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
-	"\/public\/images\/hurleyisms-sm.png": {
+	"\/public\/images\/headshots\/2.png": {
 		"fileType": 32768,
 		"ignore": 0,
 		"ignoreWasSetByUser": 0,
-		"initialSize": 11070,
-		"inputAbbreviatedPath": "\/public\/images\/hurleyisms-sm.png",
-		"outputAbbreviatedPath": "\/public\/images\/hurleyisms-sm.png",
+		"initialSize": 27392,
+		"inputAbbreviatedPath": "\/public\/images\/headshots\/2.png",
+		"outputAbbreviatedPath": "\/public\/images\/headshots\/2.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/public\/images\/headshots\/3.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 29733,
+		"inputAbbreviatedPath": "\/public\/images\/headshots\/3.png",
+		"outputAbbreviatedPath": "\/public\/images\/headshots\/3.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/public\/images\/headshots\/4.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 26534,
+		"inputAbbreviatedPath": "\/public\/images\/headshots\/4.png",
+		"outputAbbreviatedPath": "\/public\/images\/headshots\/4.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/public\/images\/headshots\/5.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 27583,
+		"inputAbbreviatedPath": "\/public\/images\/headshots\/5.png",
+		"outputAbbreviatedPath": "\/public\/images\/headshots\/5.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/public\/images\/headshots\/6.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 30580,
+		"inputAbbreviatedPath": "\/public\/images\/headshots\/6.png",
+		"outputAbbreviatedPath": "\/public\/images\/headshots\/6.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/public\/images\/headshots\/7.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 33765,
+		"inputAbbreviatedPath": "\/public\/images\/headshots\/7.png",
+		"outputAbbreviatedPath": "\/public\/images\/headshots\/7.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/public\/images\/hurleyisms-basic.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 8953,
+		"inputAbbreviatedPath": "\/public\/images\/hurleyisms-basic.png",
+		"outputAbbreviatedPath": "\/public\/images\/hurleyisms-basic.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/public\/images\/hurleyisms-pro-530.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 5401,
+		"inputAbbreviatedPath": "\/public\/images\/hurleyisms-pro-530.png",
+		"outputAbbreviatedPath": "\/public\/images\/hurleyisms-pro-530.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/public\/images\/hurleyisms-pro.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 9059,
+		"inputAbbreviatedPath": "\/public\/images\/hurleyisms-pro.png",
+		"outputAbbreviatedPath": "\/public\/images\/hurleyisms-pro.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/public\/images\/hurleyisms-sm-basic.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 9061,
+		"inputAbbreviatedPath": "\/public\/images\/hurleyisms-sm-basic.png",
+		"outputAbbreviatedPath": "\/public\/images\/hurleyisms-sm-basic.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/public\/images\/hurleyisms-sm-pro.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 8545,
+		"inputAbbreviatedPath": "\/public\/images\/hurleyisms-sm-pro.png",
+		"outputAbbreviatedPath": "\/public\/images\/hurleyisms-sm-pro.png",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"processed": 0
@@ -236,17 +379,6 @@
 		"initialSize": 2141,
 		"inputAbbreviatedPath": "\/public\/images\/hurleyisms-xsm.png",
 		"outputAbbreviatedPath": "\/public\/images\/hurleyisms-xsm.png",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"processed": 0
-		},
-	"\/public\/images\/hurleyisms.png": {
-		"fileType": 32768,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"initialSize": 6091,
-		"inputAbbreviatedPath": "\/public\/images\/hurleyisms.png",
-		"outputAbbreviatedPath": "\/public\/images\/hurleyisms.png",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"processed": 0
@@ -361,6 +493,50 @@
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
+	"\/public\/images\/star.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 789,
+		"inputAbbreviatedPath": "\/public\/images\/star.png",
+		"outputAbbreviatedPath": "\/public\/images\/star.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/public\/images\/testimonials\/1.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 23814,
+		"inputAbbreviatedPath": "\/public\/images\/testimonials\/1.png",
+		"outputAbbreviatedPath": "\/public\/images\/testimonials\/1.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/public\/images\/testimonials\/2.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 38664,
+		"inputAbbreviatedPath": "\/public\/images\/testimonials\/2.png",
+		"outputAbbreviatedPath": "\/public\/images\/testimonials\/2.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/public\/images\/testimonials\/3.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 36578,
+		"inputAbbreviatedPath": "\/public\/images\/testimonials\/3.png",
+		"outputAbbreviatedPath": "\/public\/images\/testimonials\/3.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
 	"\/public\/images\/thumbs-down-white.png": {
 		"fileType": 32768,
 		"ignore": 0,
@@ -436,23 +612,67 @@
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
 		},
-	"\/public\/javascripts\/main.js": {
+	"\/public\/javascripts\/app.js": {
 		"fileType": 64,
 		"ignore": 0,
 		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/public\/javascripts\/main.js",
-		"outputAbbreviatedPath": "\/public\/javascripts\/min\/main-min.js",
+		"inputAbbreviatedPath": "\/public\/javascripts\/app.js",
+		"outputAbbreviatedPath": "\/public\/javascripts\/min\/app-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
 		},
-	"\/public\/javascripts\/min\/main-min.js": {
+	"\/public\/javascripts\/marketing.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/public\/javascripts\/marketing.js",
+		"outputAbbreviatedPath": "\/public\/javascripts\/min\/marketing-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/public\/javascripts\/min\/app-min.js": {
 		"fileType": 64,
 		"ignore": 1,
 		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/public\/javascripts\/min\/main-min.js",
-		"outputAbbreviatedPath": "\/public\/javascripts\/min\/min\/main-min-min.js",
+		"inputAbbreviatedPath": "\/public\/javascripts\/min\/app-min.js",
+		"outputAbbreviatedPath": "\/public\/javascripts\/min\/min\/app-min-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/public\/javascripts\/min\/marketing-min.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/public\/javascripts\/min\/marketing-min.js",
+		"outputAbbreviatedPath": "\/public\/javascripts\/min\/min\/marketing-min-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/public\/javascripts\/min\/shared-min.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/public\/javascripts\/min\/shared-min.js",
+		"outputAbbreviatedPath": "\/public\/javascripts\/min\/min\/shared-min-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/public\/javascripts\/shared.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/public\/javascripts\/shared.js",
+		"outputAbbreviatedPath": "\/public\/javascripts\/min\/shared-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
@@ -540,15 +760,6 @@
 		"shouldRunAutoprefixer": 1,
 		"shouldRunBless": 0,
 		"useLibsass": 0
-		},
-	"\/public\/stylesheets\/style.css": {
-		"fileType": 16,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/public\/stylesheets\/style.css",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
 		},
 	"\/public\/stylesheets\/styles.css": {
 		"fileType": 16,

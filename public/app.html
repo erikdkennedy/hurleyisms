@@ -11,8 +11,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!-- STYLESHEETS -->
-        <link rel="stylesheet" href="stylesheets/normalize.min.css">
-        <link rel="stylesheet" href="stylesheets/main.css">
         <link rel="stylesheet" href="stylesheets/styles.css">
 
         <!-- ICONS -->
@@ -29,6 +27,15 @@
 
         <!-- SPLASH -->
         <section class="splash active">
+            <div class="splash__banner">
+                <div class="if-logged-out">
+                    <a href="pro" class="upgrade-banner">Enjoying the trial?  <span>Unlock the entire collection of Peter Hurley's lines now</span>!</a>
+                    <p class="pro-catcher no-mobile">Have a pro account?  <a href="javascript:void(0)">Log in</a>.</p>
+                </div>
+                <div class="if-logged-in no-mobile">
+                    <a href="settings" class="splash__settings-icon"><img src="images/gear.png" alt="My Account & Settings"></a>
+                </div>
+            </div>
             <div class="splash__title">Hurleyisms</div>
             <p class="splash__start-for">Start For</p>
             <ul class="mode-selector">
@@ -37,8 +44,12 @@
                 <li><a href="#" class="begin-session" data-audience-type=2><img src="images/kids.png" alt="Kids"><p>Kids</p></a></li>
             </ul>
             <footer class="splash__footer">
-                <span class="switch"><span class="active">PG</span><span>R</span></span>
+                <div class="switch-wrapper">
+                    <span class="switch"><span class="active">PG</span><span>R</span></span>
+                </div>
+                <a href="settings" class="btn mobile-only if-logged-in"><img src="images/gear-white.png"> Account</a>
                 <a href="#" class="btn add-line">Submit a Line</a>
+                <p class="pro-catcher mobile-only if-logged-out">Have a pro account?  <a href="javascript:void(0)">Log in</a></p>
             </footer>
         </section>
 
@@ -50,6 +61,20 @@
                 <h1>New Line</h1>
                 <a href="#" class="btn--green add-line hidden">Submit</a>
             </header>
+            <div class="blue-box if-logged-out">
+                <div class="submit__container">
+                    <h2>Only Hurleyism Pros can use this feature</h2>
+                    <p>Why go pro?  Pro users get the following:</p>
+                    <ul>
+                        <li>All <strong>official</strong> Peter Hurley lines (over 20 years of ideas)</li>
+                        <li>All <strong>future</strong> Peter Hurley lines</li>
+                        <li>All <strong>user-submitted lines</strong></li>
+                        <li>The ability to <strong>submit your own</strong> lines</li>
+                        <li><strong>BONUS:</strong> Peter Hurley's Pre-Photoshoot Checklist</li>
+                    </ul>
+                    <a href="pro" class="btn btn--white btn--shadow">Tell Me More</a>
+                </div>
+            </div>
             <div class="submit__container">
                 <div class="form-control">
                     <label for="the-line">The Line <span class="form-control__label-hint"><span class="char-remaining"></span> characters remaining</span></label>
@@ -121,6 +146,7 @@
 
         <script src="javascripts/vendor/jquery-1.11.1.min.js"></script>
         <script src="javascripts/vendor/jquery.mobile.custom.min.js"></script>
-        <script src="javascripts/main.js"></script>
+        <script src="javascripts/min/shared-min.js"></script>
+        <script src="javascripts/min/app-min.js"></script>
     </body>
 </html>
