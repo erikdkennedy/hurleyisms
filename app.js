@@ -28,11 +28,11 @@ var appClientFiles = [
 ];
 var uglified = uglifyJs.minify(appClientFiles, { compress: false });
 
-fs.writeFile('public/javascripts/min/hurleyisms.min.js', uglified.code, function (err) {
+fs.writeFile('public/javascripts/hurleyisms.min.js', uglified.code, function (err) {
     if (err) {
         console.log(err);
     } else {
-        console.log("Script generated and saved:", 'loc8r.min.js');
+        console.log("Script generated and saved:", 'hurleyisms.min.js');
     }
 });
 
