@@ -21,12 +21,12 @@ app.set('view engine', 'jade');
 
 //combine JS for SPA
 var appClientFiles = [
-  'public/javascripts/vendor/jquery-1.11.1.min.js',
-  'public/javascripts/vendor/modernizr-2.6.2-respond-1.1.0.min.js',
   'public/javascripts/shared.js',
   'public/javascripts/app.js'
 ];
-var uglified = uglifyJs.minify(appClientFiles, { compress: false });
+var compressFlag = process.env.ENVIRONMENT == 'prod' || false ;
+console.log(compressFlag + "- compressFlag");
+var uglified = uglifyJs.minify(appClientFiles, { compress: compressFlag, mangle:compressFlag });
 
 fs.writeFile('public/javascripts/hurleyisms.min.js', uglified.code, function (err) {
     if (err) {
@@ -35,9 +35,6 @@ fs.writeFile('public/javascripts/hurleyisms.min.js', uglified.code, function (er
         console.log("Script generated and saved:", 'hurleyisms.min.js');
     }
 });
-
-
-
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
