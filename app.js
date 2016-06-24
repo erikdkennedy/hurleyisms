@@ -10,12 +10,34 @@ var admin = require('./routes/admin');
 var users = require('./routes/users');
 var appRoute = require('./routes/app');
 var passport = require('passport');
+var uglifyJs = require("uglify-js");
+var fs = require('fs');
 var BasicStrategy = require('passport-http').BasicStrategy
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
+//combine JS for SPA
+var appClientFiles = [
+  'public/javascripts/vendor/jquery-1.11.1.min.js',
+  'public/javascripts/vendor/modernizr-2.6.2-respond-1.1.0.min.js',
+  'public/javascripts/shared.js',
+  'public/javascripts/app.js'
+];
+var uglified = uglifyJs.minify(appClientFiles, { compress: false });
+
+fs.writeFile('public/javascripts/min/hurleyisms.min.js', uglified.code, function (err) {
+    if (err) {
+        console.log(err);
+    } else {
+        console.log("Script generated and saved:", 'loc8r.min.js');
+    }
+});
+
+
+
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));

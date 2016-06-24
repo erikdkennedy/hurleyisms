@@ -9,3 +9,5 @@ node_modules/
 !.elasticbeanstalk/*.global.yml
 
 hurleyisms.tsv
+hurleyisms.min.js
+
