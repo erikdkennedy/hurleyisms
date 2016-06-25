@@ -566,9 +566,9 @@ body.has-modal-open {
 
     position: fixed;
     bottom: 100%;
-    left: 0;
-    right: 0;
-    margin: 0 15px;
+    left: 20px;
+    right: 20px;
+    margin: 20px auto;
     border-radius: 3px;
     padding: 14px;
     max-width: 350px;
@@ -579,9 +579,13 @@ body.has-modal-open {
     backface-visibility: hidden;
 
     &.appear {
-        transform: translateY(150%);
+        transform: translateY(calc(100% + 40px));
     }
 }
+
+	.toast--red {
+		background-color: $red;
+	}
 
 .feature > .content-width {
 	display: flex;
@@ -1446,6 +1450,8 @@ section.lines {
 
 		.line {
 			margin-bottom: 20px;
+			transition: all 0.4s ease 2s;
+			transform: scale(1);
 
 			@media ($tablet) {
 				padding: 13px 20px 10px;
@@ -1453,6 +1459,11 @@ section.lines {
 				box-shadow: 0 1px 4px rgba(black, .4);
 			}
 		}
+
+			.line--deleting {
+				transform: scale(0);
+				// height: 0;
+			}
 
 			.line__text {
 				margin-bottom: 15px;
@@ -1501,10 +1512,9 @@ section.lines {
 					margin-right: 20px;
 				}
 
-				.line__vote-btn {
+				.line__square-btn {
 					@include ir;
 
-					display: none;
 					width: 44px;
 					height: 44px;
 					padding: 6px;
@@ -1517,22 +1527,35 @@ section.lines {
 					&:hover {
 						background-color: rgba(black, .05);
 					}
+				}
 
-					&.thumbs-up {background-image: url(../images/thumbs-up.png);}
-					&.thumbs-down {background-image: url(../images/thumbs-down.png);}
+				.line__delete {
+					background-image: url(../images/trash-can.png);
+				}
+
+					.line__textarea + .line__footer .line__delete {
+						display: none;
+					}
+
+				.line__thumbs-up {
+					display: none;
+					background-image: url(../images/thumbs-up.png);
 
 					&.active {
 						border: none;
+						background-image: url(../images/thumbs-up-white.png);
+						background-color: $green;
+					}
+				}
 
-						&.thumbs-up {
-							background-image: url(../images/thumbs-up-white.png);
-							background-color: $green;
-						}
+				.line__thumbs-down {
+					display: none;
+					background-image: url(../images/thumbs-down.png);
 
-						&.thumbs-down {
-							background-image: url(../images/thumbs-down-white.png);
-							background-color: $red;
-						}
+					&.active {
+						border: none;
+						background-image: url(../images/thumbs-down-white.png);
+						background-color: $red;
 					}
 				}
 

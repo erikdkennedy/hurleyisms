@@ -581,6 +581,17 @@
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
+	"\/public\/images\/trash-can.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 686,
+		"inputAbbreviatedPath": "\/public\/images\/trash-can.png",
+		"outputAbbreviatedPath": "\/public\/images\/trash-can.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
 	"\/public\/images\/women.png": {
 		"fileType": 32768,
 		"ignore": 0,

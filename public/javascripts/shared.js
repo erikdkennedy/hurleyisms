@@ -192,15 +192,16 @@ jQuery.fn.extend({
 	}
 });
 
-$.createToast = function(innerHTML, lifespanInMS) {
+$.createToast = function(innerHTML, lifespanInMS, className) {
 
 	function setStyleBeforeAnimation($el) {
 		return window.getComputedStyle($el[0]).opacity;
 	}
 
 	var lifespan = lifespanInMS || 3000;
+	var className = className || "";
 
-	$("body").append("<div class='toast'>" + innerHTML + "</div>");
+	$("body").append("<div class='toast " + className + "'>" + innerHTML + "</div>");
 	var $toast = $(".toast");
 	setStyleBeforeAnimation($toast);
 	$toast.addClass("appear");
@@ -237,7 +238,8 @@ $(document).ready(function() {
 	});
 
 	//open modal
-	$("a[data-modal]").click(function() {
+	$(document).on("click", "a[data-modal]", function() {
+		console.log("hey");
 
 		//if there's a current modal open, close it
 		if ($("body").hasClass("has-modal-open")) {
@@ -261,13 +263,8 @@ $(document).ready(function() {
 	});
 
 	//click on background screen to close modal
-	$(".modal").click(function() {
-		$.closeModal();
-	});
-
-	//click somewhere on modal window
-	$(".modal__window").click(function(e) {
-		e.stopPropagation(); //stop propagation so the modal isn't closed
+	$(".modal").click(function(e) {
+		if ($(e.toElement).is(".modal")) $.closeModal();
 	});
 
 	//press Esc while modal is open

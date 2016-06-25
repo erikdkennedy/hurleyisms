@@ -892,9 +892,9 @@ body.has-modal-open {
 .toast {
   position: fixed;
   bottom: 100%;
-  left: 0;
-  right: 0;
-  margin: 0 15px;
+  left: 20px;
+  right: 20px;
+  margin: 20px auto;
   border-radius: 3px;
   padding: 14px;
   max-width: 350px;
@@ -906,8 +906,11 @@ body.has-modal-open {
   -webkit-backface-visibility: hidden;
           backface-visibility: hidden; }
   .toast.appear {
-    -webkit-transform: translateY(150%);
-            transform: translateY(150%); }
+    -webkit-transform: translateY(calc(100% + 40px));
+            transform: translateY(calc(100% + 40px)); }
+
+.toast--red {
+  background-color: #EB3B1C; }
 
 .feature > .content-width {
   display: -webkit-box;
@@ -1655,12 +1658,20 @@ section.lines {
       padding: 15px; } }
 
 .line {
-  margin-bottom: 20px; }
+  margin-bottom: 20px;
+  -webkit-transition: all 0.4s ease 2s;
+  transition: all 0.4s ease 2s;
+  -webkit-transform: scale(1);
+          transform: scale(1); }
   @media (min-width: 569px) {
     .line {
       padding: 13px 20px 10px;
       border-radius: 2px;
       box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4); } }
+
+.line--deleting {
+  -webkit-transform: scale(0);
+          transform: scale(0); }
 
 .line__text {
   margin-bottom: 15px;
@@ -1715,11 +1726,10 @@ html.no-touch body.is-admin .line__text:hover {
 .line__cancel-change {
   margin-right: 20px; }
 
-.line__vote-btn {
+.line__square-btn {
   text-indent: 100%;
   white-space: nowrap;
   overflow: hidden;
-  display: none;
   width: 44px;
   height: 44px;
   padding: 6px;
@@ -1728,20 +1738,30 @@ html.no-touch body.is-admin .line__text:hover {
   background-repeat: no-repeat;
   background-position: center center;
   border: 2px solid rgba(0, 0, 0, 0.1); }
-  .line__vote-btn:hover {
+  .line__square-btn:hover {
     background-color: rgba(0, 0, 0, 0.05); }
-  .line__vote-btn.thumbs-up {
-    background-image: url(../images/thumbs-up.png); }
-  .line__vote-btn.thumbs-down {
-    background-image: url(../images/thumbs-down.png); }
-  .line__vote-btn.active {
-    border: none; }
-    .line__vote-btn.active.thumbs-up {
-      background-image: url(../images/thumbs-up-white.png);
-      background-color: #51B87C; }
-    .line__vote-btn.active.thumbs-down {
-      background-image: url(../images/thumbs-down-white.png);
-      background-color: #EB3B1C; }
+
+.line__delete {
+  background-image: url(../images/trash-can.png); }
+
+.line__textarea + .line__footer .line__delete {
+  display: none; }
+
+.line__thumbs-up {
+  display: none;
+  background-image: url(../images/thumbs-up.png); }
+  .line__thumbs-up.active {
+    border: none;
+    background-image: url(../images/thumbs-up-white.png);
+    background-color: #51B87C; }
+
+.line__thumbs-down {
+  display: none;
+  background-image: url(../images/thumbs-down.png); }
+  .line__thumbs-down.active {
+    border: none;
+    background-image: url(../images/thumbs-down-white.png);
+    background-color: #EB3B1C; }
 
 .lines__footer {
   display: -webkit-box;

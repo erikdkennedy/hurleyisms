@@ -169,6 +169,7 @@ $(document).ready(function() {
 
 		if ($(".error").length === 0) {
 		    sendNewLine(function () {
+		    	$.createToast("Line submitted!");
 		        resetSubmitForm();
 		    });
 		} else {
@@ -189,7 +190,6 @@ $(document).ready(function() {
 	    sendLine(line, callback);
 	}
 	function resetSubmitForm() {
-		$(".line-added").addClass("fade-in");
 		$("#the-line").val("");
 		scrollToElement( $("body") );
 	}
@@ -199,11 +199,6 @@ $(document).ready(function() {
 			scrollTop: $element.offset().top
 		}, 250);
 	}
-
-	//on submit-a-line animation complete, remove the animating class
-	$("body").on("webkitAnimationEnd oanimationend msAnimationEnd animationend", function() {
-		$(".line-added").removeClass("fade-in");
-	});
 
 
 
@@ -405,9 +400,7 @@ $(document).ready(function() {
 
 		pause();
 
-		//TODO cancel other lines being edited
-
-		lineBeforeEdits = $textBox.html(); //.replace(/"/g, '\\"');
+		lineBeforeEdits = $textBox.html();
 		var height = $textBox.outerHeight();
 		$textBox.replaceWith("<textarea class='line__textarea' spellcheck='true' style='height: " + height + "px;'>" + lineBeforeEdits + "</textarea>");
 
@@ -424,6 +417,25 @@ $(document).ready(function() {
 	//TODO Andrew - remove this when admin mode is implemented
 	$(document).keyup(function(e) {
 		if (e.which === 65 && !$(e.target).isTextField()) $("body").toggleClass("is-admin");
+	});
+
+	//click TRASH CAN button to delete line
+	$(document).on("click", ".line__delete", function() {
+		var lineName = $(this).closest(".line").attr("name");
+		$("#delete-line-modal").data("line", lineName);
+		pause();
+	});
+
+	//on closing delete line modal
+	$("#delete-line-modal, #delete-line-modal .modal__close, #delete-line-modal .btn--red").click(function() {
+		unpause();
+	});
+
+	//clicking "Delete line" on modal dialog
+	$("#delete-line-modal .btn--red").click(function() {
+		var lineName = $("#delete-line-modal").data("line");
+		$.createToast("Line deleted", null, "toast--red");
+		$(".line[name=" + lineName + "]").remove();
 	});
 
 	//press cmd+enter to save changes to edited line
@@ -450,6 +462,7 @@ $(document).ready(function() {
 		startProgressBarIfItWasRunning();
 		var $textarea = $(".line__textarea");
 		$textarea.replaceWith("<p class='line__text'>" + $textarea.val() + "</p>");
+		$.createToast("Changes saved!");
 	}
 
 	function startProgressBarIfItWasRunning() {
