@@ -49,13 +49,21 @@ h1, h2, h3, h4, p {
 	margin-top: 0;
 }
 
-input[type=text], textarea {
+input[type=text],
+input[type=password],
+input[type=email],
+textarea {
 	padding: 4px 6px;
 	font-family: "Roboto", sans-serif;
 	font-size: 17px;
 	border: 1px solid #999;
 	border-radius: 2px;
-	box-shadow: inset 0 1px 2px rgba(black, .3);
+	box-shadow: inset 0 1px 3px rgba(black, .3);
+
+	&[disabled] {
+		pointer-events: none;
+		opacity: .5;
+	}
 }
 
 a {
@@ -71,7 +79,13 @@ a {
 // TODO remove in final code
 body:not(.is-logged-in) .if-logged-in,
 body.is-logged-in .if-logged-out,
-body:not(.is-admin) .if-admin {
+body:not(.is-admin) .if-admin,
+body.is-monthly .if-lifetime,
+body.is-lifetime .if-monthly {
+	display: none !important;
+}
+
+.hidden {
 	display: none !important;
 }
 
@@ -301,6 +315,16 @@ section {
 		}
 	}
 
+	.btn--blue {
+		@extend .btn;
+
+		background-color: $blue;
+
+		&:hover {
+			background-color: adjust-color($blue, $lightness: -6);
+		}
+	}
+
 	.btn--red {
 		@extend .btn;
 
@@ -442,6 +466,7 @@ body.has-modal-open {
 }
 
 .form-control {
+	position: relative;
 	margin-bottom: 46px;
 
 	label,
@@ -467,13 +492,13 @@ body.has-modal-open {
 
 	input[type=text],
 	input[type=email],
-	input[type=password] {
+	input[type=password],
+	textarea {
 		width: 100%;
 		height: 44px;
 	}
 
 	textarea {
-		width: 100%;
 		height: 100px;
 	}
 
@@ -520,6 +545,42 @@ body.has-modal-open {
 	label, .form-control__label {
 		line-height: 44px;
 	}
+}
+
+.input-group {
+	display: flex;
+
+	input:not(:last-child) {
+		border-top-right-radius: 0px;
+		border-bottom-right-radius: 0px;
+	}
+
+	input ~ .input-group__addon {
+		border-top-left-radius: 0px;
+		border-bottom-left-radius: 0px;
+	}
+}
+
+.toast {
+    @extend .dark-bg;
+
+    position: fixed;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    margin: 0 15px;
+    border-radius: 3px;
+    padding: 14px;
+    max-width: 350px;
+    background-color: $green;
+    box-shadow: 0 1px 3px rgba(black, .4);
+    transition: all 0.2s ease;
+    z-index: 10;
+    backface-visibility: hidden;
+
+    &.appear {
+        transform: translateY(150%);
+    }
 }
 
 .feature > .content-width {
@@ -1301,7 +1362,7 @@ section.splash {
 			letter-spacing: .3px;
 		}
 
-		> .btn {
+		> :last-child {
 			float: right;
 			padding-left: 5px;
 			padding-right: 5px;
@@ -1872,6 +1933,71 @@ body.upsell h2 {
 			font-size: 14px;
 			opacity: .5;
 		}
+
+
+
+/*****************************************
+			 MY ACCOUNT PAGE
+*****************************************/
+
+.submit__header > :last-child {
+	padding: 9px 5px;
+}
+
+.input-group .error {
+	position: absolute;
+	top: 100%;
+	left: 0;
+}
+
+.show-password {
+	display: block;
+	padding-top: 8px;
+}
+
+.form-control--fake {
+	@extend .form-control;
+
+	> p {
+		margin-bottom: 6px;
+	}
+}
+
+.account-type-display {
+	border-radius: 4px;
+	padding: 14px 14px 12px;
+	background-color: #E6E6E6;
+}
+
+	.account-type-display__type {
+		margin: 0 0 9px;
+		font-size: 23px;
+		font-weight: 300;
+	}
+
+	.account-type-display__price,
+	.account-type-display__started {
+		margin: 0;
+	}
+
+	.account-type-display__switch {
+		display: block;
+		margin-top: 8px;
+		font-size: 15px;
+	}
+
+.cancel-subscription-display {}
+
+	.cancel-subscription-display__explanation {
+		opacity: .5;
+		font-size: 15px;
+	}
+
+	.cancel-subscription-display__cta {
+		display: block;
+		margin-top: 12px;
+		font-size: 15px;
+	}
 
 
 

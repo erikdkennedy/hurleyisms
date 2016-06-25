@@ -423,12 +423,8 @@ $(document).ready(function() {
 	//press "a" to toggle admin mode (prototype only)
 	//TODO Andrew - remove this when admin mode is implemented
 	$(document).keyup(function(e) {
-		if (e.which === 65 && !isTextArea(e.target)) $("body").toggleClass("is-admin");
+		if (e.which === 65 && !$(e.target).isTextField()) $("body").toggleClass("is-admin");
 	});
-
-	function isTextArea(el) {
-		return $(el).is("textarea");
-	}
 
 	//press cmd+enter to save changes to edited line
 	$(document).on("keydown", ".line__textarea", function(e) {

@@ -1,0 +1,1 @@
+var express=require("express"),router=express.Router(),path=require("path");router.get("/",function(e,r,t){r.sendFile("public/index.html")}),router.get("/pro",function(e,r,t){r.sendFile(path.join(__dirname,"../public","pro.html"))}),router.get("/my-account",function(e,r,t){r.sendFile(path.join(__dirname,"../public","my-account.html"))}),module.exports=router;
