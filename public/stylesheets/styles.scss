@@ -70,7 +70,8 @@ a {
 
 // TODO remove in final code
 body:not(.is-logged-in) .if-logged-in,
-body.is-logged-in .if-logged-out {
+body.is-logged-in .if-logged-out,
+body:not(.is-admin) .if-admin {
 	display: none !important;
 }
 
@@ -1399,6 +1400,21 @@ section.lines {
 				line-height: 1.2;
 			}
 
+				html.no-touch body.is-admin .line__text:hover {
+					background-color: #F3F3F3;
+					cursor: pointer;
+				}
+
+			.line__textarea {
+				margin-top: -1px;
+				margin-left: -7px;
+				margin-bottom: 15px;
+				width: 100%;
+				font-size: 35px;
+				font-weight: 300;
+				line-height: 1.2;
+			}
+
 			.line__footer {
 				display: flex;
 				justify-content: space-between;
@@ -1411,43 +1427,53 @@ section.lines {
 				opacity: .4;
 			}
 
-			.line__vote-buttons {
-				display: none;
+			.line__action-buttons {
+				display: flex;
+				align-items: center;
 			}
 
-			.line__vote-buttons .btn {
-				@include ir;
-
-				width: 44px;
-				height: 44px;
-				padding: 6px;
-				background-color: white;
-				text-align: center;
-				background-repeat: no-repeat;
-				background-position: center center;
-				border: 2px solid rgba(black, .1);
-
-				&:hover {
-					background-color: rgba(black, .05);
+				.line__text + .line__footer .if-editing {
+					display: none;
 				}
 
-				&.thumbs-up {background-image: url(../images/thumbs-up.png);}
-				&.thumbs-down {background-image: url(../images/thumbs-down.png);}
+				.line__cancel-change {
+					margin-right: 20px;
+				}
 
-				&.active {
-					border: none;
+				.line__vote-btn {
+					@include ir;
 
-					&.thumbs-up {
-						background-image: url(../images/thumbs-up-white.png);
-						background-color: $green;
+					display: none;
+					width: 44px;
+					height: 44px;
+					padding: 6px;
+					background-color: white;
+					text-align: center;
+					background-repeat: no-repeat;
+					background-position: center center;
+					border: 2px solid rgba(black, .1);
+
+					&:hover {
+						background-color: rgba(black, .05);
 					}
 
-					&.thumbs-down {
-						background-image: url(../images/thumbs-down-white.png);
-						background-color: $red;
+					&.thumbs-up {background-image: url(../images/thumbs-up.png);}
+					&.thumbs-down {background-image: url(../images/thumbs-down.png);}
+
+					&.active {
+						border: none;
+
+						&.thumbs-up {
+							background-image: url(../images/thumbs-up-white.png);
+							background-color: $green;
+						}
+
+						&.thumbs-down {
+							background-image: url(../images/thumbs-down-white.png);
+							background-color: $red;
+						}
 					}
 				}
-			}
 
 	.lines__footer {
 		display: flex;

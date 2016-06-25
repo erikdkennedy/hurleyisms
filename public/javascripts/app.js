@@ -12,6 +12,8 @@ $(document).ready(function() {
 		KIDS: 2
 	};
 
+	var lineBeforeEdits;
+
 	//cached for perf
 	var $progressBar = $("#progress-bar");
 	var $progressBarFill = $("#progress-bar__fill");
@@ -338,6 +340,7 @@ $(document).ready(function() {
 
 	function stopProgressBar() {
 		cancelAnimationFrame(progressBarAnimation);
+		lastRepaintTime = null;
 	}
 
 	function resetProgressBar() {
@@ -387,6 +390,82 @@ $(document).ready(function() {
 		$("#lines .line__text").removeAttr("style");
 	}
 
+	//click a line to edit is (admins only)
+	$(document).on("click", ".line__text", function() {
+		startEditingLine( $(this) );
+	});
+
+	function startEditingLine($textBox) {
+		if (!isAdmin()) return false;
+
+		var progressBarWasRunning = !!lastRepaintTime;
+
+		var $currentlyEditingLines = $(".line__textarea");
+		if ($currentlyEditingLines.length) cancelLineChanges();
+
+		pause();
+
+		//TODO cancel other lines being edited
+
+		lineBeforeEdits = $textBox.html(); //.replace(/"/g, '\\"');
+		var height = $textBox.outerHeight();
+		$textBox.replaceWith("<textarea class='line__textarea' spellcheck='true' style='height: " + height + "px;'>" + lineBeforeEdits + "</textarea>");
+
+		$(".line__textarea")
+				.data("prog-bar-running", progressBarWasRunning)
+				.focus();
+	}
+
+	function isAdmin() {
+		return $("body").hasClass("is-admin");
+	}
+
+	//press "a" to toggle admin mode (prototype only)
+	//TODO Andrew - remove this when admin mode is implemented
+	$(document).keyup(function(e) {
+		if (e.which === 65 && !isTextArea(e.target)) $("body").toggleClass("is-admin");
+	});
+
+	function isTextArea(el) {
+		return $(el).is("textarea");
+	}
+
+	//press cmd+enter to save changes to edited line
+	$(document).on("keydown", ".line__textarea", function(e) {
+		if (e.which === 13 && e.metaKey) saveLineChanges();
+	});
+
+	//press save button to save changes to edited line
+	$(document).on("click", ".line__save-change", function() {
+		saveLineChanges();
+	});
+
+	//press esc to cancel changes to edited line
+	$(document).on("keydown", ".line__textarea", function(e) {
+		if (e.which === 27) cancelLineChanges();
+	});
+
+	//press cancel button to cancel changes to edited line
+	$(document).on("click", ".line__cancel-change", function() {
+		cancelLineChanges();
+	});
+
+	function saveLineChanges() {
+		startProgressBarIfItWasRunning();
+		var $textarea = $(".line__textarea");
+		$textarea.replaceWith("<p class='line__text'>" + $textarea.val() + "</p>");
+	}
+
+	function startProgressBarIfItWasRunning() {
+		var progBarWasRunning = $(".line__textarea").data("prog-bar-running");
+		if (progBarWasRunning) unpause();
+	}
+
+	function cancelLineChanges() {
+		startProgressBarIfItWasRunning();
+		$(".line__textarea").replaceWith("<p class='line__text'>" + lineBeforeEdits + "</p>");
+	}
+
 	//swipe left (mobile)
 	$(window).on("swipeleft", function() {
 		flipToNextPage();
@@ -427,16 +506,24 @@ $(document).ready(function() {
 		progressBarSpeed = $(this).val();
 	});
 
-	//pause session
+	//press pause (or unpause) button
 	$(".pause").click(function() {
-		$(this).toggleClass("is-paused");
-
 		if ($(this).hasClass("is-paused")) {
-			stopProgressBar();
+			unpause();
 		} else {
-			startProgressBar();
+			pause();
 		}
 	});
+
+	function pause() {
+		$(".pause").addClass("is-paused");
+		stopProgressBar();
+	}
+
+	function unpause() {
+		$(".pause").removeClass("is-paused");
+		startProgressBar();
+	}
 
 	//flip to next page
 	$(".next").click(function() {
