@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Hurleyisms - My Account</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- STYLESHEETS -->
+        <link rel="stylesheet" href="stylesheets/styles.css">
+
+        <!-- ICONS -->
+        <link rel="icon" type="image/x-icon" href="images/favicon.ico" sizes="32x32" />
+        <link rel="apple-touch-icon" sizes="120x120" href="images/apple-touch-icon-120.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon-180.png" />
+
+        <!-- FONTS -->
+        <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
+
+        <script src="javascripts/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    </head>
+    <body class="is-monthly">
+        <header class="submit__header">
+            <a href="app" class="close">X</a>
+            <h1>My Account</h1>
+            <a href="/">Log out</a>
+        </header>
+        <div class="submit__container">
+            <form class="form-control">
+                <label for="email">Email Address</label>
+                <div id="email" class="input-group simple-edit">
+                    <input type="email" class="simple-edit__input" value="david@hurleyisms.com" disabled>
+                    <a href="#" class="input-group__addon btn--blue simple-edit__edit">Edit</a>
+                </div>
+            </form>
+            <form class="form-control">
+                <label for="password">Password</label>
+                <div id="password" class="input-group simple-edit">
+                    <input type="password" class="simple-edit__input" value="fillinpasswordhere" disabled>
+                    <a href="#" class="input-group__addon btn--blue simple-edit__edit">Edit</a>
+                </div>
+                <a href="#" class="show-password hidden">Show password</a>
+            </form>
+            <div class="form-control--fake if-monthly">
+                <p>Account Type</p>
+                <div class="account-type-display">
+                    <h2 class="account-type-display__type">Monthly Subscription</h2>
+                    <p class="account-type-display__price">$4.99/month</p>
+                    <p class="account-type-display__started">Started May 2016</p>
+                </div>
+                <a href="#" class="account-type-display__switch">Switch to Lifetime Access ($99)</a>
+            </div>
+            <div class="form-control--fake if-lifetime">
+                <p>Account Type</p>
+                <div class="account-type-display">
+                    <h2 class="account-type-display__type">Lifetime Access</h2>
+                    <p class="account-type-display__started">Started May 2016</p>
+                </div>
+            </div>
+            <div class="form-control--fake if-monthly cancel-subscription-display">
+                <p>Cancel Subscription</p>
+                <p class="cancel-subscription-display__explanation">If you stay and support the growth of Hurleyisms, you’re cool.  But you can cancel at any time–there’s no annoying salesperson to make it hard.</p>
+                <a href="#" class="cancel-subscription-display__cta" data-modal="cancel-subscription-modal">Cancel Subscription</a>
+            </div>
+        </div>
+
+        <!-- CANCEL SUBSCRIPTION MODAL -->
+        <div class="modal" id="cancel-subscription-modal">
+            <div class="modal__window">
+                <div class="modal__header">
+                    <h1>Cancel Subscription</h1>
+                    <a href="javascript:void(0)" class="modal__close">X</a>
+                </div>
+                <div class="modal__body">
+                    <p>Are you sure you want to cancel your subscription?  This will go into effect immediately.</p>
+                </div>
+                <div class="modal__footer">
+                    <a href="/" class="btn--red">Cancel account</a>
+                    <a href="#" class="modal__close">I'll keep my account for now</a>
+                </div>
+            </div>
+        </div>
+        <script src="javascripts/vendor/jquery-1.11.1.min.js"></script>
+        <script src="javascripts/shared.js"></script>
+        <script src="javascripts/my-account.js"></script>
+    </body>
+</html>

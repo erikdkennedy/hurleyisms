@@ -12,4 +12,8 @@ router.get('/pro', function(req, res, next) {
     res.sendFile(path.join(__dirname,'../public','pro.html'));
 });
 
+router.get('/my-account', function(req, res, next) {
+    res.sendFile(path.join(__dirname,'../public','my-account.html'));
+});
+
 module.exports = router;

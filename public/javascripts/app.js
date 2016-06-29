@@ -12,6 +12,8 @@ $(document).ready(function() {
 		KIDS: 2
 	};
 
+	var lineBeforeEdits;
+
 	//cached for perf
 	var $progressBar = $("#progress-bar");
 	var $progressBarFill = $("#progress-bar__fill");
@@ -167,6 +169,7 @@ $(document).ready(function() {
 
 		if ($(".error").length === 0) {
 		    sendNewLine(function () {
+		    	$.createToast("Line submitted!");
 		        resetSubmitForm();
 		    });
 		} else {
@@ -187,7 +190,6 @@ $(document).ready(function() {
 	    sendLine(line, callback);
 	}
 	function resetSubmitForm() {
-		$(".line-added").addClass("fade-in");
 		$("#the-line").val("");
 		scrollToElement( $("body") );
 	}
@@ -197,11 +199,6 @@ $(document).ready(function() {
 			scrollTop: $element.offset().top
 		}, 250);
 	}
-
-	//on submit-a-line animation complete, remove the animating class
-	$("body").on("webkitAnimationEnd oanimationend msAnimationEnd animationend", function() {
-		$(".line-added").removeClass("fade-in");
-	});
 
 
 
@@ -338,6 +335,7 @@ $(document).ready(function() {
 
 	function stopProgressBar() {
 		cancelAnimationFrame(progressBarAnimation);
+		lastRepaintTime = null;
 	}
 
 	function resetProgressBar() {
@@ -387,6 +385,96 @@ $(document).ready(function() {
 		$("#lines .line__text").removeAttr("style");
 	}
 
+	//click a line to edit is (admins only)
+	$(document).on("click", ".line__text", function() {
+		startEditingLine( $(this) );
+	});
+
+	function startEditingLine($textBox) {
+		if (!isAdmin()) return false;
+
+		var progressBarWasRunning = !!lastRepaintTime;
+
+		var $currentlyEditingLines = $(".line__textarea");
+		if ($currentlyEditingLines.length) cancelLineChanges();
+
+		pause();
+
+		lineBeforeEdits = $textBox.html();
+		var height = $textBox.outerHeight();
+		$textBox.replaceWith("<textarea class='line__textarea' spellcheck='true' style='height: " + height + "px;'>" + lineBeforeEdits + "</textarea>");
+
+		$(".line__textarea")
+				.data("prog-bar-running", progressBarWasRunning)
+				.focus();
+	}
+
+	function isAdmin() {
+		return $("body").hasClass("is-admin");
+	}
+
+	//press "a" to toggle admin mode (prototype only)
+	//TODO Andrew - remove this when admin mode is implemented
+	$(document).keyup(function(e) {
+		if (e.which === 65 && !$(e.target).isTextField()) $("body").toggleClass("is-admin");
+	});
+
+	//click TRASH CAN button to delete line
+	$(document).on("click", ".line__delete", function() {
+		var lineName = $(this).closest(".line").attr("name");
+		$("#delete-line-modal").data("line", lineName);
+		pause();
+	});
+
+	//on closing delete line modal
+	$("#delete-line-modal, #delete-line-modal .modal__close, #delete-line-modal .btn--red").click(function() {
+		unpause();
+	});
+
+	//clicking "Delete line" on modal dialog
+	$("#delete-line-modal .btn--red").click(function() {
+		var lineName = $("#delete-line-modal").data("line");
+		$.createToast("Line deleted", null, "toast--red");
+		$(".line[name=" + lineName + "]").remove();
+	});
+
+	//press cmd+enter to save changes to edited line
+	$(document).on("keydown", ".line__textarea", function(e) {
+		if (e.which === 13 && e.metaKey) saveLineChanges();
+	});
+
+	//press save button to save changes to edited line
+	$(document).on("click", ".line__save-change", function() {
+		saveLineChanges();
+	});
+
+	//press esc to cancel changes to edited line
+	$(document).on("keydown", ".line__textarea", function(e) {
+		if (e.which === 27) cancelLineChanges();
+	});
+
+	//press cancel button to cancel changes to edited line
+	$(document).on("click", ".line__cancel-change", function() {
+		cancelLineChanges();
+	});
+
+	function saveLineChanges() {
+		startProgressBarIfItWasRunning();
+		var $textarea = $(".line__textarea");
+		$textarea.replaceWith("<p class='line__text'>" + $textarea.val() + "</p>");
+		$.createToast("Changes saved!");
+	}
+
+	function startProgressBarIfItWasRunning() {
+		var progBarWasRunning = $(".line__textarea").data("prog-bar-running");
+		if (progBarWasRunning) unpause();
+	}
+
+	function cancelLineChanges() {
+		startProgressBarIfItWasRunning();
+		$(".line__textarea").replaceWith("<p class='line__text'>" + lineBeforeEdits + "</p>");
+	}
+
 	//swipe left (mobile)
 	$(window).on("swipeleft", function() {
 		flipToNextPage();
@@ -427,16 +515,24 @@ $(document).ready(function() {
 		progressBarSpeed = $(this).val();
 	});
 
-	//pause session
+	//press pause (or unpause) button
 	$(".pause").click(function() {
-		$(this).toggleClass("is-paused");
-
 		if ($(this).hasClass("is-paused")) {
-			stopProgressBar();
+			unpause();
 		} else {
-			startProgressBar();
+			pause();
 		}
 	});
+
+	function pause() {
+		$(".pause").addClass("is-paused");
+		stopProgressBar();
+	}
+
+	function unpause() {
+		$(".pause").removeClass("is-paused");
+		startProgressBar();
+	}
 
 	//flip to next page
 	$(".next").click(function() {
