@@ -7,7 +7,8 @@
 var app = require('../app');
 var debug = require('debug')('hurleyisms:server');
 var http = require('http');
-
+var https = require('https');
+var fs = require('fs');
 /**
  * Get port from environment and store in Express.
  */
@@ -16,11 +17,28 @@ var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
- * Create HTTP server.
+ * Create HTTP or HTTPS server.
+ * For local development we need to have an https server, for prod it will only
+ * be http as the load balancer carries the cert
  */
 
-var server = http.createServer(app);
+if(process.env.NODE_ENV === 'development'){
+console.log("SSL server [DEVELOPMENT]");
+var options = {
+  
+  key: fs.readFileSync('server.key'),
+  cert: fs.readFileSync('server.crt'),
+  requestCert: false,
+  rejectUnauthorized: false
+}
 
+var server = https.createServer(options,app);
+}
+else{
+  console.log("Non SSL server [PRODUCTION] ");
+  var server = http.createServer(app);
+
+}
 /**
  * Listen on provided port, on all network interfaces.
  */
