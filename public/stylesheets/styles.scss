@@ -49,13 +49,21 @@ h1, h2, h3, h4, p {
 	margin-top: 0;
 }
 
-input[type=text], textarea {
+input[type=text],
+input[type=password],
+input[type=email],
+textarea {
 	padding: 4px 6px;
 	font-family: "Roboto", sans-serif;
 	font-size: 17px;
 	border: 1px solid #999;
 	border-radius: 2px;
-	box-shadow: inset 0 1px 2px rgba(black, .3);
+	box-shadow: inset 0 1px 3px rgba(black, .3);
+
+	&[disabled] {
+		pointer-events: none;
+		opacity: .5;
+	}
 }
 
 a {
@@ -70,7 +78,14 @@ a {
 
 // TODO remove in final code
 body:not(.is-logged-in) .if-logged-in,
-body.is-logged-in .if-logged-out {
+body.is-logged-in .if-logged-out,
+body:not(.is-admin) .if-admin,
+body.is-monthly .if-lifetime,
+body.is-lifetime .if-monthly {
+	display: none !important;
+}
+
+.hidden {
 	display: none !important;
 }
 
@@ -300,6 +315,16 @@ section {
 		}
 	}
 
+	.btn--blue {
+		@extend .btn;
+
+		background-color: $blue;
+
+		&:hover {
+			background-color: adjust-color($blue, $lightness: -6);
+		}
+	}
+
 	.btn--red {
 		@extend .btn;
 
@@ -441,6 +466,7 @@ body.has-modal-open {
 }
 
 .form-control {
+	position: relative;
 	margin-bottom: 46px;
 
 	label,
@@ -466,13 +492,13 @@ body.has-modal-open {
 
 	input[type=text],
 	input[type=email],
-	input[type=password] {
+	input[type=password],
+	textarea {
 		width: 100%;
 		height: 44px;
 	}
 
 	textarea {
-		width: 100%;
 		height: 100px;
 	}
 
@@ -520,6 +546,46 @@ body.has-modal-open {
 		line-height: 44px;
 	}
 }
+
+.input-group {
+	display: flex;
+
+	input:not(:last-child) {
+		border-top-right-radius: 0px;
+		border-bottom-right-radius: 0px;
+	}
+
+	input ~ .input-group__addon {
+		border-top-left-radius: 0px;
+		border-bottom-left-radius: 0px;
+	}
+}
+
+.toast {
+    @extend .dark-bg;
+
+    position: fixed;
+    bottom: 100%;
+    left: 20px;
+    right: 20px;
+    margin: 20px auto;
+    border-radius: 3px;
+    padding: 14px;
+    max-width: 350px;
+    background-color: $green;
+    box-shadow: 0 1px 3px rgba(black, .4);
+    transition: all 0.2s ease;
+    z-index: 10;
+    backface-visibility: hidden;
+
+    &.appear {
+        transform: translateY(calc(100% + 40px));
+    }
+}
+
+	.toast--red {
+		background-color: $red;
+	}
 
 .feature > .content-width {
 	display: flex;
@@ -1300,7 +1366,7 @@ section.splash {
 			letter-spacing: .3px;
 		}
 
-		> .btn {
+		> :last-child {
 			float: right;
 			padding-left: 5px;
 			padding-right: 5px;
@@ -1384,6 +1450,8 @@ section.lines {
 
 		.line {
 			margin-bottom: 20px;
+			transition: all 0.4s ease 2s;
+			transform: scale(1);
 
 			@media ($tablet) {
 				padding: 13px 20px 10px;
@@ -1392,8 +1460,28 @@ section.lines {
 			}
 		}
 
+			.line--deleting {
+				transform: scale(0);
+				// height: 0;
+			}
+
 			.line__text {
 				margin-bottom: 15px;
+				font-size: 35px;
+				font-weight: 300;
+				line-height: 1.2;
+			}
+
+				html.no-touch body.is-admin .line__text:hover {
+					background-color: #F3F3F3;
+					cursor: pointer;
+				}
+
+			.line__textarea {
+				margin-top: -1px;
+				margin-left: -7px;
+				margin-bottom: 15px;
+				width: 100%;
 				font-size: 35px;
 				font-weight: 300;
 				line-height: 1.2;
@@ -1411,43 +1499,65 @@ section.lines {
 				opacity: .4;
 			}
 
-			.line__vote-buttons {
-				display: none;
+			.line__action-buttons {
+				display: flex;
+				align-items: center;
 			}
 
-			.line__vote-buttons .btn {
-				@include ir;
-
-				width: 44px;
-				height: 44px;
-				padding: 6px;
-				background-color: white;
-				text-align: center;
-				background-repeat: no-repeat;
-				background-position: center center;
-				border: 2px solid rgba(black, .1);
-
-				&:hover {
-					background-color: rgba(black, .05);
+				.line__text + .line__footer .if-editing {
+					display: none;
 				}
 
-				&.thumbs-up {background-image: url(../images/thumbs-up.png);}
-				&.thumbs-down {background-image: url(../images/thumbs-down.png);}
+				.line__cancel-change {
+					margin-right: 20px;
+				}
 
-				&.active {
-					border: none;
+				.line__square-btn {
+					@include ir;
 
-					&.thumbs-up {
+					width: 44px;
+					height: 44px;
+					padding: 6px;
+					background-color: white;
+					text-align: center;
+					background-repeat: no-repeat;
+					background-position: center center;
+					border: 2px solid rgba(black, .1);
+
+					&:hover {
+						background-color: rgba(black, .05);
+					}
+				}
+
+				.line__delete {
+					background-image: url(../images/trash-can.png);
+				}
+
+					.line__textarea + .line__footer .line__delete {
+						display: none;
+					}
+
+				.line__thumbs-up {
+					display: none;
+					background-image: url(../images/thumbs-up.png);
+
+					&.active {
+						border: none;
 						background-image: url(../images/thumbs-up-white.png);
 						background-color: $green;
 					}
+				}
 
-					&.thumbs-down {
+				.line__thumbs-down {
+					display: none;
+					background-image: url(../images/thumbs-down.png);
+
+					&.active {
+						border: none;
 						background-image: url(../images/thumbs-down-white.png);
 						background-color: $red;
 					}
 				}
-			}
 
 	.lines__footer {
 		display: flex;
@@ -1846,6 +1956,71 @@ body.upsell h2 {
 			font-size: 14px;
 			opacity: .5;
 		}
+
+
+
+/*****************************************
+			 MY ACCOUNT PAGE
+*****************************************/
+
+.submit__header > :last-child {
+	padding: 9px 5px;
+}
+
+.input-group .error {
+	position: absolute;
+	top: 100%;
+	left: 0;
+}
+
+.show-password {
+	display: block;
+	padding-top: 8px;
+}
+
+.form-control--fake {
+	@extend .form-control;
+
+	> p {
+		margin-bottom: 6px;
+	}
+}
+
+.account-type-display {
+	border-radius: 4px;
+	padding: 14px 14px 12px;
+	background-color: #E6E6E6;
+}
+
+	.account-type-display__type {
+		margin: 0 0 9px;
+		font-size: 23px;
+		font-weight: 300;
+	}
+
+	.account-type-display__price,
+	.account-type-display__started {
+		margin: 0;
+	}
+
+	.account-type-display__switch {
+		display: block;
+		margin-top: 8px;
+		font-size: 15px;
+	}
+
+.cancel-subscription-display {}
+
+	.cancel-subscription-display__explanation {
+		opacity: .5;
+		font-size: 15px;
+	}
+
+	.cancel-subscription-display__cta {
+		display: block;
+		margin-top: 12px;
+		font-size: 15px;
+	}
 
 
 

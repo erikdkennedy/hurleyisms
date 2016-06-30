@@ -20,6 +20,8 @@
 
         <!-- FONTS -->
         <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
+
+        <script src="javascripts/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
     </head>
     <body>
 
@@ -28,10 +30,10 @@
             <div class="splash__banner">
                 <div class="if-logged-out">
                     <a href="pro" class="upgrade-banner">Enjoying the trial?  <span>Unlock the entire collection of Peter Hurley's lines now</span>!</a>
-                    <p class="pro-catcher no-mobile">Have a pro account?  <a href="javascript:void(0)">Log in</a>.</p>
+                    <p class="pro-catcher no-mobile">Have a pro account?  <a href="#" data-modal="log-in-modal">Log in</a>.</p>
                 </div>
                 <div class="if-logged-in no-mobile">
-                    <a href="settings" class="splash__settings-icon"><img src="images/gear.png" alt="My Account & Settings"></a>
+                    <a href="my-account" class="splash__settings-icon"><img src="images/gear.png" alt="My Account & Settings"></a>
                 </div>
             </div>
             <div class="splash__title">Hurleyisms</div>
@@ -45,7 +47,7 @@
                 <div class="switch-wrapper">
                     <span class="switch"><span class="active">PG</span><span>R</span></span>
                 </div>
-                <a href="settings" class="btn mobile-only if-logged-in"><img src="images/gear-white.png"> Account</a>
+                <a href="my-account" class="btn mobile-only if-logged-in"><img src="images/gear-white.png"> Account</a>
                 <a href="#" class="btn add-line">Submit a Line</a>
                 <p class="pro-catcher mobile-only if-logged-out">Have a pro account?  <a href="javascript:void(0)">Log in</a></p>
             </footer>
@@ -53,7 +55,6 @@
 
         <!-- SUBMIT A LINE -->
         <section class="submit">
-            <div class="line-added">Line added!</div>
             <header class="submit__header">
                 <a href="#" class="close">X</a>
                 <h1>New Line</h1>
@@ -122,9 +123,12 @@
                     <p class="line__text"></p>
                     <footer class="line__footer">
                         <p class="line__byline">by <span class="author"></span></p>
-                        <div class="line__vote-buttons">
-                            <a href="#" class="btn thumbs-up">Thumbs up</a>
-                            <a href="#" class="btn thumbs-down">Thumbs down</a>
+                        <div class="line__action-buttons">
+                            <a href="#" class="line__cancel-change if-admin if-editing">Cancel</a>
+                            <a href="#" class="btn--green line__save-change if-admin if-editing">Save</a>
+                            <a href="#" class="btn line__square-btn line__delete if-admin" data-modal="delete-line-modal">Delete</a>
+                            <a href="#" class="btn line__square-btn line__thumbs-up">Thumbs up</a>
+                            <a href="#" class="btn line__square-btn line__thumbs-down">Thumbs down</a>
                         </div>
                     </footer>
                 </div>
@@ -141,8 +145,75 @@
             </footer>
             <div id="progress-bar"><div id="progress-bar__fill"></div></div>
         </section>
+
+        <!-- DELETE LINE MODAL -->
+        <div class="modal" id="delete-line-modal">
+            <div class="modal__window">
+                <div class="modal__header">
+                    <h1>Are you sure?</h1>
+                    <a href="#" class="modal__close"></a>
+                </div>
+                <div class="modal__body">
+                    <p>This action cannot be undone</p>
+                    <a href="#" class="btn--red modal__close">Delete Line</a>
+                    <a href="#" class="modal__close">Keep line</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- LOG IN MODAL -->
+        <div class="modal" id="log-in-modal">
+            <div class="modal__window">
+                <div class="modal__header">
+                    <h1>Log in</h1>
+                    <a href="javascript:void(0)" class="modal__close">X</a>
+                </div>
+                <div class="modal__body">
+                    <form>
+                        <div class="form-control">
+                            <label for="login__email-address">Email Address</label>
+                            <input type="email" id="login__email-address" required>
+                        </div>
+                        <div class="form-control">
+                            <label for="login__password">Password</label>
+                            <input type="password" id="login__password" required>
+                            <p><a href="#" data-modal="forgot-password-modal"><small>I forgot my password</small></a></p>
+                        </div>
+                        <div class="form-control">
+                            <input type="submit" class="btn btn--green" val="Log In">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal__footer">
+                    <p class="note">Don't have an account? <a href="pro">Sign up for Pro now</a>.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FORGOT PASSWORD MODAL -->
+        <div class="modal" id="forgot-password-modal">
+            <div class="modal__window">
+                <div class="modal__header">
+                    <h1>Forgot Password</h1>
+                    <a href="javascript:void(0)" class="modal__close">X</a>
+                </div>
+                <div class="modal__body">
+                    <form>
+                        <div class="form-control">
+                            <label for="login__email-address">Email Address</label>
+                            <input type="email" id="login__email-address" required>
+                        </div>
+                        <div class="form-control">
+                            <input type="submit" class="btn btn--green" val="Send me my password">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <script src="javascripts/vendor/jquery-1.11.1.min.js"></script>
         <script src="javascripts/vendor/jquery.mobile.custom.min.js"></script>
-        <script src="javascripts/hurleyisms.min.js"></script>
-</body>
+        <script src="javascripts/shared.js"></script>
+        <script src="javascripts/app.js"></script>
+    </body>
 </html>
