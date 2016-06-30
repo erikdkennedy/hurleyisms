@@ -10,4 +10,5 @@ node_modules/
 
 hurleyisms.tsv
 hurleyisms.min.js
+pro.min.js
 *.codekit

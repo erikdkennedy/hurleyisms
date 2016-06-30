@@ -20,23 +20,31 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+function minJSFiles(files, target)
+{
+    var uglified = uglifyJs.minify(files, { compress: false, mangle: false });
+    fs.writeFile(target, uglified.code, function (err) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("Script generated and saved:", target);
+        }
+    });
+}
 
 //combine JS for SPA
 var appClientFiles = [
   'public/javascripts/shared.js',
   'public/javascripts/app.js'
 ];
-var compressFlag = process.env.ENVIRONMENT == 'prod' || false ;
-console.log(compressFlag + "- compressFlag");
-var uglified = uglifyJs.minify(appClientFiles, { compress: compressFlag, mangle:compressFlag });
+minJSFiles(appClientFiles, 'public/javascripts/hurleyisms.min.js');
 
-fs.writeFile('public/javascripts/hurleyisms.min.js', uglified.code, function (err) {
-    if (err) {
-        console.log(err);
-    } else {
-        console.log("Script generated and saved:", 'hurleyisms.min.js');
-    }
-});
+var proClientFiles = [
+    'public/javascripts/shared.js',
+    'public/javascripts/stripe.js'
+]
+minJSFiles(proClientFiles, 'public/javascripts/pro.min.js');
+
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));

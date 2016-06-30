@@ -22,6 +22,9 @@
         <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
 
         <script src="javascripts/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+        <script src="javascripts/vendor/jquery-1.11.1.min.js"></script>
+        <script src="https://checkout.stripe.com/checkout.js"></script>
+        <script src="javascripts/pro.min.js"></script>
     </head>
     <body class="upsell">
         <header class="upsell-header">
@@ -89,17 +92,15 @@
                 <h3 class="upsell-cta__title">Monthly Subscription</h3>
                 <p class="upsell-cta__price">$4.99/month</p>
                 <p class="upsell-cta__details"><img src="images/star.png">MOST POPULAR</p>
-                <a href="javascript:void(0)" class="btn--green upsell-cta__btn">Go Monthly</a>
+                <a class="btn--green upsell-cta__btn">Go Monthly</a>
             </div>
             <div class="upsell-cta">
                 <h3 class="upsell-cta__title">Lifetime* <br /> Access</h3>
                 <p class="upsell-cta__price">$99</p>
                 <p class="upsell-cta__details">One payment,<br /> lifetime access</p>
-                <a href="javascript:void(0)" class="btn--green upsell-cta__btn">Go Lifetime</a>
+                <a id="btnlifetime" href="javascript:void(0)" class="btn--green upsell-cta__btn">Go Lifetime</a>
                 <div class="upsell-cta__footnote">* For the life of the service</div>
             </div>
         </div>
-    </body>
-    <script src="javascripts/vendor/jquery-1.11.1.min.js"></script>
-    <script src="javascripts/min/shared-min.js"></script>
+    </body>                   
 </html>
