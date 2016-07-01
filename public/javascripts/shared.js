@@ -37,10 +37,11 @@ jQuery.fn.extend({
 
 		var error = errorMessage || "This is a required field";
 		return this.each(function() {
-			$(this).blur(function() {
-				if ($(this).val().length === 0)
+			$(this).blur(function(e) {
+				if ($(this).val().length === 0) {
 					$(this).addError(error);
-				else
+					e.stopImmediatePropagation();
+				} else
 					$(this).removeError();
 			});
 
@@ -49,6 +50,7 @@ jQuery.fn.extend({
 				$(this.form).submit(function(e) {
 					if ($input.val().length === 0) {
 						$input.addError(error);
+						e.stopImmediatePropagation();
 						return false;
 					} else {
 						$input.removeError();
@@ -67,11 +69,13 @@ jQuery.fn.extend({
 		}
 
 		return this.each(function() {
-			$(this).blur(function() {
+			$(this).blur(function(e) {
 				if (isValidEmail( $(this).val() ))
 					$(this).removeError();
-				else
+				else {
 					$(this).addError(error);
+					e.stopImmediatePropagation();
+				}
 			});
 
 			if (this.form) {
@@ -84,6 +88,38 @@ jQuery.fn.extend({
 						$input.addError(error);
 						e.preventDefault();
 						e.stopPropagation();
+						return false;
+					}
+				});
+			}
+		});
+	},
+	uniquify: function(errorMessage) {
+		var error = errorMessage || "This is already taken";
+
+		function isUnique(valueToCheck) {
+			//TODO Andrew - check for uniqueness on server instead
+			return valueToCheck !== "erik.d.kennedy@gmail.com";
+		}
+
+		return this.each(function() {
+			$(this).blur(function(e) {
+				if (isUnique( $(this).val() ))
+					$(this).removeError();
+				else {
+					$(this).addError(error);
+					e.stopImmediatePropagation();
+				}
+			});
+
+			if (this.form) {
+				var $input = $(this);
+				$(this.form).submit(function(e) {
+					if (isUnique( $input.val() )) {
+						$input.removeError();
+						e.preventDefault();
+					} else {
+						$input.addError(error);
 						return false;
 					}
 				});
@@ -226,6 +262,8 @@ $(document).ready(function() {
 		e.preventDefault();
 	});
 
+
+
 	/***********************************
 				MODAL FUNCTIONS
 	***********************************/
@@ -239,7 +277,6 @@ $(document).ready(function() {
 
 	//open modal
 	$(document).on("click", "a[data-modal]", function() {
-		console.log("hey");
 
 		//if there's a current modal open, close it
 		if ($("body").hasClass("has-modal-open")) {
