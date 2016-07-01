@@ -27,10 +27,13 @@
 
         <!-- SPLASH -->
         <section class="splash active">
-            <div class="splash__banner">
+            <div class="splash__header-area">
                 <div class="if-logged-out">
-                    <a href="pro" class="upgrade-banner">Enjoying the trial?  <span>Unlock the entire collection of Peter Hurley's lines now</span>!</a>
+                    <a href="pro" class="banner banner--upgrade">Enjoying the trial?  <span>Unlock the entire collection of Peter Hurley's lines now</span>!</a>
                     <p class="pro-catcher no-mobile">Have a pro account?  <a href="#" data-modal="log-in-modal">Log in</a>.</p>
+                </div>
+                <div class="if-logged-in if-payment-error">
+                    <a href="#" class="banner banner--error">Your payment details are not valid.  <span>Fix them now to unlock all functionality</span>.</a>
                 </div>
                 <div class="if-logged-in no-mobile">
                     <a href="my-account" class="splash__settings-icon"><img src="images/gear.png" alt="My Account & Settings"></a>

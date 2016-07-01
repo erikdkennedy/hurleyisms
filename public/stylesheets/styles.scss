@@ -81,7 +81,8 @@ body:not(.is-logged-in) .if-logged-in,
 body.is-logged-in .if-logged-out,
 body:not(.is-admin) .if-admin,
 body.is-monthly .if-lifetime,
-body.is-lifetime .if-monthly {
+body.is-lifetime .if-monthly,
+body:not(.has-payment-error) .if-payment-error {
 	display: none !important;
 }
 
@@ -1133,7 +1134,7 @@ section.splash {
 
 	// .splash__banner {}
 
-		.upgrade-banner {
+		.banner {
 			@extend .dark-bg;
 
 			display: block;
@@ -1141,12 +1142,20 @@ section.splash {
 			padding: 5px;
 			text-align: center;
 			text-decoration: none;
-			background-color: $green;
+			background-color: gray;
 
 			span {
 				text-decoration: underline;
 			}
 		}
+
+			.banner--upgrade {
+				background-color: $green;
+			}
+
+			.banner--error {
+				background-color: $red;
+			}
 
 		.pro-catcher {
 			flex-basis: 100%;

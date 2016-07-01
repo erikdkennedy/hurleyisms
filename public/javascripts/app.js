@@ -131,8 +131,9 @@ $(document).ready(function() {
 			   LISTENERS - SUBMIT
 	*****************************************/
 
-	//switch logged in/out -- TODO: remove this
+	//TODO Andrew, remove this, it's prototype only
 	$(document).keyup(function(e) {
+		//switch logged in/out
 		if (e.keyCode === 76) {
 			if (isLoggedIn()) {
 				enableLineSubmissionControls();
@@ -140,7 +141,12 @@ $(document).ready(function() {
 				disableLineSubmissionControls();
 			}
 		}
+
+		//switch payment set up/NOT set up
+		if (e.keyCode === 80)
+			$("body").toggleClass("has-payment-error");
 	});
+
 
 	//close this page
 	$("section.submit a.close").click(function() {
