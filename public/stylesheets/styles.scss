@@ -82,7 +82,8 @@ body.is-logged-in .if-logged-out,
 body:not(.is-admin) .if-admin,
 body.is-monthly .if-lifetime,
 body.is-lifetime .if-monthly,
-body:not(.has-payment-error) .if-payment-error {
+body:not(.has-payment-error) .if-payment-error,
+body:not(.is-unverified-email) .if-unverified-email {
 	display: none !important;
 }
 
@@ -1138,16 +1139,23 @@ section.splash {
 			@extend .dark-bg;
 
 			display: block;
-			margin: -5px -5px 5px;
 			padding: 5px;
 			text-align: center;
 			text-decoration: none;
 			background-color: gray;
 
+			a {
+				color: inherit;
+			}
+
 			span {
 				text-decoration: underline;
 			}
 		}
+
+			.banner--splash {
+				margin: -5px -5px 5px;
+			}
 
 			.banner--upgrade {
 				background-color: $green;

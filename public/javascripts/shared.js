@@ -270,7 +270,7 @@ $(document).ready(function() {
 
 	//TODO remove in final code
 	$("body").keyup(function(e) {
-		if (e.keyCode === 76) {
+		if (e.which === 76) {
 			$(this).toggleClass("is-logged-in");
 		}
 	});
