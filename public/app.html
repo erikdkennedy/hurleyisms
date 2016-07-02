@@ -27,10 +27,13 @@
 
         <!-- SPLASH -->
         <section class="splash active">
-            <div class="splash__banner">
+            <div class="splash__header-area">
                 <div class="if-logged-out">
-                    <a href="pro" class="upgrade-banner">Enjoying the trial?  <span>Unlock the entire collection of Peter Hurley's lines now</span>!</a>
+                    <a href="pro" class="banner banner--upgrade banner--splash">Enjoying the trial?  <span>Unlock the entire collection of Peter Hurley's lines now</span>!</a>
                     <p class="pro-catcher no-mobile">Have a pro account?  <a href="#" data-modal="log-in-modal">Log in</a>.</p>
+                </div>
+                <div class="if-logged-in if-payment-error">
+                    <a href="#" class="banner banner--error banner--splash">Your payment details are not valid.  <span>Fix them now to unlock all functionality</span>.</a>
                 </div>
                 <div class="if-logged-in no-mobile">
                     <a href="my-account" class="splash__settings-icon"><img src="images/gear.png" alt="My Account & Settings"></a>
@@ -74,6 +77,7 @@
                     <a href="pro" class="btn btn--white btn--shadow">Tell Me More</a>
                 </div>
             </div>
+            <div class="banner banner--error if-logged-in if-unverified-email">You must verify your email address to submit a new line.  <a href="#" class="resend-verification-email">Send verification email to erik.d.kennedy@gmail.com</a> or <a href="my-account">change email address</a>.</div>
             <div class="submit__container">
                 <div class="form-control">
                     <label for="the-line">The Line <span class="form-control__label-hint"><span class="char-remaining"></span> characters remaining</span></label>

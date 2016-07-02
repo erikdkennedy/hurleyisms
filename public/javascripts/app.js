@@ -131,16 +131,34 @@ $(document).ready(function() {
 			   LISTENERS - SUBMIT
 	*****************************************/
 
-	//switch logged in/out -- TODO: remove this
+	//TODO Andrew, remove this, it's prototype only
 	$(document).keyup(function(e) {
-		if (e.keyCode === 76) {
-			if (isLoggedIn()) {
+		//switch payment set up/NOT set up
+		if (e.which === 80) //"p"
+			$("body").toggleClass("has-payment-error");
+
+		//switch verified/unverified email
+		if (e.which === 69) //"e"
+			$("body").toggleClass("is-unverified-email");
+
+		//show or hide line submission controls
+		if (e.which === 76 || e.which === 69) { //"l" or "e"
+			if (isLoggedIn() && hasVerifiedEmail()) {
 				enableLineSubmissionControls();
 			} else {
 				disableLineSubmissionControls();
 			}
 		}
 	});
+
+	function hasVerifiedEmail() {
+		return !$("body").hasClass("is-unverified-email");
+	}
+
+	$(".resend-verification-email").click(function() {
+		$.createToast("Verification email sent!");
+	});
+
 
 	//close this page
 	$("section.submit a.close").click(function() {

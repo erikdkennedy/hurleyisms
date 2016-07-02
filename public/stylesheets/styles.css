@@ -538,7 +538,9 @@ body:not(.is-logged-in) .if-logged-in,
 body.is-logged-in .if-logged-out,
 body:not(.is-admin) .if-admin,
 body.is-monthly .if-lifetime,
-body.is-lifetime .if-monthly {
+body.is-lifetime .if-monthly,
+body:not(.has-payment-error) .if-payment-error,
+body:not(.is-unverified-email) .if-unverified-email {
   display: none !important; }
 
 .hidden {
@@ -569,7 +571,7 @@ body.is-lifetime .if-monthly {
   .semantic-ul > li > a, .mode-selector > li > a, .submit__container .checkbox-list > li > a {
     display: block; }
 
-.dark-bg, .switch:not(.active) span:first-child, .switch.active span:last-child, .btn, .btn--green, .btn--blue, .btn--red, .btn--white, .form-control .checkbox-list input[type=checkbox] + label, .form-control--setting .checkbox-list input[type=checkbox] + label, .form-control--fake .checkbox-list input[type=checkbox] + label, .toast, .marketing-page footer, .upgrade-banner, .blue-box {
+.dark-bg, .switch:not(.active) span:first-child, .switch.active span:last-child, .btn, .btn--green, .btn--blue, .btn--red, .btn--white, .form-control .checkbox-list input[type=checkbox] + label, .form-control--setting .checkbox-list input[type=checkbox] + label, .form-control--fake .checkbox-list input[type=checkbox] + label, .toast, .marketing-page footer, .banner, .blue-box {
   color: white;
   -webkit-font-smoothing: antialiased; }
 
@@ -1388,15 +1390,25 @@ section.splash {
   position: relative;
   padding: 5px; }
 
-.upgrade-banner {
+.banner {
   display: block;
-  margin: -5px -5px 5px;
   padding: 5px;
   text-align: center;
   text-decoration: none;
-  background-color: #51B87C; }
-  .upgrade-banner span {
+  background-color: gray; }
+  .banner a {
+    color: inherit; }
+  .banner span {
     text-decoration: underline; }
+
+.banner--splash {
+  margin: -5px -5px 5px; }
+
+.banner--upgrade {
+  background-color: #51B87C; }
+
+.banner--error {
+  background-color: #EB3B1C; }
 
 .pro-catcher {
   -webkit-flex-basis: 100%;
