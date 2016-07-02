@@ -25,6 +25,7 @@
     "passport-local": "^1.0.0",
     "request": "^2.72.0",
     "serve-favicon": "~2.3.0",
+    "stripe": "^4.7.0",
     "uglify-js": "^2.6.4"
   }
 }

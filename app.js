@@ -8,14 +8,16 @@ require('./models/db');
 require('./config/passport');
 var routes = require('./routes/index');
 var admin = require('./routes/admin');
-var users = require('./routes/users');
 var appRoute = require('./routes/app');
 var authRoute = require('./routes/auth');
 var passport = require('passport');
 var uglifyJs = require("uglify-js");
+var jwt = require('express-jwt');
 var fs = require('fs');
 var BasicStrategy = require('passport-http').BasicStrategy
 var app = express();
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -41,7 +43,8 @@ minJSFiles(appClientFiles, 'public/javascripts/hurleyisms.min.js');
 
 var proClientFiles = [
     'public/javascripts/shared.js',
-    'public/javascripts/stripe.js'
+    'public/javascripts/stripe.js',
+    'public/javascripts/auth.js'
 ]
 minJSFiles(proClientFiles, 'public/javascripts/pro.min.js');
 
@@ -56,11 +59,25 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
 
+//setup auth cookie checking
+
+app.use(jwt({
+    secret: process.env.JWT_SECRET,
+    userProperty: 'payload',
+    credentialsRequired: false,
+    getToken: function fromCookie(req)
+    {
+        console.log("checking cookie");
+        if(req.cookies.auth) return req.cookies.auth;
+        return null;
+    }
+}));
+
+
 // ROUTING SECTION
 app.use('/', routes);
 app.use('/app', appRoute);
 app.use('/admin', admin);
-app.use('/users', users);
 app.use('/auth', authRoute );
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
