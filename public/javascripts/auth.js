@@ -53,6 +53,19 @@ $(document).ready(function () {
     }
     $("#logout").click(loggout);
 
+    updateEmailAddress = function (email, callback) {
+        $.post('auth/email', { email: email }).done(function () {
+            callback();
+        });
+    }
+    updatePassword = function (password, callback) {
+        $.post('auth/password', { password: password }).done(function () {
+            callback();
+        });
+    }
+
+
+
     isLoggedIn = function () {
         var token = getToken();
         if (token) {
@@ -82,6 +95,18 @@ $(document).ready(function () {
             return false;
         }
     };
+    loggedInEmail = function () {
+        var token = getToken();
+        if (token) {
+            var payload = JSON.parse(window.atob(token.split('.')[1]));
+            if (payload.exp > Date.now() / 1000) return payload.email;
+            return null;
+        } else {
+            return null;
+        }
+    };
+
+    
 
     var getToken = function () {
         return getCookie("auth");

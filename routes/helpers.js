@@ -5,7 +5,7 @@
     res.redirect('/auth/login');
 }
 function isLoggedIn(req) {
-    return req.payload;
+    return req.payload && req.payload.email;
 }
 function onlyLoggedIn(req, res, next) {
     if (isLoggedIn(req)) {

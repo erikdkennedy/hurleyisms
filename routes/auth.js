@@ -5,9 +5,14 @@ var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var stripe = require("stripe")(process.env.STRIPE_KEY);
 var helpers = require('./helpers');
+
 var sendJSONresponse = function (res, status, content) {
     res.status(status);
     res.json(content);
+};
+var sendUpdateCookie = function (res, user, content) {
+    setCookie(res, user);
+    sendJSONresponse(res, 200, content);
 };
 
 var setCookie = function (res, user) {
@@ -58,9 +63,7 @@ router.post('/register', function (req, res) {
         if (err) {
             sendJSONresponse(res, 404, err);
         } else {
-            setCookie(res, user);
-            sendJSONresponse(res, 200, {
-            });
+            sendUpdateCookie(res, user, { status: 'success' });
         }
     });
 
@@ -83,16 +86,14 @@ router.post('/login', function (req, res) {
         }
 
         if (user) {
-            setCookie(res, user);
-            sendJSONresponse(res, 200, {
-            });
+            sendUpdateCookie(res, user, { status: 'success' });
         } else {
             sendJSONresponse(res, 401, info);
         }
 
     })(req, res);
 });
-router.post('/lifetime', function (req, res) {
+router.post('/lifetime', helpers.onlyLoggedIn, function (req, res) {
     if (!(req.payload && req.payload.email)) {
         sendJSONresponse(res, 401);
         return;
@@ -123,13 +124,13 @@ router.post('/lifetime', function (req, res) {
                 if (err) {
                     sendJSONresponse(res, 404, err);
                 } else {
-                    sendJSONresponse(res, 200, { status: 'success' });
+                    sendUpdateCookie(res, user, { status: 'success' });
                 }
             });
         });
     });
 });
-router.post('/monthly', function (req, res) {
+router.post('/monthly', helpers.onlyLoggedIn, function (req, res) {
     if (!(req.payload && req.payload.email)) {
         sendJSONresponse(res, 401);
         return;
@@ -159,9 +160,45 @@ router.post('/monthly', function (req, res) {
                 if (err) {
                     sendJSONresponse(res, 404, err);
                 } else {
-                    sendJSONresponse(res, 200, { status: 'success' });
+                    sendUpdateCookie(res, user, { status: 'success' });
                 }
             });
+        });
+    });
+});
+router.post('/email', helpers.onlyLoggedIn, function (req, res) {
+    if (!req.body.email) {
+        sendJSONresponse(res, 400, {
+            "message": "All fields required"
+        });
+        return;
+    }
+    getUser(req, res, function (req, res, user) {
+        user.email = req.body.email;
+        user.save(function (err) {
+            if (err) {
+                sendJSONresponse(res, 404, err);
+            } else {
+                sendUpdateCookie(res, user, { status: 'success' });
+            }
+        });
+    });
+});
+router.post('/password', helpers.onlyLoggedIn, function (req, res) {
+    if (!req.body.password) {
+        sendJSONresponse(res, 400, {
+            "message": "All fields required"
+        });
+        return;
+    }
+    getUser(req, res, function (req, res, user) {
+        user.setPassword(req.body.password);
+        user.save(function (err) {
+            if (err) {
+                sendJSONresponse(res, 404, err);
+            } else {
+                sendUpdateCookie(res, user, { status: 'success' });
+            }
         });
     });
 });

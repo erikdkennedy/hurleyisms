@@ -3,7 +3,7 @@ $(document).ready(function() {
 	/*****************************************
 				  INITIALIZATION
 	*****************************************/
-
+    $("input[type=email]").val(loggedInEmail());
 	$("input[type=email], input[type=password]").requirify();
 	$("input[type=email]").emailify();
 	$("input[type=password]").showPasswordify({
@@ -13,6 +13,10 @@ $(document).ready(function() {
 	$("#email").simpleEditify({
 		onSaveSuccess: function() {
 			$.createToast("New email address saved!  Check your inbox for Hurleyisms's message to confirm this email is yours.");
+		},
+		onSave: function (callback) {
+		    var email = $("input[type=email]").val();
+		    updateEmailAddress(email, callback);
 		}
 	});
 
@@ -25,10 +29,12 @@ $(document).ready(function() {
 		},
 		onSaveSuccess: function() {
 			$.createToast("New password saved!");
+		},
+		onSave: function (callback) {
+		    var password = $("input[type=password]").val();
+		    updatePassword(password, callback);
 		}
 	});
-
-
 
 	/*****************************************
 					LISTENERS
@@ -43,4 +49,7 @@ $(document).ready(function() {
 	$(".show-password").click(function() {
 		$(this).toggleText("Show password", "Hide password");
 	});
+
+    
+    
 });

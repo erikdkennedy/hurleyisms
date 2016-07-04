@@ -111,14 +111,13 @@ jQuery.fn.extend({
 
             //CLICK "SAVE"
             $(this).on("click", ".simple-edit__save", function () {
-                $(this).closest("form").submit();
-            });
-
-            //SUBMIT FORM
-            $(this).closest("form").submit(function () {
                 if ($(this).find(".error").length === 0) {
-                    var $simpleEdit = $(this).find(".simple-edit");
-                    saveSimpleEdit($simpleEdit);
+                    var $simpleEdit = $(this).closest(".simple-edit");
+                    var callback = function () {
+                        saveSimpleEdit($simpleEdit);
+                    };
+                    if (options.onSave) { options.onSave(callback); }
+                    else { callback(); }
                 }
             });
 
