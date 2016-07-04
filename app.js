@@ -48,6 +48,12 @@ var proClientFiles = [
 ]
 minJSFiles(proClientFiles, 'public/javascripts/pro.min.js');
 
+var proClientFiles = [
+    'public/javascripts/shared.js',
+    'public/javascripts/marketing.js',
+    'public/javascripts/auth.js'
+]
+minJSFiles(proClientFiles, 'public/javascripts/index.min.js');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));

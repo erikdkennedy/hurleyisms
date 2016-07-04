@@ -6,7 +6,9 @@ var userSchema = new mongoose.Schema({
     email: {
         type: String,
         unique: true,
-        required: true
+        required: true,
+        lowercase: true,
+        trim: true
     },
     name: {
         type: String,
@@ -35,7 +37,7 @@ userSchema.methods.validPassword = function (password) {
 
 userSchema.methods.generateJwt = function () {
     var expiry = new Date();
-    expiry.setDate(expiry.getDate() + 7);
+    expiry.setDate(expiry.getDate() + 30);
 
     return jwt.sign({
         _id: this._id,

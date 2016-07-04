@@ -12,7 +12,7 @@ var sendJSONresponse = function (res, status, content) {
 
 var setCookie = function (res, user) {
     token = user.generateJwt();
-    res.cookie('auth', token, { maxAge: 604800000 });
+    res.cookie('auth', token, { secure:true, maxAge: 604800000 });
 }
 var getUser = function (req, res, callback) {
     if (req.payload && req.payload.email) {
