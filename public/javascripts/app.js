@@ -89,7 +89,7 @@ $(document).ready(function() {
 		changeScreen("submit");
 
 		//TODO remove... should be handled elsewhere
-		if (isLoggedIn()) {
+		if (isLoggedIn() && hasVerifiedEmail()) {
 			enableLineSubmissionControls();
 		} else {
 			disableLineSubmissionControls();
@@ -133,7 +133,7 @@ $(document).ready(function() {
 	*****************************************/
 
 	//TODO Andrew, remove this, it's prototype only
-	$(document).keyup(function(e) {
+	/*$(document).keyup(function(e) {
 		//switch payment set up/NOT set up
 		if (e.which === 80) //"p"
 			$("body").toggleClass("has-payment-error");
@@ -150,11 +150,11 @@ $(document).ready(function() {
 				disableLineSubmissionControls();
 			}
 		}
-	});
+	});*/
 
-	function hasVerifiedEmail() {
+	/*function hasVerifiedEmail() {
 		return !$("body").hasClass("is-unverified-email");
-	}
+	}*/
 
 	$(".resend-verification-email").click(function() {
 		$.createToast("Verification email sent!");
@@ -205,7 +205,6 @@ $(document).ready(function() {
 	    line.women = $('#audience-women').is(":checked");
 	    line.kids = $('#audience-kids').is(":checked");
 	    line.profanity = $('#switch-pg').hasClass("active");
-	    line.author = $("#your-name").val();
 	    sendLine(line, callback);
 	}
 	function resetSubmitForm() {
@@ -431,7 +430,7 @@ $(document).ready(function() {
 	$("body").toggleClass("is-admin", isAdmin());
 	$("body").toggleClass("is-logged-in", isLoggedIn());
 	$("body").toggleClass("is-monthly", isMonthly());
-	
+	$("body").toggleClass("is-unverified-email", !hasVerifiedEmail());
 
 	//click TRASH CAN button to delete line
 	$(document).on("click", ".line__delete", function() {

@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var stripe = require("stripe")(process.env.STRIPE_KEY);
 var helpers = require('./helpers');
+var xssFilters = require('xss-filters');
 
 var sendJSONresponse = function (res, status, content) {
     res.status(status);
@@ -53,9 +54,8 @@ router.post('/register', function (req, res) {
     }
 
     var user = new User();
-
-    user.name = req.body.name;
-    user.email = req.body.email;
+    user.name = xssFilters.inHTMLData(req.body.name);
+    user.email = xssFilters.inHTMLData(req.body.email);
 
     user.setPassword(req.body.password);
 
@@ -219,7 +219,7 @@ router.post('/email', helpers.onlyLoggedIn, function (req, res) {
         return;
     }
     getUser(req, res, function (req, res, user) {
-        user.email = req.body.email;
+        user.email = xssFilters.inHTMLData(req.body.email);
         user.save(function (err) {
             if (err) {
                 sendJSONresponse(res, 404, err);

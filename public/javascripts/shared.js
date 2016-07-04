@@ -204,13 +204,6 @@ $(document).ready(function () {
 				MODAL FUNCTIONS
 	***********************************/
 
-    //TODO remove in final code
-    $("body").keyup(function (e) {
-        if (e.which === 76) {
-            $(this).toggleClass("is-logged-in");
-        }
-    });
-
     //open modal
     $(document).on("click", "a[data-modal]", function () {
         //TODO determine better way of doing this 

@@ -23,6 +23,8 @@ var userSchema = new mongoose.Schema({
     subscriptionid: String,
     chargeid: String,
     type: String,
+    //TODO remove auto email verification 
+    emailverified: { type:Boolean, "default":true},
     admin: {type: Boolean, "default": false}
 });
 
@@ -56,6 +58,7 @@ userSchema.methods.generateJwt = function () {
         pro: this.pro,
         admin: this.admin,
         type: this.type,
+        emailverified: this.emailverified,
         exp: parseInt(expiry.getTime() / 1000),
     }, process.env.JWT_SECRET); // DO NOT KEEP YOUR SECRET IN THE CODE!
 };

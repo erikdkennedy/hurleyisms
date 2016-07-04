@@ -7,7 +7,10 @@ var lineSchema = new mongoose.Schema(
     kids: { type: Boolean, require: true },
     profanity: { type: Boolean, require: true },
     rating: { type: Number, "default": 0 },
-    author: String,
+    author: { type: String, require: true },
+    //The author text is required, but the author ID is not
+    //lines with no author id are the pre-loaded lines
+    authorid: String,
     dateadded: { type: Date, "default": Date.now },
     ipaddress: { type: String, "default": "" },
     approved: { type: Boolean, required: true, "default": false },

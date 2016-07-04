@@ -115,6 +115,17 @@ $(document).ready(function () {
         }
     };
 
+    hasVerifiedEmail = function () {
+        var token = getToken();
+        if (token) {
+            var payload = JSON.parse(window.atob(token.split('.')[1]));
+            if (payload.exp > Date.now() / 1000) return payload.emailverified;
+            return null;
+        } else {
+            return null;
+        }
+    }
+
     
 
     var getToken = function () {
