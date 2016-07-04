@@ -53,6 +53,14 @@ $(document).ready(function () {
     }
     $("#logout").click(loggout);
 
+    cancel = function () {
+        $.post('auth/cancel').done(function () {
+            document.location.href = '/my-account';
+        });
+    }
+    $("#cancel").click(cancel);
+
+
     updateEmailAddress = function (email, callback) {
         $.post('auth/email', { email: email }).done(function () {
             callback();
@@ -64,6 +72,7 @@ $(document).ready(function () {
         });
     }
 
+   
 
 
     isLoggedIn = function () {

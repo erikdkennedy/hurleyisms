@@ -13,7 +13,6 @@ router.get('/', function(req, res, next) {
 
 
 router.get('/data/:audience/:profanity', function (req, res) {
-    console.log("got here");
     console.log("audience " + req.params.audience);
     query = { kids: true };
     switch(Number(req.params.audience))
@@ -68,7 +67,8 @@ router.post('/add', function (req, res) {
         }
     });
 });
-router.get('/rate/:lineid/:vote', function (req, res) {
+//not currently doing line voting functionality
+/*router.get('/rate/:lineid/:vote', function (req, res) {
     console.log("vote called");
     Lines.findById(req.params.lineid).exec(function (err, line) {
         if (req.params.vote === "true") line.rating++;
@@ -78,6 +78,7 @@ router.get('/rate/:lineid/:vote', function (req, res) {
         });
     });
 });
+*/
 var sendJSONresponse = function (res, status, content) {
     res.status(status);
     res.json(content);

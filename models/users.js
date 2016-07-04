@@ -20,6 +20,7 @@ var userSchema = new mongoose.Schema({
     token: String,
     pro: Boolean,
     customerid: String,
+    subscriptionid: String,
     chargeid: String,
     type: String,
     admin: {type: Boolean, "default": false}
@@ -29,6 +30,15 @@ userSchema.methods.setPassword = function (password) {
     this.salt = crypto.randomBytes(16).toString('hex');
     this.hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64).toString('hex');
 };
+
+userSchema.methods.isMonthly = function()
+{
+    return this.type === "monthly" && this.subscriptionid && this.pro
+}
+
+userSchema.methods.isLifetime = function () {
+    return this.type === "lifetime" && this.pro
+}
 
 userSchema.methods.validPassword = function (password) {
     var hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64).toString('hex');

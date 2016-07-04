@@ -17,7 +17,7 @@ var sendUpdateCookie = function (res, user, content) {
 
 var setCookie = function (res, user) {
     token = user.generateJwt();
-    res.cookie('auth', token, { secure:true, maxAge: 604800000 });
+    res.cookie('auth', token, { secure: true, maxAge: 604800000 });
 }
 var getUser = function (req, res, callback) {
     if (req.payload && req.payload.email) {
@@ -105,6 +105,14 @@ router.post('/lifetime', helpers.onlyLoggedIn, function (req, res) {
         return;
     }
     getUser(req, res, function (req, res, user) {
+        if (user.isMonthly()) {
+            sendJSONresponse(res, 404, { error: "You are already a monthly subscriber" });
+            return;
+        }
+        if (user.isLifetime()) {
+            sendJSONresponse(res, 404, { error: "You are already a lifetime subscriber" });
+            return;
+        }
         user.token = req.body.token;
         charge = stripe.charges.create({
             amount: 9900, // amount in cents, again
@@ -142,6 +150,14 @@ router.post('/monthly', helpers.onlyLoggedIn, function (req, res) {
         return;
     }
     getUser(req, res, function (req, res, user) {
+        if (user.isMonthly()) {
+            sendJSONresponse(res, 404, { error: "You are already a monthly subscriber" });
+            return;
+        }
+        if (user.isLifetime()) {
+            sendJSONresponse(res, 404, { error: "You are already a lifetime subscriber" });
+            return;
+        }
         user.token = req.body.token;
         stripe.customers.create({
             source: user.token,
@@ -155,6 +171,7 @@ router.post('/monthly', helpers.onlyLoggedIn, function (req, res) {
             console.log(customer);
             user.pro = true;
             user.customerid = customer.id,
+            user.subscriptionid = customer.subscriptions.data[0].id;
             user.type = "monthly";
             user.save(function (err) {
                 if (err) {
@@ -164,6 +181,34 @@ router.post('/monthly', helpers.onlyLoggedIn, function (req, res) {
                 }
             });
         });
+    });
+});
+router.post('/cancel', helpers.onlyLoggedIn, function (req, res) {
+    getUser(req, res, function (req, res, user) {
+        if (!user.isMonthly()) {
+            sendJSONresponse(res, 404, { error: "You are not a monthly subscriber" });
+            return;
+        }
+
+        stripe.subscriptions.del(user.subscriptionid, function (error, confirmation) {
+            if (!error) {
+                user.pro = false;
+                user.type = undefined;
+                user.save(function (err) {
+                    if (err) {
+                        sendJSONresponse(res, 404, err);
+                    } else {
+                        sendUpdateCookie(res, user, { status: 'success' });
+                    }
+                });
+            }
+            else {
+                sendJSONresponse(res, 404, error);
+            }
+
+        });
+
+        
     });
 });
 router.post('/email', helpers.onlyLoggedIn, function (req, res) {
@@ -202,7 +247,7 @@ router.post('/password', helpers.onlyLoggedIn, function (req, res) {
         });
     });
 });
-router.post('/logout',  function (req, res) {
+router.post('/logout', function (req, res) {
     res.clearCookie('auth');
     sendJSONresponse(res, 200, { status: 'success' });
 });
