@@ -31,6 +31,7 @@ rl.on('line', function (lineText) {
         line.kids = parts[4].indexOf("X") > -1;
         line.profanity = parts[5].indexOf("X") > -1;
         line.author = parts[6];
+        line.free = parts[8].indexOf("X") > -1;
         line.ipaddress = "4.2.2.1";
         line.approved = true;
         cachedLines.push(line);

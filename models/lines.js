@@ -10,6 +10,7 @@ var lineSchema = new mongoose.Schema(
     author: String,
     dateadded: { type: Date, "default": Date.now },
     ipaddress: { type: String, "default": "" },
-    approved:{type:Boolean, required: true, "default":false}
+    approved: { type: Boolean, required: true, "default": false },
+    free: {type: Boolean, required: true, "default": false}
 });
 mongoose.model('Line', lineSchema);
