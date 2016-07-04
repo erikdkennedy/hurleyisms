@@ -4,7 +4,7 @@ var passport = require('passport');
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var stripe = require("stripe")(process.env.STRIPE_KEY);
-
+var helpers = require('./helpers');
 var sendJSONresponse = function (res, status, content) {
     res.status(status);
     res.json(content);
@@ -164,6 +164,10 @@ router.post('/monthly', function (req, res) {
             });
         });
     });
+});
+router.post('/logout',  function (req, res) {
+    res.clearCookie('auth');
+    sendJSONresponse(res, 200, { status: 'success' });
 });
 
 

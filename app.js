@@ -51,9 +51,9 @@ var proClientFiles = [
 minJSFiles(proClientFiles, 'public/javascripts/pro.min.js');
 
 var indexClientFiles = [
+    'public/javascripts/auth.js',
     'public/javascripts/shared.js',
-    'public/javascripts/my-account.js',
-    'public/javascripts/auth.js'
+    'public/javascripts/my-account.js'
 ]
 minJSFiles(indexClientFiles, 'public/javascripts/index.min.js');
 

@@ -32,8 +32,7 @@ $(document).ready(function () {
     }
     $("#btn_register").click(register);
 
-    
-    var login = function()
+    var login = function ()
     {
         var user = {};
         user.email = $("#login__email-address").val().toLowerCase();
@@ -44,8 +43,16 @@ $(document).ready(function () {
             $("#login-modal input[type=email]").addError("Email or password incorrect");
         });
     }
-
     $("#btn_login").click(login);
+
+    var loggout = function()
+    {
+        $.post('auth/logout').done(function () {
+            document.location.href = '/';
+        });
+    }
+    $("#logout").click(loggout);
+
     isLoggedIn = function () {
         var token = getToken();
         if (token) {
