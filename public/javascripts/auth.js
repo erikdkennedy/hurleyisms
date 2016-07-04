@@ -56,6 +56,26 @@ $(document).ready(function () {
         }
     };
 
+    isAdmin = function () {
+        var token = getToken();
+        if (token) {
+            var payload = JSON.parse(window.atob(token.split('.')[1]));
+            return payload.exp > Date.now() / 1000 && payload.admin;
+        } else {
+            return false;
+        }
+    };
+
+    isMonthly = function () {
+        var token = getToken();
+        if (token) {
+            var payload = JSON.parse(window.atob(token.split('.')[1]));
+            return payload.exp > Date.now() / 1000 && payload.type === "monthly";
+        } else {
+            return false;
+        }
+    };
+
     var getToken = function () {
         return getCookie("auth");
     };

@@ -105,9 +105,10 @@ $(document).ready(function() {
 		}
 	}
 
-	function isLoggedIn() {
+	/*function isLoggedIn() {
 		return $("body").hasClass("is-logged-in");
 	}
+    */
 
 	function enableLineSubmissionControls() {
 		var $page = $("section.submit");
@@ -427,15 +428,10 @@ $(document).ready(function() {
 				.focus();
 	}
 
-	function isAdmin() {
-		return $("body").hasClass("is-admin");
-	}
-
-	//press "a" to toggle admin mode (prototype only)
-	//TODO Andrew - remove this when admin mode is implemented
-	$(document).keyup(function(e) {
-		if (e.which === 65 && !$(e.target).isTextField()) $("body").toggleClass("is-admin");
-	});
+	$("body").toggleClass("is-admin", isAdmin());
+	$("body").toggleClass("is-logged-in", isLoggedIn());
+	$("body").toggleClass("is-monthly", isMonthly());
+	
 
 	//click TRASH CAN button to delete line
 	$(document).on("click", ".line__delete", function() {

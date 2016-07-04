@@ -24,7 +24,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 function minJSFiles(files, target)
 {
-    var uglified = uglifyJs.minify(files, { compress: false, mangle: false });
+    var uglified = uglifyJs.minify(files, { compress: false, mangle: false, output: { beautify: true } });
     fs.writeFile(target, uglified.code, function (err) {
         if (err) {
             console.log(err);
@@ -36,24 +36,33 @@ function minJSFiles(files, target)
 
 //combine JS for SPA
 var appClientFiles = [
+  'public/javascripts/auth.js',
   'public/javascripts/shared.js',
   'public/javascripts/app.js'
 ];
 minJSFiles(appClientFiles, 'public/javascripts/hurleyisms.min.js');
 
 var proClientFiles = [
+    'public/javascripts/auth.js',
     'public/javascripts/shared.js',
     'public/javascripts/stripe.js',
-    'public/javascripts/auth.js'
+    
 ]
 minJSFiles(proClientFiles, 'public/javascripts/pro.min.js');
 
-var proClientFiles = [
+var indexClientFiles = [
     'public/javascripts/shared.js',
-    'public/javascripts/marketing.js',
+    'public/javascripts/my-account.js',
     'public/javascripts/auth.js'
 ]
-minJSFiles(proClientFiles, 'public/javascripts/index.min.js');
+minJSFiles(indexClientFiles, 'public/javascripts/index.min.js');
+
+var myAccountClientFiles = [
+  'public/javascripts/auth.js',
+  'public/javascripts/shared.js',
+  'public/javascripts/my-account.js'
+];
+minJSFiles(myAccountClientFiles, 'public/javascripts/myaccount.min.js');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));

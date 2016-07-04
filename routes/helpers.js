@@ -4,8 +4,17 @@
     }
     res.redirect('/auth/login');
 }
-function isLoggedIn(req){
+function isLoggedIn(req) {
     return req.payload;
+}
+function onlyLoggedIn(req, res, next) {
+    if (isLoggedIn(req)) {
+        return next();
+    }
+    res.status(401).json({
+        status: 'error',
+        message: 'You must log in first.'
+    });
 }
 function ensureAdmin(req, res, next) {
     if (req.isAuthenticated() && req.user.admin) {
@@ -39,5 +48,6 @@ module.exports = {
     ensureAdmin: ensureAdmin,
     ensureAdminJSON: ensureAdminJSON,
     loginRedirect: loginRedirect,
-    isLoggedIn: isLoggedIn
+    isLoggedIn: isLoggedIn,
+    onlyLoggedIn: onlyLoggedIn
 };

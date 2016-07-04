@@ -21,8 +21,8 @@ var userSchema = new mongoose.Schema({
     pro: Boolean,
     customerid: String,
     chargeid: String,
-    type: String
-
+    type: String,
+    admin: {type: Boolean, "default": false}
 });
 
 userSchema.methods.setPassword = function (password) {
@@ -43,6 +43,9 @@ userSchema.methods.generateJwt = function () {
         _id: this._id,
         email: this.email,
         name: this.name,
+        pro: this.pro,
+        admin: this.admin,
+        type: this.type,
         exp: parseInt(expiry.getTime() / 1000),
     }, process.env.JWT_SECRET); // DO NOT KEEP YOUR SECRET IN THE CODE!
 };

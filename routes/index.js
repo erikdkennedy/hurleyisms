@@ -17,11 +17,11 @@ router.get('/', function (req, res, next) {
 
 router.get('/pro', function (req, res, next) {
     console.log(req.payload);
-    res.sendFile(path.join(__dirname,'../public','pro.html'));
+    res.sendFile(path.join(__dirname, '../public', 'pro.html'));
 });
 
-router.get('/my-account', function(req, res, next) {
-    res.sendFile(path.join(__dirname,'../public','my-account.html'));
+router.get('/my-account', helpers.onlyLoggedIn, function (req, res, next) {
+    res.sendFile(path.join(__dirname, '../public', 'my-account.html'));
 });
 
 module.exports = router;
