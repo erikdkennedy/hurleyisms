@@ -14,7 +14,6 @@ var passport = require('passport');
 var uglifyJs = require("uglify-js");
 var jwt = require('express-jwt');
 var fs = require('fs');
-var BasicStrategy = require('passport-http').BasicStrategy
 var app = express();
 
 
@@ -124,22 +123,4 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
-
-passport.use(new BasicStrategy(
-  function(userid, password, done) {
-    console.log(userid);
-    console.log(password);
-    if (userid === process.env.ADMINUSER && password === process.env.ADMINPASSWORD) {
-        console.log("password verified");
-        return done(null, { name: "hurley" });
-    }
-    else {
-        console.log("password rejected");
-        return done(null, false);
-    }
-  }
-));
-
-
 module.exports = app;
