@@ -63,6 +63,17 @@ var myAccountClientFiles = [
 ];
 minJSFiles(myAccountClientFiles, 'public/javascripts/myaccount.min.js');
 
+
+// Ensure the page is secure. Since AWS forwards to non-http we need to check request headers
+var forceHttps = function (req, res, next) {
+    if (req.secure || req.headers['x-forwarded-proto'] === 'https' || req.headers['x-arr-ssl'] ) {
+        next();
+    } else {
+        console.log('Request made over HTTP, redirecting to HTTPS');
+        res.redirect('https://' + req.hostname);
+    }
+}
+app.use(forceHttps);
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
