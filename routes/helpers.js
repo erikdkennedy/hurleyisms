@@ -1,4 +1,7 @@
-﻿function ensureAuthenticated(req, res, next) {
+﻿var mongoose = require('mongoose');
+var User = mongoose.model('User');
+
+function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
@@ -30,10 +33,19 @@ function isPro(req) {
     return isLoggedIn(req) && req.payload.pro;
 }
 function ensureAdmin(req, res, next) {
-    if (req.isAuthenticated() && req.user.admin) {
-        return next();
+    if (isLoggedIn(req) && req.payload.admin) {
+        User
+        .findOne({ email: req.payload.email })
+        .exec(function (err, user) {
+            if (!err && user && user.admin ) {
+                return next();
+            }
+            else {
+                res.status(401).json({ status: 'error', message: 'You are not an admin' });
+            }
+        });
     }
-    res.redirect('/auth/login');
+    
 }
 
 function ensureAdminJSON(req, res, next) {

@@ -14,7 +14,7 @@ angular.module('hurleyisms', [])
       }
       $scope.Delete = function (line) {
           $http.get('admin/' + line._id + "/delete").then(function (data) {
-              line.approved = true;
+              $scope.GetLines();
           });
       }
       $scope.Update = function (line) {

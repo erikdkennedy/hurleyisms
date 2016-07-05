@@ -208,8 +208,10 @@ $(document).ready(function () {
     $(document).on("click", "a[data-modal]", function () {
         //TODO determine better way of doing this 
         window.lifetime = false;
-        if ($(this).is("[lifetime]")) window.lifetime = true;
-
+        if ($(this).is("[lifetime]")) { window.lifetime = true; }
+        if ($(this).closest(".line").length > 0) {
+            window.editid = $(this).closest(".line").attr("name");
+        }
 
         //if there's a current modal open, close it
         if ($("body").hasClass("has-modal-open")) {

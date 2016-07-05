@@ -62,12 +62,18 @@ $(document).ready(function() {
 	        callback();
 	    });
 	}
-
+	function deleteLine(id,callback)
+	{
+	    $.get('admin/' + id + "/delete").then(function (data) {
+	        callback();
+	    });
+	}
 
 
 	/*****************************************
 			   LISTENERS - SPLASH
 	*****************************************/
+	
 
 	//start session button
 	$("a.begin-session").click(function() {
@@ -217,6 +223,15 @@ $(document).ready(function() {
 			scrollTop: $element.offset().top
 		}, 250);
 	}
+
+	function handleDeleteLine() {
+	    if(window.editid) {
+	        deleteLine(window.editid, function () {
+	            $.closeModal();
+	        });
+	    }
+	}
+	$("#delete").click(handleDeleteLine)
 
 
 
