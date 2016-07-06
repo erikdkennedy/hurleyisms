@@ -17,10 +17,6 @@ var fs = require('fs');
 var app = express();
 
 
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
 function minJSFiles(files, target)
 {
     var uglified = uglifyJs.minify(files, { compress: false, mangle: false, output: { beautify: true } });
@@ -51,8 +47,7 @@ minJSFiles(proClientFiles, 'public/javascripts/pro.min.js');
 
 var indexClientFiles = [
     'public/javascripts/auth.js',
-    'public/javascripts/shared.js',
-    'public/javascripts/my-account.js'
+    'public/javascripts/shared.js'
 ]
 minJSFiles(indexClientFiles, 'public/javascripts/index.min.js');
 

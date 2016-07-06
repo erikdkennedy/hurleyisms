@@ -32,16 +32,22 @@ $(document).ready(function () {
     }
     $("#btn_register").click(register);
 
+    var validateLogInForm = function () {
+        return $("#login-modal input[type=email]").emailify() &&
+            $("#login-modal input[required]").requirify();
+    } 
     var login = function ()
     {
-        var user = {};
-        user.email = $("#login__email-address").val().toLowerCase();
-        user.password = $("#login__password").val();
-        $.post('auth/login', user).done(function (data) {
-            document.location.href = '/app';
-        }).error(function (error) { 
-            $("#login-modal input[type=email]").addError("Email or password incorrect");
+        if(validateLogInForm){
+            var user = {};
+            user.email = $("#login__email-address").val().toLowerCase();
+            user.password = $("#login__password").val();
+            $.post('auth/login', user).done(function (data) {
+                document.location.href = '/app';
+            }).error(function (error) { 
+                $("#login-modal input[type=email]").addError("Email or password incorrect");
         });
+        }
     }
     $("#btn_login").click(login);
 
