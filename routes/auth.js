@@ -6,7 +6,7 @@ var User = mongoose.model('User');
 var stripe = require("stripe")(process.env.STRIPE_KEY);
 var helpers = require('./helpers');
 var xssFilters = require('xss-filters');
-
+var email = require("./email");
 var sendJSONresponse = function (res, status, content) {
     res.status(status);
     res.json(content);
@@ -63,7 +63,9 @@ router.post('/register', function (req, res) {
         if (err) {
             sendJSONresponse(res, 404, err);
         } else {
-            sendUpdateCookie(res, user, { status: 'success' });
+            email.sendInitialEmail(user, function () {
+                sendUpdateCookie(res, user, { status: 'success' });
+            });
         }
     });
 
