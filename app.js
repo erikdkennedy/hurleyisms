@@ -20,7 +20,8 @@ var app = express();
 
 function minJSFiles(files, target)
 {
-    var uglified = uglifyJs.minify(files, { compress: false, mangle: false, output: { beautify: true } });
+    var beautify = process.env.NODE_ENV === 'development';
+    var uglified = uglifyJs.minify(files, { compress: false, mangle: false, output: { beautify: beautify } });
     fs.writeFile(target, uglified.code, function (err) {
         if (err) {
             console.log(err);
@@ -30,34 +31,44 @@ function minJSFiles(files, target)
     });
 }
 
-//combine JS for SPA
-var appClientFiles = [
-  'public/javascripts/auth.js',
-  'public/javascripts/shared.js',
-  'public/javascripts/app.js'
-];
-minJSFiles(appClientFiles, 'public/javascripts/hurleyisms.min.js');
+function writeJSFiles() {
+    //combine JS for SPA
+    var appClientFiles = [
+      'public/javascripts/auth.js',
+      'public/javascripts/shared.js',
+      'public/javascripts/app.js'
+    ];
+    minJSFiles(appClientFiles, 'public/javascripts/hurleyisms.min.js');
 
-var proClientFiles = [
-    'public/javascripts/auth.js',
-    'public/javascripts/shared.js',
-    'public/javascripts/stripe.js',
-    
-]
-minJSFiles(proClientFiles, 'public/javascripts/pro.min.js');
+    var proClientFiles = [
+        'public/javascripts/config.min.js',
+        'public/javascripts/auth.js',
+        'public/javascripts/shared.js',
+        'public/javascripts/stripe.js'
+    ]
+    minJSFiles(proClientFiles, 'public/javascripts/pro.min.js');
 
-var indexClientFiles = [
-    'public/javascripts/auth.js',
-    'public/javascripts/shared.js'
-]
-minJSFiles(indexClientFiles, 'public/javascripts/index.min.js');
+    var indexClientFiles = [
+        'public/javascripts/auth.js',
+        'public/javascripts/shared.js'
+    ]
+    minJSFiles(indexClientFiles, 'public/javascripts/index.min.js');
 
-var myAccountClientFiles = [
-  'public/javascripts/auth.js',
-  'public/javascripts/shared.js',
-  'public/javascripts/my-account.js'
-];
-minJSFiles(myAccountClientFiles, 'public/javascripts/myaccount.min.js');
+    var myAccountClientFiles = [
+      'public/javascripts/auth.js',
+      'public/javascripts/shared.js',
+      'public/javascripts/my-account.js'
+    ];
+    minJSFiles(myAccountClientFiles, 'public/javascripts/myaccount.min.js');
+}
+//Create Configuration Javascript
+var configJsonString = require("./routes/configuration").getConfig();
+fs.writeFile('public/javascripts/config.min.js', configJsonString, function (err) {
+    if (err) {
+        console.log(err);
+    }
+    writeJSFiles();
+});
 
 
 // Ensure the page is secure. Since AWS forwards to non-http we need to check request headers

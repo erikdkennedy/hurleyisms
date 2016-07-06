@@ -1,6 +1,6 @@
 ﻿$(function () {
     var handler = StripeCheckout.configure({
-        key: 'pk_test_iuoiDTWygAIqVCAD4fZoP2Nc',
+        key: configuration.stripe_pk,
         image: 'images/apple-touch-icon-120.png',
         locale: 'auto',
         zipCode: true,
