@@ -9,9 +9,6 @@ var getBaseRequest = function (request, user) {
         "email": "email@hurleyisms.com",
         "name": "Hurleyisms"
     };
-    request.body.custom_args = {
-        customer_name: user.name
-    };
     request.body.content = [
     {
         "type": "text/html",
@@ -24,7 +21,11 @@ var getBaseRequest = function (request, user) {
                 email: user.email,
                 name: user.name
             }
-        ]
+        ],
+        substitutions: {
+            customer_name: user.name
+        }
+
     }];
     request.method = 'POST';
     request.path = '/v3/mail/send';
@@ -33,7 +34,7 @@ var sendInitialEmail = function (user, callback) {
     var request = sg.emptyRequest();
     getBaseRequest(request, user);
     request.body.template_id = "6717c2cb-73bd-48c4-b467-c2e039fb8e19";
-    request.body.subject = "Hello, World!";
+    request.body.subject = "Welcome to Hurleyisms";
     sg.API(request, function (response) {
         console.log(response.statusCode)
         console.log(response.body)
