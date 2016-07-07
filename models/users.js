@@ -63,4 +63,8 @@ userSchema.methods.generateJwt = function () {
     }, process.env.JWT_SECRET); // DO NOT KEEP YOUR SECRET IN THE CODE!
 };
 
-mongoose.model('User', userSchema);
+var model = mongoose.model('User', userSchema);
+model.schema.options.emitIndexErrors;
+model.on('error', function (error) {
+    console.error(error);
+});
