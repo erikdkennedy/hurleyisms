@@ -1,5 +1,6 @@
-﻿$(function () {
-    var handler = StripeCheckout.configure({
+﻿var stripe = function () {
+    var stripe = {};
+    stripe.handler = StripeCheckout.configure({
         key: configuration.stripe_pk,
         image: 'images/apple-touch-icon-120.png',
         locale: 'auto',
@@ -22,30 +23,41 @@
             }
         }
     });
-
-     launchlifetime = function(email) {
+    stripe.launch = function (e) {
+        e.preventDefault();
+        $.closeModal();
+        if (window.lifetime) {
+            stripe.launchlifetime(window.email);
+        }
+        else {
+            stripe.launchmonthly(window.email);
+        }
+    };
+    stripe.launchlifetime = function (email) {
         // Open Checkout with further options:
         console.log("button clicked");
-        handler.open({
+        stripe.handler.open({
             name: 'Hurleyisms',
             description: 'Lifetime Access',
             amount: 9900,
             zipCode: true,
             email: email
         });
-     }
-     launchmonthly = function(email) {
-         handler.open({
-             name: 'Hurleyisms',
-             description: 'Monthly Subscription',
-             amount: 499,
-             zipCode: true,
-             email: email
-         });
-     }
+
+    }
+    stripe.launchmonthly = function (email) {
+        stripe.handler.open({
+            name: 'Hurleyisms',
+            description: 'Monthly Subscription',
+            amount: 499,
+            zipCode: true,
+            email: email
+        });
+    }
 
     // Close Checkout on page navigation:
     $(window).on('popstate', function () {
-        handler.close();
+        stripe.handler.close();
     });
-});
+    return stripe
+}();

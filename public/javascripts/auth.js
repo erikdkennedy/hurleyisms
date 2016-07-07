@@ -17,13 +17,10 @@ $(document).ready(function () {
             user.name = $("#name").val();
             $.post('auth/register', user)
                 .done(function (data) {
-                $.closeModal();
-                if (window.lifetime) {
-                    launchlifetime(user.email);
-                }
-                else  {
-                    launchmonthly(user.email);
-                }
+                    window.email = data.email;
+                    $("#btn_register").hide();
+                    $("#btn_checkout").show();
+
             })
                 .error(function (error) {
                     $("#signup-modal input[type=email]").addError("This email has already been taken.  <a href='#' data-modal='login-modal'>Login</a> if it's yours");
@@ -31,7 +28,7 @@ $(document).ready(function () {
         }
     }
     $("#btn_register").click(register);
-
+    $("#btn_checkout").click(stripe.launch);
     var validateLogInForm = function () {
         return $("#login-modal input[type=email]").emailify() &&
             $("#login-modal input[required]").requirify();
@@ -50,7 +47,7 @@ $(document).ready(function () {
         }
     }
     $("#btn_login").click(login);
-
+    
     var loggout = function()
     {
         $.post('auth/logout').done(function () {

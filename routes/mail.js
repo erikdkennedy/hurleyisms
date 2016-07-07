@@ -40,7 +40,8 @@ router.get('/:code', function (req, res) {
                 if (err) {
                     sendJSONresponse(res, 404, err);
                 } else {
-                    sendUpdateCookie(res, user, { status: 'success' });
+                    setCookie(res, user);
+                    res.redirect("/app");
                 }
             });
 
