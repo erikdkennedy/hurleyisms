@@ -17,7 +17,6 @@ $(document).ready(function () {
             user.name = $("#name").val();
             $.post('auth/register', user)
                 .done(function (data) {
-                    window.email = data.email;
                     $("#btn_register").hide();
                     $("#btn_checkout").show();
 

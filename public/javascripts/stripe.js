@@ -27,10 +27,10 @@
         e.preventDefault();
         $.closeModal();
         if (window.lifetime) {
-            stripe.launchlifetime(window.email);
+            stripe.launchlifetime(loggedInEmail());
         }
         else {
-            stripe.launchmonthly(window.email);
+            stripe.launchmonthly(loggedInEmail());
         }
     };
     $(function () { $("#btn_checkout").click(stripe.launch); });
