@@ -23,8 +23,7 @@ var userSchema = new mongoose.Schema({
     subscriptionid: String,
     chargeid: String,
     type: String,
-    //TODO remove auto email verification 
-    emailverified: { type:Boolean},
+    emailverified: { type:Boolean, require:true, "default": false},
     admin: { type: Boolean, "default": false },
     email_code:String
 });
