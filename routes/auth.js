@@ -7,6 +7,8 @@ var stripe = require("stripe")(process.env.STRIPE_KEY);
 var helpers = require('./helpers');
 var xssFilters = require('xss-filters');
 var email = require("./email");
+var crypto = require('crypto');
+
 var sendJSONresponse = function (res, status, content) {
     res.status(status);
     res.json(content);
@@ -58,12 +60,13 @@ router.post('/register', function (req, res) {
     user.email = xssFilters.inHTMLData(req.body.email);
 
     user.setPassword(req.body.password);
-
+    user.email_code=crypto.randomBytes(100).toString('hex');
+    var email_url = "https://localhost:3001/email/"+user.email_code;
     user.save(function (err) {
         if (err) {
             sendJSONresponse(res, 404, err);
         } else {
-            email.sendInitialEmail(user, function () {
+            email.sendInitialEmail(user,email_url,  function () {
                 sendUpdateCookie(res, user, { status: 'success' });
             });
         }

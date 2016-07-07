@@ -24,8 +24,9 @@ var userSchema = new mongoose.Schema({
     chargeid: String,
     type: String,
     //TODO remove auto email verification 
-    emailverified: { type:Boolean, "default":true},
-    admin: {type: Boolean, "default": false}
+    emailverified: { type:Boolean},
+    admin: { type: Boolean, "default": false },
+    email_code:String
 });
 
 userSchema.methods.setPassword = function (password) {

@@ -11,6 +11,7 @@ var routes = require('./routes/index');
 var admin = require('./routes/admin');
 var appRoute = require('./routes/app');
 var authRoute = require('./routes/auth');
+var mailRoute = require('./routes/mail');
 var passport = require('passport');
 var uglifyJs = require("uglify-js");
 var jwt = require('express-jwt');
@@ -110,7 +111,9 @@ app.use(jwt({
 app.use('/', routes);
 app.use('/app', appRoute);
 app.use('/admin', admin);
-app.use('/auth', authRoute );
+app.use('/auth', authRoute);
+app.use('/email', mailRoute);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
