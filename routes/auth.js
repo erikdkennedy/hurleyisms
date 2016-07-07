@@ -61,7 +61,7 @@ router.post('/register', function (req, res) {
 
     user.setPassword(req.body.password);
     user.email_code=crypto.randomBytes(100).toString('hex');
-    var email_url = "https://localhost:3001/email/"+user.email_code;
+    var email_url = process.env.BASE_URL+"/email/"+user.email_code;
     user.save(function (err) {
         if (err) {
             sendJSONresponse(res, 404, err);
