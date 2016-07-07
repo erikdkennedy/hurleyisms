@@ -25,7 +25,7 @@ var userSchema = new mongoose.Schema({
     type: String,
     emailverified: { type:Boolean, require:true, "default": false},
     admin: { type: Boolean, "default": false },
-    email_code:String
+    email_code: { type: String, index: true }
 });
 
 userSchema.methods.setPassword = function (password) {
