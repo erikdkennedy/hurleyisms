@@ -28,7 +28,7 @@ $(document).ready(function () {
         }
     }
     $("#btn_register").click(register);
-    $("#btn_checkout").click(stripe.launch);
+    
     var validateLogInForm = function () {
         return $("#login-modal input[type=email]").emailify() &&
             $("#login-modal input[required]").requirify();

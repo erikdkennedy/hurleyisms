@@ -33,6 +33,7 @@
             stripe.launchmonthly(window.email);
         }
     };
+    $(function () { $("#btn_checkout").click(stripe.launch); });
     stripe.launchlifetime = function (email) {
         // Open Checkout with further options:
         console.log("button clicked");
