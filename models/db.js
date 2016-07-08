@@ -38,3 +38,4 @@ process.on('SIGTERM', function () {
 require('./lines');
 require('./banlist');
 require('./users');
+require('./events');

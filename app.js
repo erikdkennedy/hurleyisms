@@ -12,6 +12,7 @@ var admin = require('./routes/admin');
 var appRoute = require('./routes/app');
 var authRoute = require('./routes/auth');
 var mailRoute = require('./routes/mail');
+var webhookRoute = require('./routes/webhooks');
 var passport = require('passport');
 var uglifyJs = require("uglify-js");
 var jwt = require('express-jwt');
@@ -113,6 +114,7 @@ app.use('/app', appRoute);
 app.use('/admin', admin);
 app.use('/auth', authRoute);
 app.use('/email', mailRoute);
+app.use('/webhooks', webhookRoute);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -127,7 +129,8 @@ app.use(function(req, res, next) {
 // will print stacktrace
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
+      console.error(err);
+      res.status(err.status || 500);
     res.render('error', {
       message: err.message,
       error: err
