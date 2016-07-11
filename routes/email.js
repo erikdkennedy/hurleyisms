@@ -31,7 +31,8 @@ var getBaseRequest = function (request, user, url) {
     request.method = 'POST';
     request.path = '/v3/mail/send';
 }
-var sendInitialEmail = function (user, email_url, callback) {
+var sendInitialEmail = function (user, callback) {
+    var email_url = process.env.BASE_URL+"/email/"+user.email_code
     var request = sg.emptyRequest();
     getBaseRequest(request, user, email_url);
     request.body.template_id = "6717c2cb-73bd-48c4-b467-c2e039fb8e19";

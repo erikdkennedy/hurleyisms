@@ -22,6 +22,7 @@ var setCookie = function (res, user) {
     token = user.generateJwt();
     res.cookie('auth', token, { secure: true, maxAge: 604800000 });
 }
+var setEmail
 var getUser = function (req, res, callback) {
     if (req.payload && req.payload.email) {
         User
@@ -61,12 +62,12 @@ router.post('/register', function (req, res) {
 
     user.setPassword(req.body.password);
     user.email_code=crypto.randomBytes(100).toString('hex');
-    var email_url = process.env.BASE_URL+"/email/"+user.email_code;
+
     user.save(function (err) {
         if (err) {
             sendJSONresponse(res, 404, err);
         } else {
-            email.sendInitialEmail(user,email_url,  function () {
+            email.sendInitialEmail(user,  function () {
                 sendUpdateCookie(res, user, { status: 'success' });
             });
         }
@@ -225,11 +226,16 @@ router.post('/email', helpers.onlyLoggedIn, function (req, res) {
     }
     getUser(req, res, function (req, res, user) {
         user.email = xssFilters.inHTMLData(req.body.email);
+        user.email_code=crypto.randomBytes(100).toString('hex');
+        user.emailverified = false;
         user.save(function (err) {
             if (err) {
+
                 sendJSONresponse(res, 404, err);
             } else {
+                email.sendInitialEmail(user,  function () {
                 sendUpdateCookie(res, user, { status: 'success' });
+            });
             }
         });
     });
