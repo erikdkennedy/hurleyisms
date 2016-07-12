@@ -239,16 +239,14 @@ $(document).ready(function() {
 	}
 	$("#delete").click(handleDeleteLine)
 
-	function handleUpdateText(e) {
+	handleUpdateText = function(e) {
 	    var id = $(this).closest(".line").attr("name");
-	    var text = $(this).closest(".line__textarea").val();
-	        updateLineText(id,text, function () {
+	    var linetext = $(this).closest(".line").find(".line__textarea").val();
+	    updateLineText(id, { text: linetext }, function () {
 	            $.closeModal();
 	        });
 	    
 	}
-	$("#btn_admin_save").click(handleUpdateText)
-
 
 	/*****************************************
 				LISTENERS - LINES
@@ -304,6 +302,7 @@ $(document).ready(function() {
 			if (noMoreLinesFit) break;
 
 			$divForLine = $divForLine.next();
+			$(".btn_admin_save").click(handleUpdateText);
 		}
 
 		return lines;
