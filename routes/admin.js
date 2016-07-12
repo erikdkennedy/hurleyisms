@@ -56,6 +56,19 @@ router.post('/update', helpers.ensureAdmin, function (req, res) {
     });
 });
 
+router.post('/:id/updatetext', helpers.ensureAdmin, function (req, res) {
+    var text = req.body.text;
+    console.log("call to update text");
+    var id = req.params.id;
+    
+    text = modifyline(text);
+    lines.findByIdAndUpdate(id, { $set: { line: text } }, function (err, line) {
+        console.log(err);
+        console.log(line);
+        sendJSONresponse(res, 200, line);
+    });
+});
+
 function modifyline(line)
 {
     if(line.indexOf("]") > -1 && line.indexOf("]") > -1)

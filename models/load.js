@@ -1,4 +1,5 @@
 ﻿//Script to load the default lines;
+require('dotenv').config();
 require('./db.js');
 var mongoose = require('mongoose');
 var lineModel = mongoose.model('Line');

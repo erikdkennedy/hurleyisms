@@ -68,6 +68,12 @@ $(document).ready(function() {
 	        callback();
 	    });
 	}
+	function updateLineText(id, text, callback)
+	{
+	    $.post('admin/' + id + "/updatetext", text).then(function (data) {
+	        callback();
+	    });
+	}
 
 
 	/*****************************************
@@ -233,6 +239,15 @@ $(document).ready(function() {
 	}
 	$("#delete").click(handleDeleteLine)
 
+	function handleUpdateText(e) {
+	    var id = $(this).closest(".line").attr("name");
+	    var text = $(this).closest(".line__textarea").val();
+	        updateLineText(id,text, function () {
+	            $.closeModal();
+	        });
+	    
+	}
+	$("#btn_admin_save").click(handleUpdateText)
 
 
 	/*****************************************
