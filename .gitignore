@@ -1,4 +1,4 @@
-node_modules/
+node_modules/*
 
 # Elastic Beanstalk Files
 
@@ -9,3 +9,10 @@ node_modules/
 !.elasticbeanstalk/*.global.yml
 
 hurleyisms.tsv
+hurleyisms.min.js
+pro.min.js
+index.min.js
+myaccount.min.js
+config.min.js
+*.codekit
+*.env

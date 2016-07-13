@@ -4,6 +4,8 @@ var mongoose = require('mongoose');
 var Lines = mongoose.model('Line');
 var banlist = mongoose.model('Banlist');
 var path = require('path');
+var helpers = require('./helpers');
+var xssFilters = require('xss-filters');
 /* GET home page. */
 
 
@@ -13,9 +15,8 @@ router.get('/', function(req, res, next) {
 
 
 router.get('/data/:audience/:profanity', function (req, res) {
-    console.log("got here");
     console.log("audience " + req.params.audience);
-    query = { kids: true };
+    query = { };
     switch(Number(req.params.audience))
     {
         case 0:
@@ -34,16 +35,20 @@ router.get('/data/:audience/:profanity', function (req, res) {
     if (profanityOn) {
         query = { $or: [query, { profanity: profanityOn }] };
     }
-    else query.profanity = false;
+    else { query.profanity = false; }
     //only show approved
     query.approved = true;
+
+    //only show free to non-pro users
+    if (!helpers.isPro(req)) query.free = true;
+
     console.log(query);
     Lines.find(query, function(err,results){
         console.log("query returned "+results.length)
         res.json(results);
     });
 });
-router.post('/add', function (req, res) {
+router.post('/add', helpers.onlyEmailVerified, function (req, res) {
     console.log("add called");
     var line = req.body;
     
@@ -53,6 +58,7 @@ router.post('/add', function (req, res) {
      req.connection.socket.remoteAddress;
     //Check to see if ip is in ban list
     console.log(line);
+    
     banlist.count({ ipaddress: line.ipaddress }, function (err, count) {
         console.log("ipaddresscount : " + count)
         if (count>0) {
@@ -60,6 +66,11 @@ router.post('/add', function (req, res) {
         }
         else {
             console.log("adding record " + line);
+            //filter out any XSS data
+            line.line = xssFilters.inHTMLData(line.line);
+            line.author = req.payload.name;
+            line.authorid = req.payload._id;
+            //create the line
             Lines.create(line, function (err, result) {
                 console.log("err:" + err);
                 console.log("result:" + result);
@@ -68,7 +79,8 @@ router.post('/add', function (req, res) {
         }
     });
 });
-router.get('/rate/:lineid/:vote', function (req, res) {
+//not currently doing line voting functionality
+/*router.get('/rate/:lineid/:vote', function (req, res) {
     console.log("vote called");
     Lines.findById(req.params.lineid).exec(function (err, line) {
         if (req.params.vote === "true") line.rating++;
@@ -78,6 +90,7 @@ router.get('/rate/:lineid/:vote', function (req, res) {
         });
     });
 });
+*/
 var sendJSONresponse = function (res, status, content) {
     res.status(status);
     res.json(content);

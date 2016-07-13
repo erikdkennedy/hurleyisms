@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
@@ -22,18 +22,20 @@
         <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
 
         <script src="javascripts/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+        <script src="javascripts/vendor/jquery-1.11.1.min.js"></script>
+        <script src="javascripts/myaccount.min.js"></script>
     </head>
     <body class="is-monthly">
         <header class="submit__header">
             <a href="app" class="close">X</a>
             <h1>My Account</h1>
-            <a href="/">Log out</a>
+            <a id="logout" href="/">Log out</a>
         </header>
         <div class="submit__container">
             <form class="form-control">
                 <label for="email">Email Address</label>
                 <div id="email" class="input-group simple-edit">
-                    <input type="email" class="simple-edit__input" value="david@hurleyisms.com" disabled>
+                    <input type="email" class="simple-edit__input" value="" disabled>
                     <a href="#" class="input-group__addon btn--blue simple-edit__edit">Edit</a>
                 </div>
             </form>
@@ -79,13 +81,11 @@
                     <p>Are you sure you want to cancel your subscription?  This will go into effect immediately.</p>
                 </div>
                 <div class="modal__footer">
-                    <a href="/" class="btn--red">Cancel account</a>
+                    <a href="#" class="btn--red" id="cancel">Cancel account</a>
                     <a href="#" class="modal__close">I'll keep my account for now</a>
                 </div>
             </div>
         </div>
-        <script src="javascripts/vendor/jquery-1.11.1.min.js"></script>
-        <script src="javascripts/shared.js"></script>
-        <script src="javascripts/my-account.js"></script>
+        
     </body>
 </html>

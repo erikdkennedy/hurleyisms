@@ -22,6 +22,9 @@
         <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
 
         <script src="javascripts/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+        <script src="javascripts/vendor/jquery-1.11.1.min.js"></script>
+        <script src="https://checkout.stripe.com/checkout.js"></script>
+        <script src="javascripts/pro.min.js"></script>
     </head>
     <body class="upsell">
         <header class="upsell-header">
@@ -89,17 +92,16 @@
                 <h3 class="upsell-cta__title">Monthly Subscription</h3>
                 <p class="upsell-cta__price">$4.99/month</p>
                 <p class="upsell-cta__details"><img src="images/star.png">MOST POPULAR</p>
-                <a href="#" class="btn--green upsell-cta__btn" data-modal="signup-modal">Go Monthly</a>
+                <a href="#" class="btn--green upsell-cta__btn" data-modal="signup-modal" monthly>Go Monthly</a>
             </div>
             <div class="upsell-cta">
                 <h3 class="upsell-cta__title">Lifetime* <br /> Access</h3>
                 <p class="upsell-cta__price">$99</p>
                 <p class="upsell-cta__details">One payment,<br /> lifetime access</p>
-                <a href="#" class="btn--green upsell-cta__btn" data-modal="signup-modal">Go Lifetime</a>
+                <a href="#" class="btn--green upsell-cta__btn" data-modal="signup-modal" lifetime>Go Lifetime</a>
                 <div class="upsell-cta__footnote">* For the life of the service</div>
             </div>
         </div>
-
         <!-- SIGN UP MODAL -->
         <div class="modal" id="signup-modal">
             <div class="modal__window">
@@ -110,23 +112,24 @@
                 <div class="modal__body">
                     <form>
                         <div class="form-control">
-                            <label for="signup__name">Name</label>
-                            <input type="text" id="signup__name" required>
+                            <label for="name">Name</label>
+                            <input type="text" id="name" required>
                         </div>
                         <div class="form-control">
-                            <label for="signup__email-address">Email Address</label>
-                            <input type="email" id="signup__email-address" required>
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" required>
                         </div>
                         <div class="form-control">
                             <label for="signup__password">Password</label>
                             <!-- <input type="password" id="signup__password" required> -->
                             <div class="input-group">
-                                <input type="password" id="signup__password required">
+                                <input type="password" id="password" required>
                                 <a href="#" class="input-group__addon btn--blue show-password">Show</a>
                             </div>
                         </div>
                         <div class="form-control">
-                            <input type="submit" class="btn btn--green" value="Next »">
+                            <input type="button" class="btn btn--green" value="Next »" id="btn_register">
+                            <input type="button" class="btn btn--green" style="display:none" value="Checkout" id="btn_checkout">
                         </div>
                     </form>
                 </div>
@@ -152,7 +155,7 @@
                             <p><a href="javascript:void(0)" data-modal="forgot-password-modal"><small>I forgot my password</small></a></p>
                         </div>
                         <div class="form-control">
-                            <input type="submit" class="btn btn--green" val="Log In">
+                            <input type="button" class="btn btn--green" value="Log In" id="btn_login">
                         </div>
                     </form>
                 </div>
@@ -162,7 +165,4 @@
             </div>
         </div>
     </body>
-    <script src="javascripts/vendor/jquery-1.11.1.min.js"></script>
-    <script src="javascripts/min/shared-min.js"></script>
-    <script src="javascripts/pro.js"></script>
 </html>

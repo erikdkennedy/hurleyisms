@@ -62,12 +62,24 @@ $(document).ready(function() {
 	        callback();
 	    });
 	}
-
+	function deleteLine(id,callback)
+	{
+	    $.get('admin/' + id + "/delete").then(function (data) {
+	        callback();
+	    });
+	}
+	function updateLineText(id, text, callback)
+	{
+	    $.post('admin/' + id + "/updatetext", text).then(function (data) {
+	        callback();
+	    });
+	}
 
 
 	/*****************************************
 			   LISTENERS - SPLASH
 	*****************************************/
+	
 
 	//start session button
 	$("a.begin-session").click(function() {
@@ -89,7 +101,7 @@ $(document).ready(function() {
 		changeScreen("submit");
 
 		//TODO remove... should be handled elsewhere
-		if (isLoggedIn()) {
+		if (isLoggedIn() && hasVerifiedEmail()) {
 			enableLineSubmissionControls();
 		} else {
 			disableLineSubmissionControls();
@@ -105,9 +117,10 @@ $(document).ready(function() {
 		}
 	}
 
-	function isLoggedIn() {
+	/*function isLoggedIn() {
 		return $("body").hasClass("is-logged-in");
 	}
+    */
 
 	function enableLineSubmissionControls() {
 		var $page = $("section.submit");
@@ -132,7 +145,7 @@ $(document).ready(function() {
 	*****************************************/
 
 	//TODO Andrew, remove this, it's prototype only
-	$(document).keyup(function(e) {
+	/*$(document).keyup(function(e) {
 		//switch payment set up/NOT set up
 		if (e.which === 80) //"p"
 			$("body").toggleClass("has-payment-error");
@@ -149,11 +162,11 @@ $(document).ready(function() {
 				disableLineSubmissionControls();
 			}
 		}
-	});
+	});*/
 
-	function hasVerifiedEmail() {
+	/*function hasVerifiedEmail() {
 		return !$("body").hasClass("is-unverified-email");
-	}
+	}*/
 
 	$(".resend-verification-email").click(function() {
 		$.createToast("Verification email sent!");
@@ -204,7 +217,6 @@ $(document).ready(function() {
 	    line.women = $('#audience-women').is(":checked");
 	    line.kids = $('#audience-kids').is(":checked");
 	    line.profanity = $('#switch-pg').hasClass("active");
-	    line.author = $("#your-name").val();
 	    sendLine(line, callback);
 	}
 	function resetSubmitForm() {
@@ -218,7 +230,23 @@ $(document).ready(function() {
 		}, 250);
 	}
 
+	function handleDeleteLine() {
+	    if(window.editid) {
+	        deleteLine(window.editid, function () {
+	            $.closeModal();
+	        });
+	    }
+	}
+	$("#delete").click(handleDeleteLine)
 
+	handleUpdateText = function(e) {
+	    var id = $(this).closest(".line").attr("name");
+	    var linetext = $(this).closest(".line").find(".line__textarea").val();
+	    updateLineText(id, { text: linetext }, function () {
+	            $.closeModal();
+	        });
+	    
+	}
 
 	/*****************************************
 				LISTENERS - LINES
@@ -274,6 +302,7 @@ $(document).ready(function() {
 			if (noMoreLinesFit) break;
 
 			$divForLine = $divForLine.next();
+			$(".btn_admin_save").click(handleUpdateText);
 		}
 
 		return lines;
@@ -427,15 +456,10 @@ $(document).ready(function() {
 				.focus();
 	}
 
-	function isAdmin() {
-		return $("body").hasClass("is-admin");
-	}
-
-	//press "a" to toggle admin mode (prototype only)
-	//TODO Andrew - remove this when admin mode is implemented
-	$(document).keyup(function(e) {
-		if (e.which === 65 && !$(e.target).isTextField()) $("body").toggleClass("is-admin");
-	});
+	$("body").toggleClass("is-admin", isAdmin());
+	$("body").toggleClass("is-logged-in", isLoggedIn());
+	$("body").toggleClass("is-monthly", isMonthly());
+	$("body").toggleClass("is-unverified-email", !hasVerifiedEmail());
 
 	//click TRASH CAN button to delete line
 	$(document).on("click", ".line__delete", function() {
