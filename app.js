@@ -1,3 +1,4 @@
+/// <reference path="public/javascripts/pro.js" />
 require('dotenv').config();
 var express = require('express');
 var path = require('path');
@@ -46,7 +47,8 @@ function writeJSFiles() {
         'public/javascripts/config.min.js',
         'public/javascripts/auth.js',
         'public/javascripts/shared.js',
-        'public/javascripts/stripe.js'
+        'public/javascripts/stripe.js',
+        'public/javascripts/pro.js'
     ]
     minJSFiles(proClientFiles, 'public/javascripts/pro.min.js');
 
