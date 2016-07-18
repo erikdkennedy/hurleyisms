@@ -61,13 +61,13 @@ router.post('/register', function (req, res) {
     user.email = xssFilters.inHTMLData(req.body.email);
 
     user.setPassword(req.body.password);
-    user.email_code=crypto.randomBytes(100).toString('hex');
+    user.email_code = crypto.randomBytes(100).toString('hex');
 
     user.save(function (err) {
         if (err) {
             sendJSONresponse(res, 404, err);
         } else {
-            email.sendInitialEmail(user,  function () {
+            email.sendInitialEmail(user, function () {
                 sendUpdateCookie(res, user, { status: 'success' });
             });
         }
@@ -214,7 +214,18 @@ router.post('/cancel', helpers.onlyLoggedIn, function (req, res) {
 
         });
 
-        
+
+    });
+});
+router.get('/verifyemail', helpers.onlyLoggedIn, function (req, res) {
+    getUser(req, res, function (req, res, user) {
+        if (!user.email_code) {
+            sendJSONresponse(res, 404, "no user code");
+        } else {
+            email.sendInitialEmail(user, function () {
+                sendUpdateCookie(res, user, { status: 'success' });
+            });
+        }
     });
 });
 router.post('/email', helpers.onlyLoggedIn, function (req, res) {
@@ -226,16 +237,16 @@ router.post('/email', helpers.onlyLoggedIn, function (req, res) {
     }
     getUser(req, res, function (req, res, user) {
         user.email = xssFilters.inHTMLData(req.body.email);
-        user.email_code=crypto.randomBytes(100).toString('hex');
+        user.email_code = crypto.randomBytes(100).toString('hex');
         user.emailverified = false;
         user.save(function (err) {
             if (err) {
 
                 sendJSONresponse(res, 404, err);
             } else {
-                email.sendInitialEmail(user,  function () {
-                sendUpdateCookie(res, user, { status: 'success' });
-            });
+                email.sendInitialEmail(user, function () {
+                    sendUpdateCookie(res, user, { status: 'success' });
+                });
             }
         });
     });
