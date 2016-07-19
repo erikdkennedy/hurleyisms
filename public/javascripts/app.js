@@ -74,6 +74,11 @@ $(document).ready(function() {
 	        callback();
 	    });
 	}
+	function sendVerifyEmail(callback) {
+	    $.get("auth/verifyemail").then(function (data) {
+	        callback();
+	    });
+	}
 
 
 	/*****************************************
@@ -121,6 +126,7 @@ $(document).ready(function() {
 		return $("body").hasClass("is-logged-in");
 	}
     */
+	$("#email_verify").html('You must verify your email address to submit a new line.  <a id="send_verify_email" href="#" class="resend-verification-email">Send verification email to ' + loggedInEmail() + '</a> or <a href="my-account">change email address</a>.')
 
 	function enableLineSubmissionControls() {
 		var $page = $("section.submit");
@@ -167,11 +173,6 @@ $(document).ready(function() {
 	/*function hasVerifiedEmail() {
 		return !$("body").hasClass("is-unverified-email");
 	}*/
-
-	$(".resend-verification-email").click(function() {
-		$.createToast("Verification email sent!");
-	});
-
 
 	//close this page
 	$("section.submit a.close").click(function() {
@@ -248,6 +249,12 @@ $(document).ready(function() {
 	    
 	}
 
+	var handleVerifyEmail = function(){
+	    sendVerifyEmail(function () {
+	        $.createToast("Verification email sent!");
+	    });
+	}
+	$("#send_verify_email").click(handleVerifyEmail)
 	/*****************************************
 				LISTENERS - LINES
 	*****************************************/

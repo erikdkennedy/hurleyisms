@@ -1,3 +1,4 @@
+/// <reference path="public/javascripts/pro.js" />
 require('dotenv').config();
 var express = require('express');
 var path = require('path');
@@ -19,7 +20,6 @@ var jwt = require('express-jwt');
 var fs = require('fs');
 var app = express();
 
-
 function minJSFiles(files, target)
 {
     var beautify = process.env.NODE_ENV === 'development';
@@ -39,6 +39,7 @@ function writeJSFiles() {
       'public/javascripts/auth.js',
       'public/javascripts/shared.js',
       'public/javascripts/app.js'
+      
     ];
     minJSFiles(appClientFiles, 'public/javascripts/hurleyisms.min.js');
 
@@ -46,13 +47,15 @@ function writeJSFiles() {
         'public/javascripts/config.min.js',
         'public/javascripts/auth.js',
         'public/javascripts/shared.js',
-        'public/javascripts/stripe.js'
+        'public/javascripts/stripe.js',
+        'public/javascripts/pro.js'
     ]
     minJSFiles(proClientFiles, 'public/javascripts/pro.min.js');
 
     var indexClientFiles = [
         'public/javascripts/auth.js',
-        'public/javascripts/shared.js'
+        'public/javascripts/shared.js',
+        'public/javascripts/marketing.js'
     ]
     minJSFiles(indexClientFiles, 'public/javascripts/index.min.js');
 
@@ -71,7 +74,6 @@ fs.writeFile('public/javascripts/config.min.js', configJsonString, function (err
     }
     writeJSFiles();
 });
-
 
 // Ensure the page is secure. Since AWS forwards to non-http we need to check request headers
 var forceHttps = function (req, res, next) {

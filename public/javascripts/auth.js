@@ -106,6 +106,15 @@ $(document).ready(function () {
             return false;
         }
     };
+    isLifeTime = function () {
+        var token = getToken();
+        if (token) {
+            var payload = JSON.parse(window.atob(token.split('.')[1]));
+            return payload.exp > Date.now() / 1000 && payload.type === "lifetime";
+        } else {
+            return false;
+        }
+    };
     loggedInEmail = function () {
         var token = getToken();
         if (token) {
@@ -127,7 +136,16 @@ $(document).ready(function () {
             return null;
         }
     }
-
+    proDate = function () {
+        var token = getToken();
+        if (token) {
+            var payload = JSON.parse(window.atob(token.split('.')[1]));
+            if (payload.exp > Date.now() / 1000) return new Date(payload.prodate);
+            return null;
+        } else {
+            return null;
+        }
+    };
     
 
     var getToken = function () {

@@ -61,13 +61,13 @@ router.post('/register', function (req, res) {
     user.email = xssFilters.inHTMLData(req.body.email);
 
     user.setPassword(req.body.password);
-    user.email_code=crypto.randomBytes(100).toString('hex');
+    user.email_code = crypto.randomBytes(100).toString('hex');
 
     user.save(function (err) {
         if (err) {
             sendJSONresponse(res, 404, err);
         } else {
-            email.sendInitialEmail(user,  function () {
+            email.sendInitialEmail(user, function () {
                 sendUpdateCookie(res, user, { status: 'success' });
             });
         }
@@ -134,6 +134,7 @@ router.post('/lifetime', helpers.onlyLoggedIn, function (req, res) {
             user.pro = true;
             user.chargeid = charge.id;
             user.type = "lifetime";
+            user.prodate = Date.now();
             user.save(function (err) {
                 if (err) {
                     sendJSONresponse(res, 404, err);
@@ -173,12 +174,14 @@ router.post('/monthly', helpers.onlyLoggedIn, function (req, res) {
             if (err && err.type === 'StripeCardError') {
                 // The card has been declined
                 //TODO: Stop further execution
+                console.log(err);
             }
             console.log(customer);
             user.pro = true;
             user.customerid = customer.id,
             user.subscriptionid = customer.subscriptions.data[0].id;
             user.type = "monthly";
+            user.prodate = Date.now();
             user.save(function (err) {
                 if (err) {
                     sendJSONresponse(res, 404, err);
@@ -214,7 +217,18 @@ router.post('/cancel', helpers.onlyLoggedIn, function (req, res) {
 
         });
 
-        
+
+    });
+});
+router.get('/verifyemail', helpers.onlyLoggedIn, function (req, res) {
+    getUser(req, res, function (req, res, user) {
+        if (!user.email_code) {
+            sendJSONresponse(res, 404, "no user code");
+        } else {
+            email.sendInitialEmail(user, function () {
+                sendUpdateCookie(res, user, { status: 'success' });
+            });
+        }
     });
 });
 router.post('/email', helpers.onlyLoggedIn, function (req, res) {
@@ -226,16 +240,16 @@ router.post('/email', helpers.onlyLoggedIn, function (req, res) {
     }
     getUser(req, res, function (req, res, user) {
         user.email = xssFilters.inHTMLData(req.body.email);
-        user.email_code=crypto.randomBytes(100).toString('hex');
+        user.email_code = crypto.randomBytes(100).toString('hex');
         user.emailverified = false;
         user.save(function (err) {
             if (err) {
 
                 sendJSONresponse(res, 404, err);
             } else {
-                email.sendInitialEmail(user,  function () {
-                sendUpdateCookie(res, user, { status: 'success' });
-            });
+                email.sendInitialEmail(user, function () {
+                    sendUpdateCookie(res, user, { status: 'success' });
+                });
             }
         });
     });

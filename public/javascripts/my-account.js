@@ -21,18 +21,22 @@ $(document).ready(function() {
 	});
 
 	$("#password").simpleEditify({
-		onOpen: function() {
+	    onOpen: function () {
+	        $("input[type=password]").val("");
 			$(".show-password").removeClass("hidden");
 		},
-		onClose: function() {
+	    onClose: function () {
+	        $("input[type=password]").val("password");
 			$(".show-password").addClass("hidden");
 		},
 		onSaveSuccess: function() {
 			$.createToast("New password saved!");
 		},
 		onSave: function (callback) {
-		    var password = $("input[type=password]").val();
-		    updatePassword(password, callback);
+		    if ($("input[type=password]").requirify()) {
+		        var password = $("input[type=password]").val();
+		        updatePassword(password, callback);
+		    }
 		}
 	});
 
@@ -50,6 +54,11 @@ $(document).ready(function() {
 		$(this).toggleText("Show password", "Hide password");
 	});
 
-    
+	
+	$("body").toggleClass("is-monthly", isMonthly());
+	$("body").toggleClass("is-lifetime", isLifeTime());
+	var mthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+	var pdate = proDate();
+	$(".started").html("Started "+mthNames[pdate.getMonth()] + " " + pdate.getFullYear());
     
 });
