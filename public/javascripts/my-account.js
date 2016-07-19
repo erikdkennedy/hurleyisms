@@ -54,6 +54,11 @@ $(document).ready(function() {
 		$(this).toggleText("Show password", "Hide password");
 	});
 
-    
+	
+	$("body").toggleClass("is-monthly", isMonthly());
+	$("body").toggleClass("is-lifetime", isLifeTime());
+	var mthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+	var pdate = proDate();
+	$("#started").html("Started "+mthNames[pdate.getMonth() + 1] + " " + pdate.getFullYear());
     
 });

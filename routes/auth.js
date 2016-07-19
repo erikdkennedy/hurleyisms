@@ -134,6 +134,7 @@ router.post('/lifetime', helpers.onlyLoggedIn, function (req, res) {
             user.pro = true;
             user.chargeid = charge.id;
             user.type = "lifetime";
+            user.prodate = Date.now();
             user.save(function (err) {
                 if (err) {
                     sendJSONresponse(res, 404, err);
@@ -173,12 +174,14 @@ router.post('/monthly', helpers.onlyLoggedIn, function (req, res) {
             if (err && err.type === 'StripeCardError') {
                 // The card has been declined
                 //TODO: Stop further execution
+                console.log(err);
             }
             console.log(customer);
             user.pro = true;
             user.customerid = customer.id,
             user.subscriptionid = customer.subscriptions.data[0].id;
             user.type = "monthly";
+            user.prodate = Date.now();
             user.save(function (err) {
                 if (err) {
                     sendJSONresponse(res, 404, err);
