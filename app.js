@@ -19,6 +19,7 @@ var uglifyJs = require("uglify-js");
 var jwt = require('express-jwt');
 var fs = require('fs');
 var app = express();
+var sass = require('node-sass');
 
 function minJSFiles(files, target)
 {
@@ -74,6 +75,26 @@ fs.writeFile('public/javascripts/config.min.js', configJsonString, function (err
     }
     writeJSFiles();
 });
+
+sass.render({
+    file:'public/stylesheets/styles.scss'
+}, function(error, result) { // node-style callback from v3.0.0 onwards
+    if(!error){
+        // No errors during the compilation, write this result on the disk
+        fs.writeFile('public/stylesheets/styles.css', result.css, function(err){
+            if(!err){
+                console.log("styles.css written on disk");
+            }
+            else {
+                console.error(err);
+            }
+        });
+    }
+    else {
+        console.error(error);
+    }
+});
+
 
 // Ensure the page is secure. Since AWS forwards to non-http we need to check request headers
 var forceHttps = function (req, res, next) {
