@@ -3,5 +3,6 @@
   "ignore": [
     "*.min.js",
     "*.css"
-  ]
+  ],
+  "ext": "js html scss"
 }
