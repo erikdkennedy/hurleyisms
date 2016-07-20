@@ -60,6 +60,11 @@ $(document).ready(function() {
         });
 	}
 
+	//check for "Email just verified" query string
+	if (getQueryStringValue("email-verified") === "true") {
+		$.createToast("Your email has been verified!  Thanks!");
+	}
+
 
 
     /*****************************************
