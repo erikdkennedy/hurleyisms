@@ -1267,6 +1267,11 @@ section.splash {
 				margin: 5px;
 				text-decoration: none;
 
+				&.disabled {
+					opacity: .5;
+					pointer-events: none;
+				}
+
 				&:hover > img {
 					outline: 2px solid $blue;
 					-webkit-filter: brightness(1.1);

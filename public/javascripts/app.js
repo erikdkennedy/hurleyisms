@@ -123,7 +123,11 @@ $(document).ready(function() {
 	//flip rating switch
 	$(".switch").click(function() {
 	    $(this).toggleClass("active");
+
+	    var kidsButton = $(".begin-session[data-audience-type=2]");
 	    profanity = $(this).hasClass("active");
+
+	    kidsButton.toggleClass("disabled", profanity);
 	});
 
 	//click "new line" btn
