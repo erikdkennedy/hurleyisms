@@ -13,6 +13,7 @@ hurleyisms.min.js
 pro.min.js
 index.min.js
 myaccount.min.js
+styles.css
 config.min.js
 *.codekit
 *.env
