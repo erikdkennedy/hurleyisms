@@ -563,6 +563,10 @@ body.has-modal-open {
 	}
 }
 
+	.input-group__addon {
+		flex-shrink: 0;
+	}
+
 .toast {
     @extend .dark-bg;
 

@@ -40,6 +40,26 @@ $(document).ready(function() {
 	//submit-a-line init
 	displayTextareaCharRemaining();
 
+	function getQueryStringValue(key) {
+       var query = window.location.search.substring(1);
+       var vars = query.split("&");
+       for (var i=0;i<vars.length;i++) {
+               var pair = vars[i].split("=");
+               if (pair[0] === key) return pair[1];
+       }
+       return false;
+	}
+
+	//check for "Enter new password" query string
+	if (getQueryStringValue("enter-new-password") === "true") {
+        $("#new-password-modal").addClass("is-visible");
+        $("body").addClass("has-modal-open");
+
+        $("#new-password__password").showPasswordify({
+        	control: $("#new-password-modal .show-password")
+        });
+	}
+
 
 
     /*****************************************

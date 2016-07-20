@@ -63,18 +63,26 @@ jQuery.fn.extend({
 
     },
 
+    //required arg "control" - jQuery element controlling show/hide
+    //optional args "showText", "hideText"
     showPasswordify: function (options) {
         return this.each(function () {
             if (typeof options.control === "undefined") return false;
 
             var $password = $(this);
             var $control = options.control;
+            var showText = options.showText || "Show";
+            var hideText = options.hideText || "Hide";
 
             $control.click(function () {
-                if ($password.prop("type") === "text")
+                if ($password.prop("type") === "text") {
                     $password.prop("type", "password");
-                else if ($password.prop("type") === "password")
+                    $control.text(showText);
+                }
+                else if ($password.prop("type") === "password") {
                     $password.prop("type", "text");
+                    $control.text(hideText);
+                }
             });
         });
     },
