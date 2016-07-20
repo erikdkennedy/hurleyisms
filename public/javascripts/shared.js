@@ -244,7 +244,7 @@ $(document).ready(function () {
 
     //click on background screen to close modal
     $(".modal").click(function (e) {
-        if ($(e.toElement).is(".modal")) $.closeModal();
+        if ($(e.toElement).is(".modal:not(.modal--uncloseable)")) $.closeModal();
     });
 
     //press Esc while modal is open
