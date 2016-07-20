@@ -205,7 +205,7 @@ $(document).ready(function () {
 	***********************************/
 
     //open modal
-    $(document).on("click", "a[data-modal]", function () {
+    $(document).on("click", "a[data-modal]", function (e) {
         //TODO determine better way of doing this 
         window.lifetime = false;
         if ($(this).is("[lifetime]")) { window.lifetime = true; }
@@ -217,16 +217,27 @@ $(document).ready(function () {
         if ($("body").hasClass("has-modal-open")) {
             $.closeModal();
         }
+        
 
         //figure out which modal we're talking about here
         var which = $(this).attr("data-modal");
-        var $modal = $(".modal").filter("#" + which);
+        if (auth && auth.isLoggedIn() && which === "signup-modal") {
+            if (!auth.isPro()) {
+                stripe.launch(e);
+            }
+            else {
+                console.error("already pro");
+            }
+        }
+        else {
+            var $modal = $(".modal").filter("#" + which);
 
-        //open the modal
-        $modal.addClass("is-visible");
+            //open the modal
+            $modal.addClass("is-visible");
 
-        //adding a class to the body allows us to lock scrolling
-        $("body").addClass("has-modal-open");
+            //adding a class to the body allows us to lock scrolling
+            $("body").addClass("has-modal-open");
+        }
     });
 
     //click on close button

@@ -1,12 +1,12 @@
-$(document).ready(function () {
+var auth = function () {
+    var auth = {};
     var validateRegisterForm = function () {
-         //$("input[type=email]").uniquify("This email has already been taken.  <a href='#' data-modal='login-modal'>Login</a> if it's yours") &&
         return $("#signup-modal input[type=email]").emailify() &&
             $("#signup-modal input[required]").requirify();
 
 
     }
-    var register = function (e) {
+    auth.register = function (e) {
         e.preventDefault();
         //this line isn't needed as validate will remove all users
         //$("#signup-modal input[required]").removeError();
@@ -26,13 +26,11 @@ $(document).ready(function () {
                 });
         }
     }
-    $("#btn_register").click(register);
-    
     var validateLogInForm = function () {
         return $("#login-modal input[type=email]").emailify() &&
             $("#login-modal input[required]").requirify();
     } 
-    var login = function ()
+    auth.login = function ()
     {
         if(validateLogInForm){
             var user = {};
@@ -45,39 +43,31 @@ $(document).ready(function () {
         });
         }
     }
-    $("#btn_login").click(login);
-    
-    var loggout = function()
+    auth.logout = function()
     {
         $.post('auth/logout').done(function () {
             document.location.href = '/';
         });
     }
-    $("#logout").click(loggout);
+    
 
-    cancel = function () {
+    auth.cancel = function () {
         $.post('auth/cancel').done(function () {
             document.location.href = '/my-account';
         });
     }
-    $("#cancel").click(cancel);
-
-
-    updateEmailAddress = function (email, callback) {
+    auth.updateEmailAddress = function (email, callback) {
         $.post('auth/email', { email: email }).done(function () {
             callback();
         });
     }
-    updatePassword = function (password, callback) {
+    auth.updatePassword = function (password, callback) {
         $.post('auth/password', { password: password }).done(function () {
             callback();
         });
     }
 
-   
-
-
-    isLoggedIn = function () {
+    auth.isLoggedIn = function () {
         var token = getToken();
         if (token) {
             var payload = JSON.parse(window.atob(token.split('.')[1]));
@@ -87,7 +77,7 @@ $(document).ready(function () {
         }
     };
 
-    isAdmin = function () {
+    auth.isAdmin = function () {
         var token = getToken();
         if (token) {
             var payload = JSON.parse(window.atob(token.split('.')[1]));
@@ -97,7 +87,7 @@ $(document).ready(function () {
         }
     };
 
-    isMonthly = function () {
+    auth.isMonthly = function () {
         var token = getToken();
         if (token) {
             var payload = JSON.parse(window.atob(token.split('.')[1]));
@@ -106,7 +96,8 @@ $(document).ready(function () {
             return false;
         }
     };
-    isLifeTime = function () {
+
+    auth.isLifeTime = function () {
         var token = getToken();
         if (token) {
             var payload = JSON.parse(window.atob(token.split('.')[1]));
@@ -115,7 +106,8 @@ $(document).ready(function () {
             return false;
         }
     };
-    loggedInEmail = function () {
+
+    auth.loggedInEmail = function () {
         var token = getToken();
         if (token) {
             var payload = JSON.parse(window.atob(token.split('.')[1]));
@@ -126,7 +118,7 @@ $(document).ready(function () {
         }
     };
 
-    hasVerifiedEmail = function () {
+    auth.hasVerifiedEmail = function () {
         var token = getToken();
         if (token) {
             var payload = JSON.parse(window.atob(token.split('.')[1]));
@@ -135,12 +127,24 @@ $(document).ready(function () {
         } else {
             return null;
         }
-    }
-    proDate = function () {
+    };
+
+    auth.proDate = function () {
         var token = getToken();
         if (token) {
             var payload = JSON.parse(window.atob(token.split('.')[1]));
             if (payload.exp > Date.now() / 1000) return new Date(payload.prodate);
+            return null;
+        } else {
+            return null;
+        }
+    };
+
+    auth.isPro = function () {
+        var token = getToken();
+        if (token) {
+            var payload = JSON.parse(window.atob(token.split('.')[1]));
+            if (payload.exp > Date.now() / 1000) return payload.pro;
             return null;
         } else {
             return null;
@@ -152,7 +156,7 @@ $(document).ready(function () {
         return getCookie("auth");
     };
 
-    function getCookie(cname) {
+    getCookie = function(cname) {
         var name = cname + "=";
         var ca = document.cookie.split(';');
         for (var i = 0; i < ca.length; i++) {
@@ -166,4 +170,5 @@ $(document).ready(function () {
         }
         return null;
     }
-});
+    return auth;
+}();

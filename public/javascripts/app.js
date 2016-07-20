@@ -106,7 +106,7 @@ $(document).ready(function() {
 		changeScreen("submit");
 
 		//TODO remove... should be handled elsewhere
-		if (isLoggedIn() && hasVerifiedEmail()) {
+		if (auth.isLoggedIn() && auth.hasVerifiedEmail()) {
 			enableLineSubmissionControls();
 		} else {
 			disableLineSubmissionControls();
@@ -122,11 +122,7 @@ $(document).ready(function() {
 		}
 	}
 
-	/*function isLoggedIn() {
-		return $("body").hasClass("is-logged-in");
-	}
-    */
-	$("#email_verify").html('You must verify your email address to submit a new line.  <a id="send_verify_email" href="#" class="resend-verification-email">Send verification email to ' + loggedInEmail() + '</a> or <a href="my-account">change email address</a>.')
+	$("#email_verify").html('You must verify your email address to submit a new line.  <a id="send_verify_email" href="#" class="resend-verification-email">Send verification email to ' + auth.loggedInEmail() + '</a> or <a href="my-account">change email address</a>.')
 
 	function enableLineSubmissionControls() {
 		var $page = $("section.submit");
@@ -149,31 +145,7 @@ $(document).ready(function() {
 	/*****************************************
 			   LISTENERS - SUBMIT
 	*****************************************/
-
-	//TODO Andrew, remove this, it's prototype only
-	/*$(document).keyup(function(e) {
-		//switch payment set up/NOT set up
-		if (e.which === 80) //"p"
-			$("body").toggleClass("has-payment-error");
-
-		//switch verified/unverified email
-		if (e.which === 69) //"e"
-			$("body").toggleClass("is-unverified-email");
-
-		//show or hide line submission controls
-		if (e.which === 76 || e.which === 69) { //"l" or "e"
-			if (isLoggedIn() && hasVerifiedEmail()) {
-				enableLineSubmissionControls();
-			} else {
-				disableLineSubmissionControls();
-			}
-		}
-	});*/
-
-	/*function hasVerifiedEmail() {
-		return !$("body").hasClass("is-unverified-email");
-	}*/
-
+	$("#btn_login").click(auth.login);
 	//close this page
 	$("section.submit a.close").click(function() {
 		changeScreen("splash");
@@ -445,7 +417,7 @@ $(document).ready(function() {
 	});
 
 	function startEditingLine($textBox) {
-		if (!isAdmin()) return false;
+		if (!auth.isAdmin()) return false;
 
 		var progressBarWasRunning = !!lastRepaintTime;
 
@@ -463,10 +435,10 @@ $(document).ready(function() {
 				.focus();
 	}
 
-	$("body").toggleClass("is-admin", isAdmin());
-	$("body").toggleClass("is-logged-in", isLoggedIn());
-	$("body").toggleClass("is-monthly", isMonthly());
-	$("body").toggleClass("is-unverified-email", !hasVerifiedEmail());
+	$("body").toggleClass("is-admin", auth.isAdmin());
+	$("body").toggleClass("is-logged-in", auth.isLoggedIn());
+	$("body").toggleClass("is-monthly", auth.isMonthly());
+	$("body").toggleClass("is-unverified-email", !auth.hasVerifiedEmail());
 
 	//click TRASH CAN button to delete line
 	$(document).on("click", ".line__delete", function() {

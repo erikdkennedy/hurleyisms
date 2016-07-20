@@ -3,7 +3,7 @@ $(document).ready(function() {
 	/*****************************************
 				  INITIALIZATION
 	*****************************************/
-    $("input[type=email]").val(loggedInEmail());
+    $("input[type=email]").val(auth.loggedInEmail());
 	$("input[type=email], input[type=password]").requirify();
 	$("input[type=email]").emailify();
 	$("input[type=password]").showPasswordify({
@@ -55,10 +55,11 @@ $(document).ready(function() {
 	});
 
 	
-	$("body").toggleClass("is-monthly", isMonthly());
-	$("body").toggleClass("is-lifetime", isLifeTime());
+	$("body").toggleClass("is-monthly", auth.isMonthly());
+	$("body").toggleClass("is-lifetime", auth.isLifeTime());
 	var mthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-	var pdate = proDate();
-	$(".started").html("Started "+mthNames[pdate.getMonth()] + " " + pdate.getFullYear());
-    
+	var pdate = auth.proDate();
+	$(".started").html("Started " + mthNames[pdate.getMonth()] + " " + pdate.getFullYear());
+	$("#logout").click(auth.logout);
+	$("#cancel").click(auth.cancel);
 });

@@ -12,4 +12,5 @@ $(document).ready(function() {
 			$(".device-img").addClass("slide-in");
 		}
 	});
+	$("#btn_login").click(auth.login);
 });

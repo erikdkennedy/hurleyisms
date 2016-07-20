@@ -27,13 +27,13 @@
         e.preventDefault();
         $.closeModal();
         if (window.lifetime) {
-            stripe.launchlifetime(loggedInEmail());
+            stripe.launchlifetime(auth.loggedInEmail());
         }
         else {
-            stripe.launchmonthly(loggedInEmail());
+            stripe.launchmonthly(auth.loggedInEmail());
         }
     };
-    $(function () { $("#btn_checkout").click(stripe.launch); });
+    
     stripe.launchlifetime = function (email) {
         // Open Checkout with further options:
         console.log("button clicked");
@@ -60,5 +60,5 @@
     $(window).on('popstate', function () {
         stripe.handler.close();
     });
-    return stripe
+    return stripe;
 }();
