@@ -128,10 +128,21 @@
                             </div>
                         </div>
                         <div class="form-control">
-                            <input type="button" class="btn btn--green" value="Next »" id="btn_register">
-                            <input type="button" class="btn btn--green" style="display:none" value="Checkout" id="btn_checkout">
+                            <input type="button" class="btn btn--green" value="Next »" id="btn_register" data-modal="checkout-modal">
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- GET READY TO PAY MODAL -->
+        <div class="modal modal--uncloseable" id="checkout-modal">
+            <div class="modal__window">
+                <div class="modal__header">
+                    <div class="modal__body">
+                        <p>Awesome!  Now just enter payment info and you'll be all set.</p>
+                        <a href="javascript:void(0)" class="btn btn--green" value="Checkout" id="btn_checkout">Enter payment info »</a>
+                    </div>
                 </div>
             </div>
         </div>

@@ -17,8 +17,8 @@ $(document).ready(function () {
             user.name = $("#name").val();
             $.post('auth/register', user)
                 .done(function (data) {
-                    $("#btn_register").hide();
-                    $("#btn_checkout").show();
+                    //TODO Andrew, distinguish this flow for mobile vs. non-mobile users
+                    $.openModal("checkout-modal");
 
             })
                 .error(function (error) {

@@ -221,21 +221,25 @@ $(document).ready(function () {
             window.editid = $(this).closest(".line").attr("name");
         }
 
+        var id = $(this).attr("data-modal");
+        $.openModal(id);
+    });
+
+    $.openModal = function(modalID) {
         //if there's a current modal open, close it
         if ($("body").hasClass("has-modal-open")) {
             $.closeModal();
         }
 
         //figure out which modal we're talking about here
-        var which = $(this).attr("data-modal");
-        var $modal = $(".modal").filter("#" + which);
+        var $modal = $(".modal").filter("#" + modalID);
 
         //open the modal
         $modal.addClass("is-visible");
 
         //adding a class to the body allows us to lock scrolling
         $("body").addClass("has-modal-open");
-    });
+    };
 
     //click on close button
     $(".modal a.modal__close").click(function () {
