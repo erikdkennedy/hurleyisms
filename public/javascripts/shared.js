@@ -251,7 +251,7 @@ $(document).ready(function () {
             //adding a class to the body allows us to lock scrolling
             $("body").addClass("has-modal-open");
         }
-    });
+    }
 
     //click on close button
     $(".modal a.modal__close").click(function () {
