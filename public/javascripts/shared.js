@@ -230,11 +230,7 @@ $(document).ready(function () {
         if ($("body").hasClass("has-modal-open")) {
             $.closeModal();
         }
-        
-
-        //figure out which modal we're talking about here
-        var which = $(this).attr("data-modal");
-        if (auth && auth.isLoggedIn() && which === "signup-modal") {
+        if (auth && auth.isLoggedIn() && modalID === "signup-modal") {
             if (!auth.isPro()) {
                 stripe.launch(e);
             }
@@ -243,7 +239,7 @@ $(document).ready(function () {
             }
         }
         else {
-            var $modal = $(".modal").filter("#" + which);
+            var $modal = $(".modal").filter("#" + modalID);
 
             //open the modal
             $modal.addClass("is-visible");
