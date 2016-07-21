@@ -40,6 +40,31 @@ $(document).ready(function() {
 	//submit-a-line init
 	displayTextareaCharRemaining();
 
+	function getQueryStringValue(key) {
+       var query = window.location.search.substring(1);
+       var vars = query.split("&");
+       for (var i=0;i<vars.length;i++) {
+               var pair = vars[i].split("=");
+               if (pair[0] === key) return pair[1];
+       }
+       return false;
+	}
+
+	//check for "Enter new password" query string
+	if (getQueryStringValue("enter-new-password") === "true") {
+        $("#new-password-modal").addClass("is-visible");
+        $("body").addClass("has-modal-open");
+
+        $("#new-password__password").showPasswordify({
+        	control: $("#new-password-modal .show-password")
+        });
+	}
+
+	//check for "Email just verified" query string
+	if (getQueryStringValue("email-verified") === "true") {
+		$.createToast("Your email has been verified!  Thanks!");
+	}
+
 
 
     /*****************************************
@@ -98,7 +123,11 @@ $(document).ready(function() {
 	//flip rating switch
 	$(".switch").click(function() {
 	    $(this).toggleClass("active");
+
+	    var kidsButton = $(".begin-session[data-audience-type=2]");
 	    profanity = $(this).hasClass("active");
+
+	    kidsButton.toggleClass("disabled", profanity);
 	});
 
 	//click "new line" btn

@@ -563,6 +563,10 @@ body.has-modal-open {
 	}
 }
 
+	.input-group__addon {
+		flex-shrink: 0;
+	}
+
 .toast {
     @extend .dark-bg;
 
@@ -692,6 +696,8 @@ body.has-modal-open {
 }
 
 	.splash__media-wrapper {
+		@extend .content-width;
+
 		display: flex;
 		justify-content: flex-end;
 		overflow: hidden;
@@ -716,12 +722,14 @@ body.has-modal-open {
 		@media ($tablet) {
 			position: absolute;
 			top: 50%;
-			transform: translateY(-50%);
+			left: 50%;
+			transform: translateY(-50%) translateX(-50%);
 			padding: 0 50% 0 5%;
 		}
 
 		@media ($desktop) {
-			padding: 0 10%;
+			padding: 0 100px;
+			max-width: 1440px;
 		}
 
 		> h1 {
@@ -1258,6 +1266,11 @@ section.splash {
 			> a {
 				margin: 5px;
 				text-decoration: none;
+
+				&.disabled {
+					opacity: .5;
+					pointer-events: none;
+				}
 
 				&:hover > img {
 					outline: 2px solid $blue;

@@ -1,0 +1,1 @@
+var configuration=function(){var p={stripe_pk:"pk_test_p43Roytjpdw7yHKTMppmOy2k"};return p}();
