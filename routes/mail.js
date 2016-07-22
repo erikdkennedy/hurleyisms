@@ -35,13 +35,13 @@ router.get('/:code', function (req, res) {
                 return;
             }
             user.emailverified = true;
-            user.email_code = undefined;
+            //user.email_code = undefined;
             user.save(function (err) {
                 if (err) {
                     sendJSONresponse(res, 404, err);
                 } else {
                     setCookie(res, user);
-                    res.redirect("/app");
+                    res.redirect("/app?email-verified=true");
                 }
             });
 
