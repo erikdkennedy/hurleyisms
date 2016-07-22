@@ -30,7 +30,7 @@ var getBaseRequest = function (request, user) {
     request.path = '/v3/mail/send';
 }
 var sendInitialEmail = function (user, callback) {
-    var email_url = process.env.BASE_URL + "/email/" + user.verificationCode();
+    var email_url = process.env.BASE_URL + "/email/email/" + user.verificationCode();
     var request = sg.emptyRequest();
     getBaseRequest(request, user);
     request.body.personalizations[0].substitutions.email_url = email_url;
@@ -44,7 +44,7 @@ var sendInitialEmail = function (user, callback) {
     });
 }
 var sendVerifyEmail = function (user, callback) {
-    var email_url = process.env.BASE_URL + "/email/" + user.verificationCode();
+    var email_url = process.env.BASE_URL + "/email/email/" + user.verificationCode();
     var request = sg.emptyRequest();
     getBaseRequest(request, user);
     request.body.personalizations[0].substitutions.email_url = email_url;
@@ -57,8 +57,22 @@ var sendVerifyEmail = function (user, callback) {
         callback();
     });
 }
-
+var sendPasswordEmail = function (user, callback) {
+    var email_url = process.env.BASE_URL + "/email/password/" + user.verificationCode();
+    var request = sg.emptyRequest();
+    getBaseRequest(request, user);
+    request.body.personalizations[0].substitutions.email_url = email_url;
+    request.body.template_id = "7894b34d-40f7-45da-870d-e5e7e0704d6e";
+    request.body.subject = "Reset your password";
+    sg.API(request, function (response) {
+        console.log(response.statusCode)
+        console.log(response.body)
+        console.log(response.headers)
+        callback();
+    });
+}
 module.exports = {
     sendInitialEmail: sendInitialEmail,
-    sendVerifyEmail: sendVerifyEmail
+    sendVerifyEmail: sendVerifyEmail,
+    sendPasswordEmail: sendPasswordEmail
 };

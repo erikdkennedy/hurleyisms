@@ -18,7 +18,7 @@ var setCookie = function (res, user) {
     res.cookie('auth', token, { secure: true, maxAge: 604800000 });
 }
 
-router.get('/:code', function (req, res) {
+router.get('/email/:code', function (req, res) {
     var code = req.params.code;
     jwt.verify(code, process.env.JWT_SECRET, function (err, decoded) {
         if (err || !decoded.email) {
@@ -29,7 +29,7 @@ router.get('/:code', function (req, res) {
         else {
             console.log("Verifying email ");
             User
-            .findOne({ email: decoded.email})
+            .findOne({ email: decoded.email })
             .exec(function (err, user) {
                 if (!user) {
                     sendJSONresponse(res, 404, {
@@ -52,7 +52,37 @@ router.get('/:code', function (req, res) {
                 });
 
             });
-        } 
+        }
+    });
+});
+
+router.get('/password/:code', function (req, res) {
+    var code = req.params.code;
+    jwt.verify(code, process.env.JWT_SECRET, function (err, decoded) {
+        if (err || !decoded.email) {
+            sendJSONresponse(res, 404, {
+                "message": "invalid code"
+            });
+        }
+        else {
+            console.log("Verifying email ");
+            User
+            .findOne({ email: decoded.email })
+            .exec(function (err, user) {
+                if (!user) {
+                    sendJSONresponse(res, 404, {
+                        "message": "User not found"
+                    });
+                    return;
+                } else if (err) {
+                    console.log(err);
+                    sendJSONresponse(res, 404, err);
+                    return;
+                }
+                setCookie(res, user);
+                res.redirect("/app?enter-new-password=true");
+            });
+        }
     });
 });
 module.exports = router;

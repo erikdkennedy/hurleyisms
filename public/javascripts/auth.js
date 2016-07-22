@@ -63,7 +63,12 @@ var auth = function () {
     }
     auth.updatePassword = function (password, callback) {
         $.post('auth/password', { password: password }).done(function () {
-            callback();
+            if(callback)callback();
+        });
+    }
+    auth.forgotPassword = function (email, callback) {
+        $.post('auth/forgotPassword', { email: email }).done(function () {
+            if(callback) callback();
         });
     }
 

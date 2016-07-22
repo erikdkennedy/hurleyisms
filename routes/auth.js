@@ -37,7 +37,8 @@ var getUser = function (req, res, callback) {
                 console.log(err);
                 sendJSONresponse(res, 404, err);
                 return;
-            } callback(req, res, user);
+            }
+            callback(req, res, user);
         });
     } else {
         sendJSONresponse(res, 404, {
@@ -270,6 +271,31 @@ router.post('/logout', function (req, res) {
     res.clearCookie('auth');
     sendJSONresponse(res, 200, { status: 'success' });
 });
-
+router.post('/forgotPassword', function (req, res) {
+    if (!req.body.email) {
+        sendJSONresponse(res, 400, {
+            "message": "email required"
+        });
+        return;
+    }
+    var emailAddr = req.body.email.toLowerCase();
+    User
+        .findOne({ email: emailAddr })
+        .exec(function (err, user) {
+            if (!user) {
+                sendJSONresponse(res, 404, {
+                    "message": "User not found"
+                });
+                return;
+            } else if (err) {
+                console.log(err);
+                sendJSONresponse(res, 404, err);
+                return;
+            }
+            email.sendPasswordEmail(user, function () {
+                sendJSONresponse(res, 200, { status: "success" });
+            });
+        });
+});
 
 module.exports = router;

@@ -175,6 +175,21 @@ $(document).ready(function() {
 			   LISTENERS - SUBMIT
 	*****************************************/
 	$("#btn_login").click(auth.login);
+	$("#btn_newPassword").click(function (e) {
+	    var newPassword = $("#new-password__password").val();
+	    if (newPassword) {
+	        auth.updatePassword(newPassword, function () {
+	            $.closeModal();
+	            $.createToast("Your password has been updated");
+	        });
+	    }
+	});
+	$("#btn_verifyPass").click(function (e) {
+	    var emailAddress = $("#forgot__email-address").val();
+	    if (emailAddress) {
+	        auth.forgotPassword(emailAddress);
+	    }
+	});
 	//close this page
 	$("section.submit a.close").click(function() {
 		changeScreen("splash");
