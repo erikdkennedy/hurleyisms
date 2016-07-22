@@ -25,8 +25,7 @@ var userSchema = new mongoose.Schema({
     chargeid: String,
     type: String,
     emailverified: { type:Boolean, require:true, "default": false},
-    admin: { type: Boolean, "default": false },
-    email_code: { type: String, index: true }
+    admin: { type: Boolean, "default": false }
 });
 
 userSchema.methods.setPassword = function (password) {
@@ -64,6 +63,16 @@ userSchema.methods.generateJwt = function () {
         exp: parseInt(expiry.getTime() / 1000),
     }, process.env.JWT_SECRET); // DO NOT KEEP YOUR SECRET IN THE CODE!
 };
+
+userSchema.methods.verificationCode = function () {
+    var expiry = new Date();
+    expiry.setDate(expiry.getDate() + 40);
+
+    return jwt.sign({
+        _id: this._id,
+        email: this.email,
+    }, process.env.JWT_SECRET);
+}
 
 var model = mongoose.model('User', userSchema);
 model.schema.options.emitIndexErrors;

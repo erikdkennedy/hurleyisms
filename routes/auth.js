@@ -61,8 +61,6 @@ router.post('/register', function (req, res) {
     user.email = xssFilters.inHTMLData(req.body.email);
 
     user.setPassword(req.body.password);
-    user.email_code = crypto.randomBytes(100).toString('hex');
-
     user.save(function (err) {
         if (err) {
             sendJSONresponse(res, 404, err);
@@ -222,13 +220,9 @@ router.post('/cancel', helpers.onlyLoggedIn, function (req, res) {
 });
 router.get('/verifyemail', helpers.onlyLoggedIn, function (req, res) {
     getUser(req, res, function (req, res, user) {
-        if (!user.email_code) {
-            sendJSONresponse(res, 404, "no user code");
-        } else {
-            email.sendInitialEmail(user, function () {
-                sendUpdateCookie(res, user, { status: 'success' });
-            });
-        }
+        email.sendVerifyEmail(user, function () {
+            sendUpdateCookie(res, user, { status: 'success' });
+        });
     });
 });
 router.post('/email', helpers.onlyLoggedIn, function (req, res) {

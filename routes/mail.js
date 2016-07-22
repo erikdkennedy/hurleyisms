@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
+var jwt = require('jsonwebtoken');
 
 var sendJSONresponse = function (res, status, content) {
     res.status(status);
@@ -19,40 +20,39 @@ var setCookie = function (res, user) {
 
 router.get('/:code', function (req, res) {
     var code = req.params.code;
-    if (code) {
-        console.log("Verifying email ");
-        User
-        .findOne({ email_code: code })
-        .exec(function (err, user) {
-            if (!user) {
-                sendJSONresponse(res, 404, {
-                    "message": "User not found"
-                });
-                return;
-            } else if (err) {
-                console.log(err);
-                sendJSONresponse(res, 404, err);
-                return;
-            }
-            user.emailverified = true;
-            //user.email_code = undefined;
-            user.save(function (err) {
-                if (err) {
-                    sendJSONresponse(res, 404, err);
-                } else {
-                    setCookie(res, user);
-                    res.redirect("/app?email-verified=true");
-                }
+    jwt.verify(code, process.env.JWT_SECRET, function (err, decoded) {
+        if (err || !decoded.email) {
+            sendJSONresponse(res, 404, {
+                "message": "invalid code"
             });
+        }
+        else {
+            console.log("Verifying email ");
+            User
+            .findOne({ email: decoded.email})
+            .exec(function (err, user) {
+                if (!user) {
+                    sendJSONresponse(res, 404, {
+                        "message": "User not found"
+                    });
+                    return;
+                } else if (err) {
+                    console.log(err);
+                    sendJSONresponse(res, 404, err);
+                    return;
+                }
+                user.emailverified = true;
+                user.save(function (err) {
+                    if (err) {
+                        sendJSONresponse(res, 404, err);
+                    } else {
+                        setCookie(res, user);
+                        res.redirect("/app?email-verified=true");
+                    }
+                });
 
-        });
-    } else {
-        sendJSONresponse(res, 404, {
-            "message": "code not present"
-        });
-        return;
-    }
-
-
+            });
+        } 
+    });
 });
 module.exports = router;
