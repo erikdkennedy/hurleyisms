@@ -19,37 +19,36 @@ var auth = function () {
                 .done(function (data) {
                     //TODO Andrew, distinguish this flow for mobile vs. non-mobile users
                     $.openModal("checkout-modal");
-
-            })
+                })
                 .error(function (error) {
                     $("#signup-modal input[type=email]").addError("This email has already been taken.  <a href='#' data-modal='login-modal'>Login</a> if it's yours");
                 });
         }
     }
+    
     var validateLogInForm = function () {
         return $("#login-modal input[type=email]").emailify() &&
             $("#login-modal input[required]").requirify();
-    } 
-    auth.login = function ()
-    {
-        if(validateLogInForm){
+    }
+    auth.login = function () {
+        if (validateLogInForm) {
             var user = {};
             user.email = $("#login__email-address").val().toLowerCase();
             user.password = $("#login__password").val();
             $.post('auth/login', user).done(function (data) {
                 document.location.href = '/app';
-            }).error(function (error) { 
+            }).error(function (error) {
                 $("#login-modal input[type=email]").addError("Email or password incorrect");
-        });
+            });
         }
     }
-    auth.logout = function()
-    {
+    
+    auth.logout = function () {
         $.post('auth/logout').done(function () {
             document.location.href = '/';
         });
     }
-    
+
 
     auth.cancel = function () {
         $.post('auth/cancel').done(function () {
@@ -63,12 +62,12 @@ var auth = function () {
     }
     auth.updatePassword = function (password, callback) {
         $.post('auth/password', { password: password }).done(function () {
-            if(callback)callback();
+            if (callback) callback();
         });
     }
     auth.forgotPassword = function (email, callback) {
         $.post('auth/forgotPassword', { email: email }).done(function () {
-            if(callback) callback();
+            if (callback) callback();
         });
     }
 
@@ -155,13 +154,13 @@ var auth = function () {
             return null;
         }
     };
-    
+
 
     var getToken = function () {
         return getCookie("auth");
     };
 
-    getCookie = function(cname) {
+    getCookie = function (cname) {
         var name = cname + "=";
         var ca = document.cookie.split(';');
         for (var i = 0; i < ca.length; i++) {
@@ -177,3 +176,16 @@ var auth = function () {
     }
     return auth;
 }();
+$(function() {
+    $("#btn_register").click(auth.register);
+    $("#btn_login").click(auth.login);
+    $("#btn_newPassword").click(function (e) {
+        var newPassword = $("#new-password__password").val();
+        if (newPassword) {
+            auth.updatePassword(newPassword, function () {
+                $.closeModal();
+                $.createToast("Your password has been updated");
+            });
+        }
+    });
+});

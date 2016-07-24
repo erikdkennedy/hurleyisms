@@ -78,29 +78,28 @@ $(document).ready(function() {
 	    });
 	}
 	function sendLine(line, callback) {
-	    $.post('app/add',line, function (data) {
+	    $.post('app/add',line, function () {
 	        callback();
 	    });
 	}
 	function rate(id, rating, callback) {
-	    $.getJSON('app/rate/' + id + '/' + rating, function (data) {
+	    $.getJSON('app/rate/' + id + '/' + rating, function () {
 	        callback();
 	    });
 	}
 	function deleteLine(id,callback)
 	{
-	    $.get('admin/' + id + "/delete").then(function (data) {
+	    $.get('admin/' + id + "/delete").then(function () {
 	        callback();
 	    });
 	}
-	function updateLineText(id, text, callback)
-	{
-	    $.post('admin/' + id + "/updatetext", text).then(function (data) {
+	function updateLineText(id, text, callback){
+	    $.post('admin/' + id + "/updatetext", text).then(function () {
 	        callback();
 	    });
 	}
 	function sendVerifyEmail(callback) {
-	    $.get("auth/verifyemail").then(function (data) {
+	    $.get("auth/verifyemail").then(function () {
 	        callback();
 	    });
 	}
@@ -174,7 +173,6 @@ $(document).ready(function() {
 	/*****************************************
 			   LISTENERS - SUBMIT
 	*****************************************/
-	$("#btn_login").click(auth.login);
 	$("#btn_newPassword").click(function (e) {
 	    var newPassword = $("#new-password__password").val();
 	    if (newPassword) {
@@ -254,7 +252,8 @@ $(document).ready(function() {
 	        });
 	    }
 	}
-	$("#delete").click(handleDeleteLine)
+
+    $("#delete").click(handleDeleteLine);
 
 	handleUpdateText = function(e) {
 	    var id = $(this).closest(".line").attr("name");

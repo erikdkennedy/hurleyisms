@@ -39,6 +39,4 @@ $(document).ready(function() {
 	});
 
 	triggerScrollingAnimations();
-
-	$("#btn_login").click(auth.login);
 });
