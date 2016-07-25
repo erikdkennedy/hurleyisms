@@ -21,19 +21,25 @@ var fs = require('fs');
 var app = express();
 var sass = require('node-sass');
 
-function minJSFiles(files, target)
-{
+function minJSFiles(files, target){
     var beautify = process.env.NODE_ENV === 'development';
+    try{
     var uglified = uglifyJs.minify(files, { compress: false, mangle: false, output: { beautify: beautify } });
-    fs.writeFile(target, uglified.code, function (err) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log("Script generated and saved:", target);
-        }
-    });
+    
+      fs.writeFile(target, uglified.code, function (err) {
+          if (err) {
+              console.log("error found");
+              console.log(err);
+          } else {
+              console.log("Script generated and saved:", target);
+          }
+      });
+    }
+    catch(error)
+    {
+      console.log(error);
+    }
 }
-
 function writeJSFiles() {
     //combine JS for SPA
     var appClientFiles = [
@@ -61,8 +67,10 @@ function writeJSFiles() {
     minJSFiles(indexClientFiles, 'public/javascripts/index.min.js');
 
     var myAccountClientFiles = [
+      'public/javascripts/config.min.js',
       'public/javascripts/auth.js',
       'public/javascripts/shared.js',
+      'public/javascripts/stripe.js',
       'public/javascripts/my-account.js'
     ];
     minJSFiles(myAccountClientFiles, 'public/javascripts/myaccount.min.js');
@@ -125,7 +133,7 @@ app.use(jwt({
     getToken: function fromCookie(req)
     {
         console.log("checking cookie");
-        if(req.cookies.auth) return req.cookies.auth;
+        if(req.cookies.auth){ return req.cookies.auth;}
         return null;
     }
 }));
@@ -159,7 +167,7 @@ if (app.get('env') === 'development') {
       error: err
     });
   });
-}
+};
 
 // production error handler
 // no stacktraces leaked to user

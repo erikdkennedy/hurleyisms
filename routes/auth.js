@@ -37,7 +37,8 @@ var getUser = function (req, res, callback) {
                 console.log(err);
                 sendJSONresponse(res, 404, err);
                 return;
-            } callback(req, res, user);
+            }
+            callback(req, res, user);
         });
     } else {
         sendJSONresponse(res, 404, {
@@ -61,8 +62,6 @@ router.post('/register', function (req, res) {
     user.email = xssFilters.inHTMLData(req.body.email);
 
     user.setPassword(req.body.password);
-    user.email_code = crypto.randomBytes(100).toString('hex');
-
     user.save(function (err) {
         if (err) {
             sendJSONresponse(res, 404, err);
@@ -111,16 +110,16 @@ router.post('/lifetime', helpers.onlyLoggedIn, function (req, res) {
         return;
     }
     getUser(req, res, function (req, res, user) {
-        if (user.isMonthly()) {
-            sendJSONresponse(res, 404, { error: "You are already a monthly subscriber" });
-            return;
-        }
         if (user.isLifetime()) {
             sendJSONresponse(res, 404, { error: "You are already a lifetime subscriber" });
             return;
         }
+        if (user.isMonthly()) {
+            //if they are a monthly user than delete their subscription
+            stripe.subscriptions.del(user.subscriptionid);
+        }
         user.token = req.body.token;
-        charge = stripe.charges.create({
+        stripe.charges.create({
             amount: 9900, // amount in cents, again
             currency: "usd",
             source: user.token,
@@ -222,13 +221,9 @@ router.post('/cancel', helpers.onlyLoggedIn, function (req, res) {
 });
 router.get('/verifyemail', helpers.onlyLoggedIn, function (req, res) {
     getUser(req, res, function (req, res, user) {
-        if (!user.email_code) {
-            sendJSONresponse(res, 404, "no user code");
-        } else {
-            email.sendInitialEmail(user, function () {
-                sendUpdateCookie(res, user, { status: 'success' });
-            });
-        }
+        email.sendVerifyEmail(user, function () {
+            sendUpdateCookie(res, user, { status: 'success' });
+        });
     });
 });
 router.post('/email', helpers.onlyLoggedIn, function (req, res) {
@@ -276,6 +271,31 @@ router.post('/logout', function (req, res) {
     res.clearCookie('auth');
     sendJSONresponse(res, 200, { status: 'success' });
 });
-
+router.post('/forgotPassword', function (req, res) {
+    if (!req.body.email) {
+        sendJSONresponse(res, 400, {
+            "message": "email required"
+        });
+        return;
+    }
+    var emailAddr = req.body.email.toLowerCase();
+    User
+        .findOne({ email: emailAddr })
+        .exec(function (err, user) { 
+            if (!user) {
+                sendJSONresponse(res, 404, {
+                    "message": "User not found"
+                });
+                return;
+            } else if (err) {
+                console.log(err);
+                sendJSONresponse(res, 404, err);
+                return;
+            }
+            email.sendPasswordEmail(user, function () {
+                sendJSONresponse(res, 200, { status: "success" });
+            });
+        });
+});
 
 module.exports = router;
