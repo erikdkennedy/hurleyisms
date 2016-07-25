@@ -926,154 +926,14 @@ body.has-modal-open {
 	}
 
 .gallery {
-	position: relative;
 	background-color: black;
-	overflow: hidden;
 
-	.content-width {
-		position: relative;
+	img {
+		display: block;
+		margin: 0 auto;
+		max-width: 100%;
 	}
 }
-
-	.gallery__images {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: left;
-		margin-right: -10px;
-		height: 0;
-		overflow: hidden;
-
-		padding-bottom: calc( 1.26 * (100% - 30px) + 60px);
-		@media (min-width: 430px) {padding-bottom: calc( 0.94 * (100% - 40px) + 60px);}
-		@media (min-width: 540px) {padding-bottom: calc( 0.75 * (100% - 50px) + 60px);}
-		@media (min-width: 650px) {padding-bottom: calc( 0.62 * (100% - 60px) + 60px);}
-		@media (min-width: 760px) {padding-bottom: calc( 0.53 * (100% - 70px) + 60px);}
-		@media (min-width: 870px) {padding-bottom: 48.3%}
-
-		> a {
-			display: block;
-			margin: 10px 10px 0 0;
-			flex: 1 0 100px;
-			max-width: 140px;
-			min-width: calc( 12.5% - 10px);
-
-			> img {
-				width: 100%;
-			}
-		}
-	}
-
-	.gallery__overlay {
-		position: absolute;
-		top: calc( 25% + 7.5px);
-		left: calc( 33% + 5px );
-		right: 0;
-		height: calc( 50% - 15px );
-		background-color: rgba(white, .9);
-
-		@media (min-width: 430px) {
-			left: calc( 25% + 2.5px );
-		}
-
-		@media (min-width: 540px) {
-			left: calc( 20% + 2px );
-			right: calc( 20% + 2px );
-		}
-
-		@media (min-width: 650px) {
-			left: calc( 16.66% + 1.66px );
-			right: calc( 33.33% + 3.33px );
-		}
-
-		@media (min-width: 760px) {
-			left: calc( 14.29% + 1.43px );
-			right: calc( 42.86% + 4.29px );
-		}
-
-		@media (min-width: 870px) {
-			left: calc( 12.5% + 1.25px );
-			right: calc( 50% + 5px );
-		}
-
-		> h2 {
-			margin: 8px 12px;
-			font-family: "Montserrat";
-			font-size: 9vw;
-			font-weight: bold;
-			text-transform: uppercase;
-			letter-spacing: .6px;
-			line-height: 1.06;
-			color: black;
-			text-indent: -.2em;
-
-			@media (min-width: 430px) {
-				font-size: 7.5vw;
-			}
-
-			@media (min-width: 540px) {
-				font-size: 6vw;
-			}
-
-			@media (min-width: 650px) {
-				font-size: 5vw;
-			}
-
-			@media (min-width: 760px) {
-				font-size: 4.3vw;
-			}
-
-			@media (min-width: 870px) {
-				font-size: 3.8vw;
-			}
-
-			@media (min-width: 1440px) {
-				font-size: 46px;
-			}
-
-			> strong {
-				font-weight: 800;
-			}
-		}
-
-		> h3 {
-			position: absolute;
-			bottom: 0;
-			left: 0;
-			right: 0;
-			width: 100%;
-			margin: 0;
-			padding: 12px;
-			font-weight: 500;
-			text-transform: uppercase;
-			font-size: 5.8vw;
-			color: #666;
-			letter-spacing: -.04em;
-
-			@media (min-width: 430px) {
-				font-size: 4.9vw;
-			}
-
-			@media (min-width: 540px) {
-				font-size: 3.1vw;
-			}
-
-			@media (min-width: 650px) {
-				font-size: 2.6vw;
-			}
-
-			@media (min-width: 760px) {
-				font-size: 2.2vw;
-			}
-
-			@media (min-width: 870px) {
-				font-size: 1.9vw;
-			}
-
-			@media (min-width: 1440px) {
-				font-size: 26px;
-			}
-		}
-	}
 
 .final-cta {
 	padding: 80px 0;
@@ -1718,39 +1578,14 @@ section.lines {
 *****************************************/
 
 .upsell-header {
-	position: relative;
-	height: 0;
-	padding-bottom: 100%;
-	max-height: 570px;
 	background-color: black;
 
-	@media ($tablet) {
-		padding-bottom: 0;
-		height: 570px;
-	}
-
-	@media ($desktop) {
-		margin-bottom: 50px;
+	img {
+		display: block;
+		margin: 0 auto;
+		max-width: 100%;
 	}
 }
-
-	.upsell-header__gallery {
-		display: none;
-	}
-
-	.upsell-header__banner {
-		@include horizontally-and-vertically-center;
-
-		margin: 0 auto;
-		padding: 5px 0;
-		width: 100%;
-		max-width: 580px;
-		background-color: rgba(white, .95);
-
-		> img {
-			width: 100%;
-		}
-	}
 
 body.upsell h2 {
 	@extend .h2--underlined;
