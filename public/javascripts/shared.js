@@ -172,16 +172,16 @@ jQuery.fn.extend({
     }
 });
 
-$.createToast = function (innerHTML, lifespanInMS, className) {
+$.createToast = function (innerHtml, lifespanInMs, className) {
 
     function setStyleBeforeAnimation($el) {
         return window.getComputedStyle($el[0]).opacity;
     }
 
-    var lifespan = lifespanInMS || 3000;
-    var className = className || "";
+    var lifespan = lifespanInMs || 3000;
+    className = className || "";
 
-    $("body").append("<div class='toast " + className + "'>" + innerHTML + "</div>");
+    $("body").append("<div class='toast " + className + "'>" + innerHtml + "</div>");
     var $toast = $(".toast");
     setStyleBeforeAnimation($toast);
     $toast.addClass("appear");
@@ -213,7 +213,7 @@ $(document).ready(function () {
 	***********************************/
 
     //open modal
-    $(document).on("click", "a[data-modal]", function () {
+    $(document).on("click", "a[data-modal]", function (e) {
         //TODO determine better way of doing this 
         window.lifetime = false;
         if ($(this).is("[lifetime]")) { window.lifetime = true; }
@@ -225,21 +225,29 @@ $(document).ready(function () {
         $.openModal(id);
     });
 
-    $.openModal = function(modalID) {
+    $.openModal = function(modalId) {
         //if there's a current modal open, close it
         if ($("body").hasClass("has-modal-open")) {
             $.closeModal();
         }
+        if (auth && auth.isLoggedIn() && modalId === "signup-modal") {
+            if (!auth.isPro()) {
+                stripe.launch();
+            }
+            else {
+                console.error("already pro");
+            }
+        }
+        else {
+            var $modal = $(".modal").filter("#" + modalId);
 
-        //figure out which modal we're talking about here
-        var $modal = $(".modal").filter("#" + modalID);
+            //open the modal
+            $modal.addClass("is-visible");
 
-        //open the modal
-        $modal.addClass("is-visible");
-
-        //adding a class to the body allows us to lock scrolling
-        $("body").addClass("has-modal-open");
-    };
+            //adding a class to the body allows us to lock scrolling
+            $("body").addClass("has-modal-open");
+        }
+    }
 
     //click on close button
     $(".modal a.modal__close").click(function () {

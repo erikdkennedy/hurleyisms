@@ -78,29 +78,28 @@ $(document).ready(function() {
 	    });
 	}
 	function sendLine(line, callback) {
-	    $.post('app/add',line, function (data) {
+	    $.post('app/add',line, function () {
 	        callback();
 	    });
 	}
 	function rate(id, rating, callback) {
-	    $.getJSON('app/rate/' + id + '/' + rating, function (data) {
+	    $.getJSON('app/rate/' + id + '/' + rating, function () {
 	        callback();
 	    });
 	}
 	function deleteLine(id,callback)
 	{
-	    $.get('admin/' + id + "/delete").then(function (data) {
+	    $.get('admin/' + id + "/delete").then(function () {
 	        callback();
 	    });
 	}
-	function updateLineText(id, text, callback)
-	{
-	    $.post('admin/' + id + "/updatetext", text).then(function (data) {
+	function updateLineText(id, text, callback){
+	    $.post('admin/' + id + "/updatetext", text).then(function () {
 	        callback();
 	    });
 	}
 	function sendVerifyEmail(callback) {
-	    $.get("auth/verifyemail").then(function (data) {
+	    $.get("auth/verifyemail").then(function () {
 	        callback();
 	    });
 	}
@@ -135,7 +134,7 @@ $(document).ready(function() {
 		changeScreen("submit");
 
 		//TODO remove... should be handled elsewhere
-		if (isLoggedIn() && hasVerifiedEmail()) {
+		if (auth.isLoggedIn() && auth.hasVerifiedEmail()) {
 			enableLineSubmissionControls();
 		} else {
 			disableLineSubmissionControls();
@@ -151,11 +150,7 @@ $(document).ready(function() {
 		}
 	}
 
-	/*function isLoggedIn() {
-		return $("body").hasClass("is-logged-in");
-	}
-    */
-	$("#email_verify").html('You must verify your email address to submit a new line.  <a id="send_verify_email" href="#" class="resend-verification-email">Send verification email to ' + loggedInEmail() + '</a> or <a href="my-account">change email address</a>.')
+	$("#email_verify").html('You must verify your email address to submit a new line.  <a id="send_verify_email" href="#" class="resend-verification-email">Send verification email to ' + auth.loggedInEmail() + '</a> or <a href="my-account">change email address</a>.')
 
 	function enableLineSubmissionControls() {
 		var $page = $("section.submit");
@@ -178,31 +173,8 @@ $(document).ready(function() {
 	/*****************************************
 			   LISTENERS - SUBMIT
 	*****************************************/
-
-	//TODO Andrew, remove this, it's prototype only
-	/*$(document).keyup(function(e) {
-		//switch payment set up/NOT set up
-		if (e.which === 80) //"p"
-			$("body").toggleClass("has-payment-error");
-
-		//switch verified/unverified email
-		if (e.which === 69) //"e"
-			$("body").toggleClass("is-unverified-email");
-
-		//show or hide line submission controls
-		if (e.which === 76 || e.which === 69) { //"l" or "e"
-			if (isLoggedIn() && hasVerifiedEmail()) {
-				enableLineSubmissionControls();
-			} else {
-				disableLineSubmissionControls();
-			}
-		}
-	});*/
-
-	/*function hasVerifiedEmail() {
-		return !$("body").hasClass("is-unverified-email");
-	}*/
-
+	
+	
 	//close this page
 	$("section.submit a.close").click(function() {
 		changeScreen("splash");
@@ -218,14 +190,14 @@ $(document).ready(function() {
 
 		$(".error").remove();
 
-		var errorSpanHTML = " <span class='error'>Required</span>";
+		var errorSpanHtml = " <span class='error'>Required</span>";
 
 		if ($("#the-line").val() === "") {
-			$("label[for=the-line]").append(errorSpanHTML);
+			$("label[for=the-line]").append(errorSpanHtml);
 		}
 
 		if ($(".checkbox-list input:checked").length === 0) {
-			$(".form-control--audience .form-control__label").append(errorSpanHTML);
+			$(".form-control--audience .form-control__label").append(errorSpanHtml);
 		}
 
 		if ($(".error").length === 0) {
@@ -267,7 +239,8 @@ $(document).ready(function() {
 	        });
 	    }
 	}
-	$("#delete").click(handleDeleteLine)
+
+    $("#delete").click(handleDeleteLine);
 
 	handleUpdateText = function(e) {
 	    var id = $(this).closest(".line").attr("name");
@@ -474,7 +447,7 @@ $(document).ready(function() {
 	});
 
 	function startEditingLine($textBox) {
-		if (!isAdmin()) return false;
+		if (!auth.isAdmin()) return false;
 
 		var progressBarWasRunning = !!lastRepaintTime;
 
@@ -492,10 +465,10 @@ $(document).ready(function() {
 				.focus();
 	}
 
-	$("body").toggleClass("is-admin", isAdmin());
-	$("body").toggleClass("is-logged-in", isLoggedIn());
-	$("body").toggleClass("is-monthly", isMonthly());
-	$("body").toggleClass("is-unverified-email", !hasVerifiedEmail());
+	$("body").toggleClass("is-admin", auth.isAdmin());
+	$("body").toggleClass("is-logged-in", auth.isLoggedIn());
+	$("body").toggleClass("is-monthly", auth.isMonthly());
+	$("body").toggleClass("is-unverified-email", !auth.hasVerifiedEmail());
 
 	//click TRASH CAN button to delete line
 	$(document).on("click", ".line__delete", function() {

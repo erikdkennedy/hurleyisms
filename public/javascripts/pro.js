@@ -21,5 +21,5 @@ $(document).ready(function() {
 	$(".show-password").click(function() {
 		$(this).toggleText("Show", "Hide");
 	});
-
+    $("#btn_checkout").click(stripe.launch);
 });

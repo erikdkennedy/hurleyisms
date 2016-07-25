@@ -3,7 +3,7 @@
 var sg = require('sendgrid').SendGrid(process.env.SENDGRID_API_KEY)
 
 
-var getBaseRequest = function (request, user, url) {
+var getBaseRequest = function (request, user) {
     request.body = {};
     request.body.from = {
         "email": "email@hurleyisms.com",
@@ -23,20 +23,18 @@ var getBaseRequest = function (request, user, url) {
             }
         ],
         substitutions: {
-            customer_name: user.name,
-            email_url: url
+            customer_name: user.name
         }
-
     }];
     request.method = 'POST';
     request.path = '/v3/mail/send';
 }
 var sendInitialEmail = function (user, callback) {
-    var email_url = process.env.BASE_URL+"/email/"+user.email_code
+    var email_url = process.env.BASE_URL + "/email/email/" + user.verificationCode();
     var request = sg.emptyRequest();
-    getBaseRequest(request, user, email_url);
+    getBaseRequest(request, user);
+    request.body.personalizations[0].substitutions.email_url = email_url;
     request.body.template_id = "6717c2cb-73bd-48c4-b467-c2e039fb8e19";
-    //request.body.personalizations[0].substitutions.email_url = email_url;
     request.body.subject = "Welcome to Hurleyisms";
     sg.API(request, function (response) {
         console.log(response.statusCode)
@@ -45,6 +43,36 @@ var sendInitialEmail = function (user, callback) {
         callback();
     });
 }
+var sendVerifyEmail = function (user, callback) {
+    var email_url = process.env.BASE_URL + "/email/email/" + user.verificationCode();
+    var request = sg.emptyRequest();
+    getBaseRequest(request, user);
+    request.body.personalizations[0].substitutions.email_url = email_url;
+    request.body.template_id = "5da23ab1-12ac-49c8-a1bb-0d96c2fb4f5f";
+    request.body.subject = "Verify your email Address";
+    sg.API(request, function (response) {
+        console.log(response.statusCode)
+        console.log(response.body)
+        console.log(response.headers)
+        callback();
+    });
+}
+var sendPasswordEmail = function (user, callback) {
+    var email_url = process.env.BASE_URL + "/email/password/" + user.verificationCode();
+    var request = sg.emptyRequest();
+    getBaseRequest(request, user);
+    request.body.personalizations[0].substitutions.email_url = email_url;
+    request.body.template_id = "7894b34d-40f7-45da-870d-e5e7e0704d6e";
+    request.body.subject = "Reset your password";
+    sg.API(request, function (response) {
+        console.log(response.statusCode)
+        console.log(response.body)
+        console.log(response.headers)
+        callback();
+    });
+}
 module.exports = {
-    sendInitialEmail: sendInitialEmail
+    sendInitialEmail: sendInitialEmail,
+    sendVerifyEmail: sendVerifyEmail,
+    sendPasswordEmail: sendPasswordEmail
 };

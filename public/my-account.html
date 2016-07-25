@@ -23,13 +23,14 @@
 
         <script src="javascripts/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
         <script src="javascripts/vendor/jquery-1.11.1.min.js"></script>
+        <script src="https://checkout.stripe.com/checkout.js"></script>
         <script src="javascripts/myaccount.min.js"></script>
     </head>
     <body class="my-account is-monthly">
         <header class="submit__header">
             <a href="app" class="close">X</a>
             <h1>My Account</h1>
-            <a id="logout" href="/">Log out</a>
+            <a id="logout" href="#">Log out</a>
         </header>
         <div class="submit__container">
             <form class="form-control">
@@ -47,30 +48,30 @@
                 </div>
                 <a href="#" class="show-password hidden">Show password</a>
             </form>
-            <div class="form-control--fake if-monthly">
+            <div class="form-control--fake if-monthly" id="monthly">
                 <p>Account Type</p>
                 <div class="account-type-display">
                     <h2 class="account-type-display__type">Monthly Subscription</h2>
                     <p class="account-type-display__price">$4.99/month</p>
                     <p class="account-type-display__started started">Started May 2016</p>
                 </div>
-                <a href="#" class="account-type-display__switch">Switch to Lifetime Access ($99)</a>
+                <a href="#" id="btnLifeTime" class="account-type-display__switch">Switch to Lifetime Access ($99)</a>
             </div>
-            <div class="form-control--fake if-lifetime">
+            <div class="form-control--fake if-lifetime" id="lifetime">
                 <p>Account Type</p>
                 <div class="account-type-display">
                     <h2 class="account-type-display__type">Lifetime Access</h2>
                     <p class="account-type-display__started started">Started May 2016</p>
                 </div>
             </div>
-            <div class="form-control--fake if-in-purgatory">
+            <div class="form-control--fake if-in-purgatory" >
                 <p>Account Type</p>
                 <div class="account-type-display">
                     <h2 class="account-type-display__type">Basic Account</h2>
                     <p class="account-type-display__started">If you'd like access to all lines, <a href="pro">go pro</a></p>
                 </div>
             </div>
-            <div class="form-control--fake if-monthly cancel-subscription-display">
+            <div class="form-control--fake if-monthly cancel-subscription-display" id="cancle">
                 <p>Cancel Subscription</p>
                 <p class="cancel-subscription-display__explanation">If you stay and support the growth of Hurleyisms, you’re cool.  But you can cancel at any time–there’s no annoying salesperson to make it hard.</p>
                 <a href="#" class="cancel-subscription-display__cta" data-modal="cancel-subscription-modal">Cancel Subscription</a>
