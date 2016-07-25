@@ -1086,7 +1086,6 @@ body.has-modal-open {
 	padding: 14px 0 10px;
 	text-align: center;
 	background-color: black;
-
 }
 
 	.footer__byline {
@@ -1986,6 +1985,21 @@ body.upsell h2 {
 			font-size: 14px;
 			opacity: .5;
 		}
+
+.upsell footer,
+.my-account footer {
+	padding: 14px 0 10px;
+	text-align: center;
+	background-color: #eee;
+
+	> p {
+		margin: 0;
+	}
+
+	a {
+		color: #222;
+	}
+}
 
 
 
