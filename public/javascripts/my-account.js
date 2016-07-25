@@ -57,6 +57,14 @@ $(document).ready(function() {
 	
 	$("body").toggleClass("is-monthly", auth.isMonthly());
 	$("body").toggleClass("is-lifetime", auth.isLifeTime());
+	if(auth.isLifeTime() || auth.isMonthly()) {
+		$(".if-in-purgatory").hide(); 
+	}
+	else {
+		$("#lifetime").hide(); 
+		$("#monthly").hide(); 
+		$("#cancle").hide();
+	}
 	var mthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 	var pdate = auth.proDate();
 	$(".started").html("Started " + mthNames[pdate.getMonth()] + " " + pdate.getFullYear());

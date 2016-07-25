@@ -70,7 +70,7 @@ var auth = function () {
             if (callback) callback();
         });
     }
-
+    
     auth.isLoggedIn = function () {
         var token = getToken();
         if (token) {
@@ -179,6 +179,24 @@ var auth = function () {
 $(function() {
     $("#btn_register").click(auth.register);
     $("#btn_login").click(auth.login);
+    $("#btn_newPassword").click(function (e) {
+        var newPassword = $("#new-password__password").val();
+        if (newPassword) {
+            auth.updatePassword(newPassword, function () {
+                $.closeModal();
+                $.createToast("Your password has been updated");
+            });
+        }
+    });
+    $("#btn_verifyPass").click(function (e) {
+        var emailAddress = $("#forgot__email-address").val();
+        if (emailAddress) {
+            auth.forgotPassword(emailAddress,function(){
+                $.closeModal();
+                $.createToast("A password reset link has been sent to you");
+            });
+        }
+    });
     $("#btn_newPassword").click(function (e) {
         var newPassword = $("#new-password__password").val();
         if (newPassword) {
