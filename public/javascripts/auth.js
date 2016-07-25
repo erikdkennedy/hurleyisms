@@ -50,9 +50,10 @@ var auth = function () {
     }
 
 
-    auth.cancel = function () {
+    auth.cancel = function (callback) {
         $.post('auth/cancel').done(function () {
-            document.location.href = '/my-account';
+            //document.location.href = '/my-account';
+            if (callback) callback();
         });
     }
     auth.updateEmailAddress = function (email, callback) {

@@ -190,14 +190,14 @@ $(document).ready(function() {
 
 		$(".error").remove();
 
-		var errorSpanHTML = " <span class='error'>Required</span>";
+		var errorSpanHtml = " <span class='error'>Required</span>";
 
 		if ($("#the-line").val() === "") {
-			$("label[for=the-line]").append(errorSpanHTML);
+			$("label[for=the-line]").append(errorSpanHtml);
 		}
 
 		if ($(".checkbox-list input:checked").length === 0) {
-			$(".form-control--audience .form-control__label").append(errorSpanHTML);
+			$(".form-control--audience .form-control__label").append(errorSpanHtml);
 		}
 
 		if ($(".error").length === 0) {

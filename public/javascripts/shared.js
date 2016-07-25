@@ -172,16 +172,16 @@ jQuery.fn.extend({
     }
 });
 
-$.createToast = function (innerHTML, lifespanInMS, className) {
+$.createToast = function (innerHtml, lifespanInMs, className) {
 
     function setStyleBeforeAnimation($el) {
         return window.getComputedStyle($el[0]).opacity;
     }
 
-    var lifespan = lifespanInMS || 3000;
-    var className = className || "";
+    var lifespan = lifespanInMs || 3000;
+    className = className || "";
 
-    $("body").append("<div class='toast " + className + "'>" + innerHTML + "</div>");
+    $("body").append("<div class='toast " + className + "'>" + innerHtml + "</div>");
     var $toast = $(".toast");
     setStyleBeforeAnimation($toast);
     $toast.addClass("appear");
@@ -225,21 +225,21 @@ $(document).ready(function () {
         $.openModal(id);
     });
 
-    $.openModal = function(modalID) {
+    $.openModal = function(modalId) {
         //if there's a current modal open, close it
         if ($("body").hasClass("has-modal-open")) {
             $.closeModal();
         }
-        if (auth && auth.isLoggedIn() && modalID === "signup-modal") {
+        if (auth && auth.isLoggedIn() && modalId === "signup-modal") {
             if (!auth.isPro()) {
-                stripe.launch(e);
+                stripe.launch();
             }
             else {
                 console.error("already pro");
             }
         }
         else {
-            var $modal = $(".modal").filter("#" + modalID);
+            var $modal = $(".modal").filter("#" + modalId);
 
             //open the modal
             $modal.addClass("is-visible");

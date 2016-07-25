@@ -67,8 +67,10 @@ function writeJSFiles() {
     minJSFiles(indexClientFiles, 'public/javascripts/index.min.js');
 
     var myAccountClientFiles = [
+      'public/javascripts/config.min.js',
       'public/javascripts/auth.js',
       'public/javascripts/shared.js',
+      'public/javascripts/stripe.js',
       'public/javascripts/my-account.js'
     ];
     minJSFiles(myAccountClientFiles, 'public/javascripts/myaccount.min.js');

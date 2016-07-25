@@ -23,6 +23,7 @@
 
         <script src="javascripts/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
         <script src="javascripts/vendor/jquery-1.11.1.min.js"></script>
+        <script src="https://checkout.stripe.com/checkout.js"></script>
         <script src="javascripts/myaccount.min.js"></script>
     </head>
     <body class="is-monthly">
@@ -54,7 +55,7 @@
                     <p class="account-type-display__price">$4.99/month</p>
                     <p class="account-type-display__started started">Started May 2016</p>
                 </div>
-                <a href="#" class="account-type-display__switch">Switch to Lifetime Access ($99)</a>
+                <a href="#" id="btnLifeTime" class="account-type-display__switch">Switch to Lifetime Access ($99)</a>
             </div>
             <div class="form-control--fake if-lifetime" id="lifetime">
                 <p>Account Type</p>

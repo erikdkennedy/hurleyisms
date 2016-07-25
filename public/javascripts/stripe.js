@@ -24,7 +24,7 @@
         }
     });
     stripe.launch = function (e) {
-        e.preventDefault();
+        if(e)e.preventDefault();
         $.closeModal();
         if (window.lifetime) {
             stripe.launchlifetime(auth.loggedInEmail());
