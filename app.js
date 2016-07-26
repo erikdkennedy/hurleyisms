@@ -21,23 +21,22 @@ var fs = require('fs');
 var app = express();
 var sass = require('node-sass');
 
-function minJSFiles(files, target){
+function minJSFiles(files, target) {
     var beautify = process.env.NODE_ENV === 'development';
-    try{
-    var uglified = uglifyJs.minify(files, { compress: false, mangle: false, output: { beautify: beautify } });
-    
-      fs.writeFile(target, uglified.code, function (err) {
-          if (err) {
-              console.log("error found");
-              console.log(err);
-          } else {
-              console.log("Script generated and saved:", target);
-          }
-      });
+    try {
+        var uglified = uglifyJs.minify(files, { compress: false, mangle: false, output: { beautify: beautify } });
+
+        fs.writeFile(target, uglified.code, function (err) {
+            if (err) {
+                console.log("error found");
+                console.log(err);
+            } else {
+                console.log("Script generated and saved:", target);
+            }
+        });
     }
-    catch(error)
-    {
-      console.log(error);
+    catch (error) {
+        console.log(error);
     }
 }
 function writeJSFiles() {
@@ -46,7 +45,7 @@ function writeJSFiles() {
       'public/javascripts/auth.js',
       'public/javascripts/shared.js',
       'public/javascripts/app.js'
-      
+
     ];
     minJSFiles(appClientFiles, 'public/javascripts/hurleyisms.min.js');
 
@@ -85,12 +84,12 @@ fs.writeFile('public/javascripts/config.min.js', configJsonString, function (err
 });
 
 sass.render({
-    file:'public/stylesheets/styles.scss'
-}, function(error, result) { // node-style callback from v3.0.0 onwards
-    if(!error){
+    file: 'public/stylesheets/styles.scss'
+}, function (error, result) { // node-style callback from v3.0.0 onwards
+    if (!error) {
         // No errors during the compilation, write this result on the disk
-        fs.writeFile('public/stylesheets/styles.css', result.css, function(err){
-            if(!err){
+        fs.writeFile('public/stylesheets/styles.css', result.css, function (err) {
+            if (!err) {
                 console.log("styles.css written on disk");
             }
             else {
@@ -106,7 +105,7 @@ sass.render({
 
 // Ensure the page is secure. Since AWS forwards to non-http we need to check request headers
 var forceHttps = function (req, res, next) {
-    if (req.secure || req.headers['x-forwarded-proto'] === 'https' || req.headers['x-arr-ssl'] ) {
+    if (req.secure || req.headers['x-forwarded-proto'] === 'https' || req.headers['x-arr-ssl']) {
         next();
     } else {
         console.log('Request made over HTTP, redirecting to HTTPS');
@@ -115,14 +114,17 @@ var forceHttps = function (req, res, next) {
 }
 app.use(forceHttps);
 // uncomment after placing your favicon in /public
-app.use(favicon(path.join(__dirname, 'public','images', 'favicon.ico')));
-app.use(logger('dev'));
+app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
+//Only log error responses
+app.use(logger('combined', {
+    skip: function (req, res) { return res.statusCode < 400 }
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
-app.use(passport.session());
+//app.use(passport.session());
 
 //setup auth cookie checking
 
@@ -130,10 +132,9 @@ app.use(jwt({
     secret: process.env.JWT_SECRET,
     userProperty: 'payload',
     credentialsRequired: false,
-    getToken: function fromCookie(req)
-    {
+    getToken: function fromCookie(req) {
         console.log("checking cookie");
-        if(req.cookies.auth){ return req.cookies.auth;}
+        if (req.cookies.auth) { return req.cookies.auth; }
         return null;
     }
 }));
@@ -148,10 +149,10 @@ app.use('/email', mailRoute);
 app.use('/webhooks', webhookRoute);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+app.use(function (req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
 
 // error handlers
@@ -159,23 +160,23 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-      console.error(err);
-      res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
+    app.use(function (err, req, res, next) {
+        console.error(err);
+        res.status(err.status || 500)
+            .send({
+                message: err.message,
+                error: err
+            });
     });
-  });
 };
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
+app.use(function (err, req, res, next) {
+    res.status(err.status || 500)
+        .send({
+            message: err.message,
+            error: {}
+        });
 });
 module.exports = app;
