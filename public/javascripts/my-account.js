@@ -80,4 +80,10 @@ $(document).ready(function () {
     });
 
     $("#btnLifeTime").click(function () { stripe.launchlifetime(auth.loggedInEmail()); });
+    $(".privacy").click(function () {
+        window.open("/privacy")
+    });
+    $(".terms").click(function () {
+        window.open("/terms")
+    });
 });
