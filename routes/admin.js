@@ -4,7 +4,6 @@ var mongoose = require('mongoose');
 var lines = mongoose.model('Line');
 var users = mongoose.model('User');
 var path = require('path');
-var passport = require('passport');
 var helpers = require('./helpers');
 
 router.get('/', helpers.ensureAdmin, function (req, res, next) {

@@ -60,7 +60,10 @@ router.post('/register', function (req, res) {
     var user = new User();
     user.name = xssFilters.inHTMLData(req.body.name);
     user.email = xssFilters.inHTMLData(req.body.email);
-
+    user.signupip = req.headers['x-forwarded-for'] ||
+        req.connection.remoteAddress ||
+        req.socket.remoteAddress ||
+        req.connection.socket.remoteAddress;
     user.setPassword(req.body.password);
     user.save(function (err) {
         if (err) {
