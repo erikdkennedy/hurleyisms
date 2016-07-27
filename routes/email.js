@@ -4,6 +4,8 @@ var sg = require('sendgrid').SendGrid(process.env.SENDGRID_API_KEY)
 
 
 var getBaseRequest = function (request, user) {
+    var imageUrl = process.env.BASE_URL + "/images/hurleyisms-xsm.png";
+    var proUrl = process.env.BASE_URL + "/pro";
     request.body = {};
     request.body.from = {
         "email": "email@hurleyisms.com",
@@ -23,7 +25,9 @@ var getBaseRequest = function (request, user) {
             }
         ],
         substitutions: {
-            customer_name: user.name
+            customer_name: user.name,
+            image_url: imageUrl,
+            pro_url: proUrl
         }
     }];
     request.method = 'POST';
@@ -37,9 +41,9 @@ var sendInitialEmail = function (user, callback) {
     request.body.template_id = "6717c2cb-73bd-48c4-b467-c2e039fb8e19";
     request.body.subject = "Welcome to Hurleyisms";
     sg.API(request, function (response) {
-        console.log(response.statusCode)
-        console.log(response.body)
-        console.log(response.headers)
+        console.log(response.statusCode);
+            console.log(response.body);
+        console.log(response.headers);
         callback();
     });
 }
@@ -65,14 +69,40 @@ var sendPasswordEmail = function (user, callback) {
     request.body.template_id = "7894b34d-40f7-45da-870d-e5e7e0704d6e";
     request.body.subject = "Reset your password";
     sg.API(request, function (response) {
-        console.log(response.statusCode)
-        console.log(response.body)
-        console.log(response.headers)
+        console.log(response.statusCode);
+        console.log(response.body);
+        console.log(response.headers);
+        callback();
+    });
+}
+var sendCancellationEmail = function (user, callback) {
+    var request = sg.emptyRequest();
+    getBaseRequest(request, user);
+    request.body.template_id = "51e69306-4ee0-4906-9029-8440ac52000e";
+    request.body.subject = "Cancel Hurleyisms";
+    sg.API(request, function (response) {
+        console.log(response.statusCode);
+        console.log(response.body);
+        console.log(response.headers);
+        callback();
+    });
+}
+var sendUpgradeEmail = function (user, callback) {
+    var request = sg.emptyRequest();
+    getBaseRequest(request, user);
+    request.body.template_id = "4dd08203-d0bb-481f-8719-36d045e7af5a";
+    request.body.subject = "Upgrade to Hurleyisms Lifetime Access";
+    sg.API(request, function (response) {
+        console.log(response.statusCode);
+        console.log(response.body);
+        console.log(response.headers);
         callback();
     });
 }
 module.exports = {
     sendInitialEmail: sendInitialEmail,
     sendVerifyEmail: sendVerifyEmail,
-    sendPasswordEmail: sendPasswordEmail
+    sendPasswordEmail: sendPasswordEmail,
+    sendCancellationEmail: sendCancellationEmail,
+    sendUpgradeEmail: sendUpgradeEmail
 };

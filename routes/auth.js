@@ -22,7 +22,6 @@ var setCookie = function (res, user) {
     token = user.generateJwt();
     res.cookie('auth', token, { secure: true, maxAge: 604800000 });
 }
-var setEmail
 var getUser = function (req, res, callback) {
     if (req.payload && req.payload.email) {
         User
@@ -113,6 +112,7 @@ router.post('/lifetime', helpers.onlyLoggedIn, function (req, res) {
         return;
     }
     getUser(req, res, function (req, res, user) {
+        var wasMonthly = false;
         if (user.isLifetime()) {
             sendJSONresponse(res, 404, { error: "You are already a lifetime subscriber" });
             return;
@@ -120,10 +120,11 @@ router.post('/lifetime', helpers.onlyLoggedIn, function (req, res) {
         if (user.isMonthly()) {
             //if they are a monthly user than delete their subscription
             stripe.subscriptions.del(user.subscriptionid);
+            wasMonthly = true;
         }
         user.token = req.body.token;
         stripe.charges.create({
-            amount: 9900, // amount in cents, again
+            amount: 9900, // amount in cents
             currency: "usd",
             source: user.token,
             description: "Life Time Access"
@@ -141,7 +142,14 @@ router.post('/lifetime', helpers.onlyLoggedIn, function (req, res) {
                 if (err) {
                     sendJSONresponse(res, 404, err);
                 } else {
-                    sendUpdateCookie(res, user, { status: 'success' });
+                    if (wasMonthly) {
+                        email.sendUpgradeEmail(user, function() {
+                            sendUpdateCookie(res, user, { status: 'success' });
+                        });
+                    } else {
+                        sendUpdateCookie(res, user, { status: 'success' });
+                    }
+                    
                 }
             });
         });
@@ -209,7 +217,9 @@ router.post('/cancel', helpers.onlyLoggedIn, function (req, res) {
                     if (err) {
                         sendJSONresponse(res, 404, err);
                     } else {
-                        sendUpdateCookie(res, user, { status: 'success' });
+                        email.sendCancellationEmail(user, function () {
+                            sendUpdateCookie(res, user, { status: 'success' });
+                        });
                     }
                 });
             }
@@ -284,7 +294,7 @@ router.post('/forgotPassword', function (req, res) {
     var emailAddr = req.body.email.toLowerCase();
     User
         .findOne({ email: emailAddr })
-        .exec(function (err, user) { 
+        .exec(function (err, user) {
             if (!user) {
                 sendJSONresponse(res, 404, {
                     "message": "User not found"

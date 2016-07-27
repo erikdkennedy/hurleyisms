@@ -35,14 +35,9 @@ userSchema.methods.setPassword = function (password) {
     this.hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64).toString('hex');
 };
 
-userSchema.methods.isMonthly = function()
-{
-    return this.type === "monthly" && this.subscriptionid && this.pro
-}
+userSchema.methods.isMonthly = function() { return this.type === "monthly" && this.subscriptionid && this.pro; }
 
-userSchema.methods.isLifetime = function () {
-    return this.type === "lifetime" && this.pro
-}
+userSchema.methods.isLifetime = function () { return this.type === "lifetime" && this.pro; }
 
 userSchema.methods.validPassword = function (password) {
     var hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64).toString('hex');
