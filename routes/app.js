@@ -2,23 +2,22 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var Lines = mongoose.model('Line');
-var banlist = mongoose.model('Banlist');
+var Users = mongoose.model('User');
 var path = require('path');
 var helpers = require('./helpers');
 var xssFilters = require('xss-filters');
 /* GET home page. */
 
 
-router.get('/', function(req, res, next) {
-    res.sendFile(path.join(__dirname,'../public','app.html'));
+router.get('/', function (req, res) {
+    res.sendFile(path.join(__dirname, '../public', 'app.html'));
 });
 
 
 router.get('/data/:audience/:profanity', function (req, res) {
     console.log("audience " + req.params.audience);
-    query = { };
-    switch(Number(req.params.audience))
-    {
+    query = {};
+    switch (Number(req.params.audience)) {
         case 0:
             query = { men: true };
             console.log("men");
@@ -30,6 +29,15 @@ router.get('/data/:audience/:profanity', function (req, res) {
         case 2:
             query = { kids: true };
             console.log("kids");
+            break;
+        case 3:
+            query = { couples: true };
+            console.log("couples");
+            break;
+        case 4:
+            query = { weddings: true };
+            console.log("weddings");
+            break;
     }
     var profanityOn = JSON.parse(req.params.profanity);
     if (profanityOn) {
@@ -43,39 +51,39 @@ router.get('/data/:audience/:profanity', function (req, res) {
     if (!helpers.isPro(req)) query.free = true;
 
     console.log(query);
-    Lines.find(query, function(err,results){
-        console.log("query returned "+results.length)
+    Lines.find(query, function (err, results) {
+        console.log("query returned " + results.length);
         res.json(results);
     });
 });
 router.post('/add', helpers.onlyEmailVerified, function (req, res) {
     console.log("add called");
     var line = req.body;
-    
+
     line.ipaddress = req.headers['x-forwarded-for'] ||
-     req.connection.remoteAddress ||
-     req.socket.remoteAddress ||
-     req.connection.socket.remoteAddress;
-    //Check to see if ip is in ban list
+        req.connection.remoteAddress ||
+        req.socket.remoteAddress ||
+        req.connection.socket.remoteAddress;
+    //Check to see if user has been banned
     console.log(line);
-    
-    banlist.count({ ipaddress: line.ipaddress }, function (err, count) {
-        console.log("ipaddresscount : " + count)
-        if (count>0) {
-            console.error("Banned IP tried to create record");
-        }
-        else {
+
+    Users.findById(req.payload._id).exec(function (err, user) {
+        if (user.banned) {
+            console.error("Banned User tried to create record");
+            sendJSONresponse(res, 403, { message: "You have been banned from submitting lines" });
+        } else {
             console.log("adding record " + line);
             //filter out any XSS data
             line.line = xssFilters.inHTMLData(line.line);
-            line.author = req.payload.name;
-            line.authorid = req.payload._id;
+            line.author = user.name;
+            line.authorid = user._id;
             //create the line
-            Lines.create(line, function (err, result) {
-                console.log("err:" + err);
-                console.log("result:" + result);
-                sendJSONresponse(res, 200, result)
-            });
+            Lines.create(line,
+                function (err, result) {
+                    console.log("err:" + err);
+                    console.log("result:" + result);
+                    sendJSONresponse(res, 200, result);
+                });
         }
     });
 });

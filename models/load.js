@@ -30,9 +30,11 @@ rl.on('line', function (lineText) {
         line.men = parts[2].indexOf("X") > -1;
         line.women = parts[3].indexOf("X") > -1;
         line.kids = parts[4].indexOf("X") > -1;
-        line.profanity = parts[5].indexOf("X") > -1;
-        line.author = parts[6];
-        line.free = parts[8].indexOf("X") > -1;
+        line.couples = parts[5].indexOf("X") > -1;
+        line.weddings = parts[6].indexOf("X") > -1;
+        line.profanity = parts[7].indexOf("X") > -1;
+        line.author = parts[8];
+        line.free = parts[10].indexOf("X") > -1;
         line.ipaddress = "4.2.2.1";
         line.approved = true;
         cachedLines.push(line);

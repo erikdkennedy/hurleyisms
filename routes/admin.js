@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var lines = mongoose.model('Line');
-var banlist = mongoose.model('Banlist');
+var users = mongoose.model('User');
 var path = require('path');
 var passport = require('passport');
 var helpers = require('./helpers');
@@ -34,8 +34,8 @@ router.get('/:id/delete', helpers.ensureAdmin, function (req, res) {
 router.post('/ban', helpers.ensureAdmin, function (req, res) {
     var line = req.body;
     console.log("call to ban " + line.ipaddress);
-    banlist.create({ ipaddress: line.ipaddress }, function (err, bannedip) {
-        lines.remove({ ipaddress: line.ipaddress }, function (err) {
+    users.findByIdAndUpdate(line.authorid, { $set: { banned: true } }, function(){
+        lines.remove({ authorid: line.authorid }, function (err) {
             sendJSONresponse(res, 200, { status: "success" });
         });
     });

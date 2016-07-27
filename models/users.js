@@ -25,7 +25,8 @@ var userSchema = new mongoose.Schema({
     chargeid: String,
     type: String,
     emailverified: { type:Boolean, require:true, "default": false},
-    admin: { type: Boolean, "default": false }
+    admin: { type: Boolean, "default": false },
+    banned: { type: Boolean, require: true, "default": false }
 });
 
 userSchema.methods.setPassword = function (password) {
