@@ -46,6 +46,19 @@ jQuery.fn.extend({
         });
         return valid;
     },
+    requirifyCheck: function (errorMessage) {
+        var error = errorMessage || "This is a required field";
+        var valid = true;
+        this.each(function () {
+            if (!$(this).is(":checked")) {
+                $(this).addError(error);
+                valid = false;
+                return false;
+            }
+            $(this).removeError();
+        });
+        return valid;
+    },
     emailify: function (errorMessage) {
         var error = errorMessage || "Please enter a valid email address";
 

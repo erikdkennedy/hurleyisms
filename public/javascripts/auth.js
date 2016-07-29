@@ -1,8 +1,12 @@
 var auth = function () {
     var auth = {};
     var validateRegisterForm = function () {
-        return $("#signup-modal input[type=email]").emailify() &&
-            $("#signup-modal input[required]").requirify();
+        var fields =  $("#signup-modal input[type=email]").emailify() &&
+            $("#signup-modal input[required]").requirify(); 
+
+        var terms = $("#chk_terms").requirifyCheck("You must accept the terms and privacy policy");
+        return terms && fields;
+
 
 
     }
