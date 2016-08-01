@@ -5,6 +5,8 @@ var lineSchema = new mongoose.Schema(
     men: { type: Boolean, require: true },
     women: { type: Boolean, require: true },
     kids: { type: Boolean, require: true },
+    couples: { type: Boolean, require: true },
+    weddings: { type: Boolean, require: true },
     profanity: { type: Boolean, require: true },
     rating: { type: Number, "default": 0 },
     author: { type: String, require: true },

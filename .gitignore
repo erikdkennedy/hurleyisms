@@ -17,3 +17,4 @@ styles.css
 config.min.js
 *.codekit
 *.env
+JSLintNet.json

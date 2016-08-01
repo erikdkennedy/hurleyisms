@@ -39,4 +39,11 @@ $(document).ready(function() {
 	});
 
 	triggerScrollingAnimations();
+
+	$(".privacy").click(function () {
+	    window.open("/privacy")
+	});
+	$(".terms").click(function () {
+	    window.open("/terms")
+	});
 });

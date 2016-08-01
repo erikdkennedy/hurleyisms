@@ -9,7 +9,9 @@ $(document).ready(function() {
 	var audienceTypes = {
 		MEN: 0,
 		WOMEN: 1,
-		KIDS: 2
+		KIDS: 2,
+		COUPLES: 3,
+        WEDDING :4
 	};
 
 	var lineBeforeEdits;
@@ -78,10 +80,13 @@ $(document).ready(function() {
 	    });
 	}
 	function sendLine(line, callback) {
-	    $.post('app/add',line, function () {
-	        callback();
-	    });
-	}
+	    $.post('app/add', line).done(function() {
+	         callback();
+	    }).error(function(error) {
+	        if (error.status === 403) {
+	            $.createToast(error.responseJSON.message);
+	        }
+	    }); }
 	function rate(id, rating, callback) {
 	    $.getJSON('app/rate/' + id + '/' + rating, function () {
 	        callback();
@@ -218,6 +223,8 @@ $(document).ready(function() {
 	    line.men = $('#audience-men').is(":checked");
 	    line.women = $('#audience-women').is(":checked");
 	    line.kids = $('#audience-kids').is(":checked");
+	    line.couples = $('#audience-couples').is(":checked");
+	    line.weddings = $('#audience-wedding').is(":checked");
 	    line.profanity = $('#switch-pg').hasClass("active");
 	    sendLine(line, callback);
 	}
@@ -274,6 +281,8 @@ $(document).ready(function() {
 		if (audience === audienceTypes.MEN) audienceName = "men";
 		if (audience === audienceTypes.WOMEN) audienceName = "women";
 		if (audience === audienceTypes.KIDS) audienceName = "kids";
+		if (audience === audienceTypes.COUPLES) audienceName = "couples";
+		if (audience === audienceTypes.WEDDING) audienceName = "weddings";
 
 		$("span.audience").text(audienceName);
 	}

@@ -24,8 +24,10 @@ var userSchema = new mongoose.Schema({
     subscriptionid: String,
     chargeid: String,
     type: String,
-    emailverified: { type:Boolean, require:true, "default": false},
-    admin: { type: Boolean, "default": false }
+    emailverified: { type: Boolean, required: true, "default": false },
+    admin: { type: Boolean, "default": false },
+    banned: { type: Boolean, required: true, "default": false },
+    signupip: { type: String, required: true }
 });
 
 userSchema.methods.setPassword = function (password) {
@@ -33,14 +35,9 @@ userSchema.methods.setPassword = function (password) {
     this.hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64).toString('hex');
 };
 
-userSchema.methods.isMonthly = function()
-{
-    return this.type === "monthly" && this.subscriptionid && this.pro
-}
+userSchema.methods.isMonthly = function() { return this.type === "monthly" && this.subscriptionid && this.pro; }
 
-userSchema.methods.isLifetime = function () {
-    return this.type === "lifetime" && this.pro
-}
+userSchema.methods.isLifetime = function () { return this.type === "lifetime" && this.pro; }
 
 userSchema.methods.validPassword = function (password) {
     var hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64).toString('hex');

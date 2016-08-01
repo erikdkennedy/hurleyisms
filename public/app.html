@@ -48,9 +48,15 @@
         <div class="splash__title">Hurleyisms</div>
         <p class="splash__start-for">Start For</p>
         <ul class="mode-selector">
-            <li><a href="#" class="begin-session" data-audience-type=0><img src="images/men.png" alt="Men"><p>Men</p></a></li>
-            <li><a href="#" class="begin-session" data-audience-type=1><img src="images/women.png" alt="Women"><p>Women</p></a></li>
-            <li><a href="#" class="begin-session" data-audience-type=2><img src="images/kids.png" alt="Kids"><p>Kids</p></a></li>
+            <li><a href="#" class="begin-session" data-audience-type="0"><img src="images/men.png" alt="Men"><p>Men</p></a></li>
+            <li><a href="#" class="begin-session" data-audience-type="1"><img src="images/women.png" alt="Women"><p>Women</p></a></li>
+            <li><a href="#" class="begin-session" data-audience-type="2"><img src="images/kids.png" alt="Kids">
+                <p>Kids</p></a></li>
+            <li><a href="#" class="begin-session" data-audience-type="3"><img src="images/kids.png" alt="Couples">
+                <p>Couples</p></a></li>
+            <li><a href="#" class="begin-session" data-audience-type="4"><img src="images/kids.png" alt="Weddings">
+                <p>Weddings</p></a></li>
+
         </ul>
         <footer class="splash__footer">
             <div class="switch-wrapper">
@@ -104,15 +110,19 @@
                         <input type="checkbox" id="audience-kids">
                         <label for="audience-kids">Kids</label>
                     </li>
+                    <li>
+                        <input type="checkbox" id="audience-couples">
+                        <label for="audience-couples">Couples</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="audience-wedding">
+                        <label for="audience-wedding">Weddings</label>
+                    </li>
                 </ul>
             </div>
             <div class="form-control--setting">
                 <p class="form-control__label">Contains profanity?</p>
                 <span id="switch-pg" class="switch"><span class="active">PG</span><span>R</span></span>
-            </div>
-            <div class="form-control">
-                <label for="your-name">Your Name</label>
-                <input type="text" id="your-name" placeholder="Optional">
             </div>
             <a href="#" class="btn--green add-line">Submit</a>
         </div>
