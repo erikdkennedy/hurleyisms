@@ -11,14 +11,22 @@
             // Get the token ID to your server-side code for use.
             if (window.lifetime) {
                 $.post('auth/lifetime', { token: token.id }).done(function (data) {
+                    $.createToast("Thanks for joining Hurleyisms Pro.  We're redirecting you <a href='app'>back to the app</a> in a few seconds", 5000);
+
                     console.log('redirecting');
-                    document.location.href = '/app';
+                    setTimeout(function() {
+                        document.location.href = '/app';
+                    }, 5000);
                 });
             }
             else {
                 $.post('auth/monthly', { token: token.id }).done(function (data) {
+                    $.createToast("Thanks for joining Hurleyisms Pro.  We're redirecting you <a href='app'>back to the app</a> in a few seconds", 5000);
+
                     console.log('redirecting');
-                    document.location.href = '/app';
+                    setTimeout(function() {
+                        document.location.href = '/app';
+                    }, 5000);
                 });
             }
         }
