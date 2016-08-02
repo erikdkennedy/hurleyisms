@@ -477,7 +477,7 @@ $(document).ready(function() {
 	$("body").toggleClass("is-admin", auth.isAdmin());
 	$("body").toggleClass("is-logged-in", auth.isLoggedIn());
 	$("body").toggleClass("is-monthly", auth.isMonthly());
-	$("body").toggleClass("is-unverified-email", !auth.hasVerifiedEmail());
+	//$("body").toggleClass("is-unverified-email", !auth.hasVerifiedEmail());
 
 	//click TRASH CAN button to delete line
 	$(document).on("click", ".line__delete", function() {
