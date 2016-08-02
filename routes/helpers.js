@@ -19,15 +19,6 @@ function onlyLoggedIn(req, res, next) {
         message: 'You must log in first.'
     });
 }
-function onlyEmailVerified(req, res, next) {
-    if (isLoggedIn(req) && req.payload.emailverified) {
-        return next();
-    }
-    res.status(401).json({
-        status: 'error',
-        message: 'You must log in first.'
-    });
-}
 function isPro(req) {
     console.log("is Pro: "+ (isLoggedIn(req) && req.payload.pro))
     return isLoggedIn(req) && req.payload.pro;
@@ -75,6 +66,5 @@ module.exports = {
     loginRedirect: loginRedirect,
     isLoggedIn: isLoggedIn,
     onlyLoggedIn: onlyLoggedIn,
-    isPro: isPro,
-    onlyEmailVerified: onlyEmailVerified
+    isPro: isPro
 };

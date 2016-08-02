@@ -9,54 +9,69 @@ var xssFilters = require('xss-filters');
 /* GET home page. */
 
 
-router.get('/', function (req, res) {
+router.get('/', function(req, res) {
     res.sendFile(path.join(__dirname, '../public', 'app.html'));
 });
 
 
-router.get('/data/:audience/:profanity', function (req, res) {
+router.get('/data/:audience/:profanity', function(req, res) {
     console.log("audience " + req.params.audience);
     query = {};
     switch (Number(req.params.audience)) {
         case 0:
-            query = { men: true };
+            query = {
+                men: true
+            };
             console.log("men");
             break;
         case 1:
-            query = { women: true };
+            query = {
+                women: true
+            };
             console.log("women");
             break;
         case 2:
-            query = { kids: true };
+            query = {
+                kids: true
+            };
             console.log("kids");
             break;
         case 3:
-            query = { couples: true };
+            query = {
+                couples: true
+            };
             console.log("couples");
             break;
         case 4:
-            query = { weddings: true };
+            query = {
+                weddings: true
+            };
             console.log("weddings");
             break;
     }
     var profanityOn = JSON.parse(req.params.profanity);
     if (profanityOn) {
-        query = { $or: [query, { profanity: profanityOn }] };
+        query = {
+            $or: [query, {
+                profanity: profanityOn
+            }]
+        };
+    } else {
+        query.profanity = false;
     }
-    else { query.profanity = false; }
     //only show approved
     query.approved = true;
 
     //only show free to non-pro users
-    if (!helpers.isPro(req)) query.free = true;
+    if (!helpers.isPro(req)) {query.free = true};
 
     console.log(query);
-    Lines.find(query, function (err, results) {
+    Lines.find(query, function(err, results) {
         console.log("query returned " + results.length);
         res.json(results);
     });
 });
-router.post('/add', helpers.onlyEmailVerified, function (req, res) {
+router.post('/add', helpers.onlyLoggedIn, function(req, res) {
     console.log("add called");
     var line = req.body;
 
@@ -67,24 +82,35 @@ router.post('/add', helpers.onlyEmailVerified, function (req, res) {
     //Check to see if user has been banned
     console.log(line);
 
-    Users.findById(req.payload._id).exec(function (err, user) {
+    Users.findById(req.payload._id).exec(function(err, user) {
         if (user.banned) {
             console.error("Banned User tried to create record");
-            sendJSONresponse(res, 403, { message: "You have been banned from submitting lines" });
-        } else {
-            console.log("adding record " + line);
-            //filter out any XSS data
-            line.line = xssFilters.inHTMLData(line.line);
-            line.author = user.name;
-            line.authorid = user._id;
-            //create the line
-            Lines.create(line,
-                function (err, result) {
-                    console.log("err:" + err);
-                    console.log("result:" + result);
-                    sendJSONresponse(res, 200, result);
-                });
+            sendJSONresponse(res, 403, {
+                message: "You have been banned from submitting lines"
+            });
+            return;
+        } 
+        if (!user.emailverified) {
+            console.error("Unverified user has attempted to add line");
+            sendJSONresponse(res, 401, {
+                message: "You have not verified your email"
+            });
+            return;
         }
+
+        console.log("adding record " + line);
+        //filter out any XSS data
+        line.line = xssFilters.inHTMLData(line.line);
+        line.author = user.name;
+        line.authorid = user._id;
+        //create the line
+        Lines.create(line,
+            function(err, result) {
+                console.log("err:" + err);
+                console.log("result:" + result);
+                sendJSONresponse(res, 200, result);
+            });
+
     });
 });
 //not currently doing line voting functionality
@@ -99,7 +125,7 @@ router.post('/add', helpers.onlyEmailVerified, function (req, res) {
     });
 });
 */
-var sendJSONresponse = function (res, status, content) {
+var sendJSONresponse = function(res, status, content) {
     res.status(status);
     res.json(content);
 };
