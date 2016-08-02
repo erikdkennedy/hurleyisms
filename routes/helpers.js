@@ -66,6 +66,5 @@ module.exports = {
     loginRedirect: loginRedirect,
     isLoggedIn: isLoggedIn,
     onlyLoggedIn: onlyLoggedIn,
-    isPro: isPro,
-    onlyEmailVerified: onlyEmailVerified
+    isPro: isPro
 };
