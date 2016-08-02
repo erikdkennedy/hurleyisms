@@ -76,6 +76,20 @@ jQuery.fn.extend({
 
     },
 
+    //required options: bodyWrapper, footer
+    footerify: function (options) {
+
+        if (!options.bodyWrapper || !options.footer) return false;
+
+        var $bodyWrapper = options.bodyWrapper;
+        var $footer = options.footer;
+
+        var footerHeight = $("footer").outerHeight();
+        $(".body-wrapper")
+                .css("min-height", "100%")
+                .css("margin-bottom", "-" + footerHeight + "px");
+    },
+
     //required arg "control" - jQuery element controlling show/hide
     //optional args "showText", "hideText"
     showPasswordify: function (options) {

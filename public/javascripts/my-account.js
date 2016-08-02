@@ -3,6 +3,12 @@ $(document).ready(function () {
     /*****************************************
 				  INITIALIZATION
 	*****************************************/
+
+    $("body").footerify({
+        bodyWrapper: $(".body-wrapper"),
+        footer: $("footer")
+    });
+
     $("input[type=email]").val(auth.loggedInEmail());
     $("input[type=email], input[type=password]").requirify();
     $("input[type=email]").emailify();
