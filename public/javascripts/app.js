@@ -2,16 +2,16 @@ $(document).ready(function() {
 	/*****************************************
 				  HELPERS & INIT
 	*****************************************/
-    var cachedLines = [];
+	var cachedLines = [];
 
-    var profanity = false;
+	var profanity = false;
 
 	var audienceTypes = {
 		MEN: 0,
 		WOMEN: 1,
 		KIDS: 2,
 		COUPLES: 3,
-        WEDDING :4
+		WEDDING: 4
 	};
 
 	var lineBeforeEdits;
@@ -36,30 +36,30 @@ $(document).ready(function() {
 
 		$("section.submit .char-remaining").text(charRemaining);
 		$("section.submit label[for=the-line] .form-control__label-hint")
-				.toggleClass("error", noCharRemaining);
+			.toggleClass("error", noCharRemaining);
 	}
 
 	//submit-a-line init
 	displayTextareaCharRemaining();
 
 	function getQueryStringValue(key) {
-       var query = window.location.search.substring(1);
-       var vars = query.split("&");
-       for (var i=0;i<vars.length;i++) {
-               var pair = vars[i].split("=");
-               if (pair[0] === key) return pair[1];
-       }
-       return false;
+		var query = window.location.search.substring(1);
+		var vars = query.split("&");
+		for (var i = 0; i < vars.length; i++) {
+			var pair = vars[i].split("=");
+			if (pair[0] === key) return pair[1];
+		}
+		return false;
 	}
 
 	//check for "Enter new password" query string
 	if (getQueryStringValue("enter-new-password") === "true") {
-        $("#new-password-modal").addClass("is-visible");
-        $("body").addClass("has-modal-open");
+		$("#new-password-modal").addClass("is-visible");
+		$("body").addClass("has-modal-open");
 
-        $("#new-password__password").showPasswordify({
-        	control: $("#new-password-modal .show-password")
-        });
+		$("#new-password__password").showPasswordify({
+			control: $("#new-password-modal .show-password")
+		});
 	}
 
 	//check for "Email just verified" query string
@@ -69,77 +69,86 @@ $(document).ready(function() {
 
 
 
-    /*****************************************
-                   DataAccess
-    *****************************************/
-	function updateCache(callback)
-	{
-	    $.getJSON('app/data/' + audience + '/' + profanity, function (data) {
-	        cachedLines = data;
-	        callback();
-	    });
+	/*****************************************
+	               DataAccess
+	*****************************************/
+	function updateCache(callback) {
+		$.getJSON('app/data/' + audience + '/' + profanity, function(data) {
+			cachedLines = data;
+			callback();
+		});
 	}
+
 	function sendLine(line, callback) {
-	    $.post('app/add', line).done(function() {
-	         callback();
-	    }).error(function(error) {
-	        if (error.status === 403) {
-	            $.createToast(error.responseJSON.message);
-	        }
-	    }); }
+		$.post('app/add', line).done(function() {
+			$("body").toggleClass("is-unverified-email", false);
+			callback();
+		}).error(function(error) {
+				if (error.status === 403) {
+					$.createToast(error.responseJSON.message);
+				}
+				if (error.status === 401) {
+					$("body").toggleClass("is-unverified-email", !auth.hasVerifiedEmail());
+				}
+			});
+		}
+
+
 	function rate(id, rating, callback) {
-	    $.getJSON('app/rate/' + id + '/' + rating, function () {
-	        callback();
-	    });
+		$.getJSON('app/rate/' + id + '/' + rating, function() {
+			callback();
+		});
 	}
-	function deleteLine(id,callback)
-	{
-	    $.get('admin/' + id + "/delete").then(function () {
-	        callback();
-	    });
+
+	function deleteLine(id, callback) {
+		$.get('admin/' + id + "/delete").then(function() {
+			callback();
+		});
 	}
-	function updateLineText(id, text, callback){
-	    $.post('admin/' + id + "/updatetext", text).then(function () {
-	        callback();
-	    });
+
+	function updateLineText(id, text, callback) {
+		$.post('admin/' + id + "/updatetext", text).then(function() {
+			callback();
+		});
 	}
+
 	function sendVerifyEmail(callback) {
-	    $.get("auth/verifyemail").then(function () {
-	        callback();
-	    });
+		$.get("auth/verifyemail").then(function() {
+			callback();
+		});
 	}
 
 
 	/*****************************************
 			   LISTENERS - SPLASH
 	*****************************************/
-	
+
 
 	//start session button
 	$("a.begin-session").click(function() {
 		audience = Number($(this).attr("data-audience-type"));
-		updateCache(function () {
-		    changeScreen("lines");
-		    startPlay();
+		updateCache(function() {
+			changeScreen("lines");
+			startPlay();
 		});
 	});
 
 	//flip rating switch
 	$(".switch").click(function() {
-	    $(this).toggleClass("active");
+		$(this).toggleClass("active");
 
-	    var kidsButton = $(".begin-session[data-audience-type=2]");
-	    profanity = $(this).hasClass("active");
+		var kidsButton = $(".begin-session[data-audience-type=2]");
+		profanity = $(this).hasClass("active");
 
-	    kidsButton.toggleClass("disabled", profanity);
+		kidsButton.toggleClass("disabled", profanity);
 	});
 
 	//click "new line" btn
 	$(".btn.add-line").click(function() {
 		changeScreen("submit");
 
-		//TODO remove... should be handled elsewhere
-		if (auth.isLoggedIn() && auth.hasVerifiedEmail()) {
+		//Only need to be logged in to submit a line
+		if (auth.isLoggedIn() /*&& auth.hasVerifiedEmail()*/) {
 			enableLineSubmissionControls();
 		} else {
 			disableLineSubmissionControls();
@@ -178,8 +187,8 @@ $(document).ready(function() {
 	/*****************************************
 			   LISTENERS - SUBMIT
 	*****************************************/
-	
-	
+
+
 	//close this page
 	$("section.submit a.close").click(function() {
 		changeScreen("splash");
@@ -206,31 +215,31 @@ $(document).ready(function() {
 		}
 
 		if ($(".error").length === 0) {
-		    sendNewLine(function () {
-		    	$.createToast("Line submitted!");
-		        resetSubmitForm();
-		    });
+			sendNewLine(function() {
+				$.createToast("Line submitted!");
+				resetSubmitForm();
+			});
 		} else {
 			var $firstError = $(".error").first();
 			scrollToElement($firstError);
 		}
 	});
 
-	function sendNewLine(callback)
-	{
-	    var line = {};
-	    line.line = $("#the-line").val();
-	    line.men = $('#audience-men').is(":checked");
-	    line.women = $('#audience-women').is(":checked");
-	    line.kids = $('#audience-kids').is(":checked");
-	    line.couples = $('#audience-couples').is(":checked");
-	    line.weddings = $('#audience-wedding').is(":checked");
-	    line.profanity = $('#switch-pg').hasClass("active");
-	    sendLine(line, callback);
+	function sendNewLine(callback) {
+		var line = {};
+		line.line = $("#the-line").val();
+		line.men = $('#audience-men').is(":checked");
+		line.women = $('#audience-women').is(":checked");
+		line.kids = $('#audience-kids').is(":checked");
+		line.couples = $('#audience-couples').is(":checked");
+		line.weddings = $('#audience-wedding').is(":checked");
+		line.profanity = $('#switch-pg').hasClass("active");
+		sendLine(line, callback);
 	}
+
 	function resetSubmitForm() {
 		$("#the-line").val("");
-		scrollToElement( $("body") );
+		scrollToElement($("body"));
 	}
 
 	function scrollToElement($element) {
@@ -240,33 +249,35 @@ $(document).ready(function() {
 	}
 
 	function handleDeleteLine() {
-	    if(window.editid) {
-	        deleteLine(window.editid, function () {
-	            $.closeModal();
-	        });
-	    }
+		if (window.editid) {
+			deleteLine(window.editid, function() {
+				$.closeModal();
+			});
+		}
 	}
 
-    $("#delete").click(handleDeleteLine);
+	$("#delete").click(handleDeleteLine);
 
 	handleUpdateText = function(e) {
-	    var id = $(this).closest(".line").attr("name");
-	    var linetext = $(this).closest(".line").find(".line__textarea").val();
-	    updateLineText(id, { text: linetext }, function () {
-	            $.closeModal();
-	        });
-	    
+		var id = $(this).closest(".line").attr("name");
+		var linetext = $(this).closest(".line").find(".line__textarea").val();
+		updateLineText(id, {
+			text: linetext
+		}, function() {
+			$.closeModal();
+		});
+
 	}
 
-	var handleVerifyEmail = function(){
-	    sendVerifyEmail(function () {
-	        $.createToast("Verification email sent!");
-	    });
+	var handleVerifyEmail = function() {
+		sendVerifyEmail(function() {
+			$.createToast("Verification email sent!");
+		});
 	}
 	$("#send_verify_email").click(handleVerifyEmail)
-	/*****************************************
-				LISTENERS - LINES
-	*****************************************/
+		/*****************************************
+					LISTENERS - LINES
+		*****************************************/
 
 	function startPlay() {
 		writeAudienceType();
@@ -300,7 +311,7 @@ $(document).ready(function() {
 
 		var $divForLine = $("main .line").first();
 
-		for (var i=0; i<maxNumLines && i<cachedLines.length; i++) {
+		for (var i = 0; i < maxNumLines && i < cachedLines.length; i++) {
 			var line;
 
 			while (1) {
@@ -382,12 +393,12 @@ $(document).ready(function() {
 
 	function updateCharCountOfDisplayedLines(lines) {
 		charCountOfDisplayedLines = lines
-				.map(function(eachLine) {
-					return eachLine.line.length;
-				})
-				.reduce(function(a, b) {
-					return a + b;
-				});
+			.map(function(eachLine) {
+				return eachLine.line.length;
+			})
+			.reduce(function(a, b) {
+				return a + b;
+			});
 	}
 
 	function determineProgressBarSpeed() {
@@ -431,7 +442,7 @@ $(document).ready(function() {
 
 		var oldPercentage = $progressBarFill.width() / $progressBar.width() * 100;
 		var magicConstant = isMobile() ? 0.5 : 1.0;
-		var delta = magicConstant*progressBarSpeed*timeSinceLastRepaint/charCountOfDisplayedLines;
+		var delta = magicConstant * progressBarSpeed * timeSinceLastRepaint / charCountOfDisplayedLines;
 		return oldPercentage + delta;
 	}
 
@@ -439,7 +450,7 @@ $(document).ready(function() {
 		resetLineRatings();
 		removeLineResizing();
 		writeNewLines();
-		scrollToElement( $("body") );
+		scrollToElement($("body"));
 	}
 
 	function resetLineRatings() {
@@ -452,7 +463,7 @@ $(document).ready(function() {
 
 	//click a line to edit is (admins only)
 	$(document).on("click", ".line__text", function() {
-		startEditingLine( $(this) );
+		startEditingLine($(this));
 	});
 
 	function startEditingLine($textBox) {
@@ -470,13 +481,14 @@ $(document).ready(function() {
 		$textBox.replaceWith("<textarea class='line__textarea' spellcheck='true' style='height: " + height + "px;'>" + lineBeforeEdits + "</textarea>");
 
 		$(".line__textarea")
-				.data("prog-bar-running", progressBarWasRunning)
-				.focus();
+			.data("prog-bar-running", progressBarWasRunning)
+			.focus();
 	}
 
 	$("body").toggleClass("is-admin", auth.isAdmin());
 	$("body").toggleClass("is-logged-in", auth.isLoggedIn());
 	$("body").toggleClass("is-monthly", auth.isMonthly());
+	//We are going to do the verified email check on the server side and show this dialog if the call fails
 	//$("body").toggleClass("is-unverified-email", !auth.hasVerifiedEmail());
 
 	//click TRASH CAN button to delete line
@@ -559,15 +571,15 @@ $(document).ready(function() {
 
 	//click thumbs up/down
 	$(document).on("click", ".thumbs-up, .thumbs-down", function() {
-	    var id = $(this).parents(".line").attr("name");
-	    var rating = $(this).hasClass("thumbs-up");
-	    var elem = $(this);
-	    rate(id, rating, function () {
-	        elem.toggleClass("active");
-	        if (elem.hasClass("active")) {
-	            elem.siblings(".btn.active").removeClass("active");
-	        }
-	    });
+		var id = $(this).parents(".line").attr("name");
+		var rating = $(this).hasClass("thumbs-up");
+		var elem = $(this);
+		rate(id, rating, function() {
+			elem.toggleClass("active");
+			if (elem.hasClass("active")) {
+				elem.siblings(".btn.active").removeClass("active");
+			}
+		});
 	});
 
 	//change speed

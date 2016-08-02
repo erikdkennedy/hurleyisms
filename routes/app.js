@@ -63,7 +63,7 @@ router.get('/data/:audience/:profanity', function(req, res) {
     query.approved = true;
 
     //only show free to non-pro users
-    if (!helpers.isPro(req)) query.free = true;
+    if (!helpers.isPro(req)) {query.free = true};
 
     console.log(query);
     Lines.find(query, function(err, results) {
@@ -71,7 +71,7 @@ router.get('/data/:audience/:profanity', function(req, res) {
         res.json(results);
     });
 });
-router.post('/add', helpers.onlyEmailVerified, function(req, res) {
+router.post('/add', helpers.onlyLoggedIn, function(req, res) {
     console.log("add called");
     var line = req.body;
 
