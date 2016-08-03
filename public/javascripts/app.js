@@ -11,7 +11,7 @@ $(document).ready(function() {
 		WOMEN: 1,
 		KIDS: 2,
 		COUPLES: 3,
-		WEDDING: 4
+		GROUPS: 4
 	};
 
 	var lineBeforeEdits;
@@ -232,7 +232,7 @@ $(document).ready(function() {
 		line.women = $('#audience-women').is(":checked");
 		line.kids = $('#audience-kids').is(":checked");
 		line.couples = $('#audience-couples').is(":checked");
-		line.weddings = $('#audience-wedding').is(":checked");
+		line.groups = $('#audience-groups').is(":checked");
 		line.profanity = $('#switch-pg').hasClass("active");
 		sendLine(line, callback);
 	}
@@ -293,7 +293,7 @@ $(document).ready(function() {
 		if (audience === audienceTypes.WOMEN) audienceName = "women";
 		if (audience === audienceTypes.KIDS) audienceName = "kids";
 		if (audience === audienceTypes.COUPLES) audienceName = "couples";
-		if (audience === audienceTypes.WEDDING) audienceName = "weddings";
+		if (audience === audienceTypes.GROUPS) audienceName = "groups";
 
 		$("span.audience").text(audienceName);
 	}
