@@ -21,7 +21,7 @@ var sendUpdateCookie = function (res, user, content) {
 var setCookie = function (res, user) {
     token = user.generateJwt();
     res.cookie('auth', token, { secure: true, maxAge: 604800000 });
-}
+};
 var getUser = function (req, res, callback) {
     if (req.payload && req.payload.email) {
         User

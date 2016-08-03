@@ -6,10 +6,7 @@ var auth = function () {
 
         var terms = $("#chk_terms").requirifyCheck("You must accept the terms and privacy policy");
         return terms && fields;
-
-
-
-    }
+    };
     auth.register = function (e) {
         e.preventDefault();
         //this line isn't needed as validate will remove all users
@@ -28,12 +25,11 @@ var auth = function () {
                     $("#signup-modal input[type=email]").addError("This email has already been taken.  <a href='#' data-modal='login-modal'>Login</a> if it's yours");
                 });
         }
-    }
-    
+    };
     var validateLogInForm = function () {
         return $("#login-modal input[type=email]").emailify() &&
             $("#login-modal input[required]").requirify();
-    }
+    };
     auth.login = function () {
         if (validateLogInForm) {
             var user = {};
@@ -45,13 +41,13 @@ var auth = function () {
                 $("#login-modal input[type=email]").addError("Email or password incorrect");
             });
         }
-    }
+    };
     
     auth.logout = function () {
         $.post('auth/logout').done(function () {
             document.location.href = '/';
         });
-    }
+    };
 
 
     auth.cancel = function (callback) {
@@ -59,22 +55,22 @@ var auth = function () {
             //document.location.href = '/my-account';
             if (callback) callback();
         });
-    }
+    };
     auth.updateEmailAddress = function (email, callback) {
         $.post('auth/email', { email: email }).done(function () {
             callback();
         });
-    }
+    };
     auth.updatePassword = function (password, callback) {
         $.post('auth/password', { password: password }).done(function () {
             if (callback) callback();
         });
-    }
+    };
     auth.forgotPassword = function (email, callback) {
         $.post('auth/forgotPassword', { email: email }).done(function () {
             if (callback) callback();
         });
-    }
+    };
     
     auth.isLoggedIn = function () {
         var token = getToken();
@@ -178,12 +174,18 @@ var auth = function () {
             }
         }
         return null;
-    }
+    };
     return auth;
 }();
 $(function() {
     $("#btn_register").click(auth.register);
     $("#btn_login").click(auth.login);
+    $("#login-modal input[type=password]").keyup(function(e){
+        if(e.keyCode == 13)
+        {
+            auth.login();
+        }
+    });
     $("#btn_newPassword").click(function (e) {
         var newPassword = $("#new-password__password").val();
         if (newPassword) {
