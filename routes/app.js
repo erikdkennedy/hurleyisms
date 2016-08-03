@@ -14,7 +14,7 @@ router.get('/', function(req, res) {
 });
 
 
-router.get('/data/:audience/:profanity', function(req, res) {
+router.get('/data/:audience/:profanity', helpers.databaseQueryTimeout, function(req, res) {
     console.log("audience " + req.params.audience);
     query = {};
     switch (Number(req.params.audience)) {
