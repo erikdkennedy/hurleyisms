@@ -487,6 +487,7 @@ $(document).ready(function() {
 
 	$("body").toggleClass("is-admin", auth.isAdmin());
 	$("body").toggleClass("is-logged-in", auth.isLoggedIn());
+	$("body").toggleClass("is-pro", auth.isPro());
 	$("body").toggleClass("is-monthly", auth.isMonthly());
 	//We are going to do the verified email check on the server side and show this dialog if the call fails
 	//$("body").toggleClass("is-unverified-email", !auth.hasVerifiedEmail());
