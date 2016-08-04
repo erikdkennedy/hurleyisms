@@ -6,18 +6,23 @@
         locale: 'auto',
         zipCode: true,
         token: function (token) {
-            console.log("have the token");
             // You can access the token ID with `token.id`.
             // Get the token ID to your server-side code for use.
             var postUrl = window.lifetime ? "auth/lifetime" : "auth/monthly";
             
-                $.post(postUrl, { token: token.id }).done(function (data) {
+                $.post(postUrl, { token: token.id })
+                .done(function (data) {
                     $.createToast("Thanks for joining Hurleyisms Pro.  We're redirecting you <a href='app'>back to the app</a> in a few seconds", 5000);
 
                     console.log('redirecting');
                     setTimeout(function() {
                         document.location.href = '/app';
                     }, 5000);
+                }).
+                error(function(error){
+                   
+                      $.createToast("There was a problem processing your card. Please <a href='javascript:stripe.launch()'>try again</a>", 10000);
+                    
                 });
             
         }
@@ -34,7 +39,6 @@
     };
     stripe.launchlifetime = function (email) {
         // Open Checkout with further options:
-        console.log("button clicked");
         stripe.handler.open({
             name: 'Hurleyisms',
             description: 'Lifetime Access',

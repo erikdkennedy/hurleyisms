@@ -131,7 +131,8 @@ router.post('/lifetime', helpers.onlyLoggedIn, function (req, res) {
         }, function (err, charge) {
             if (err && err.type === 'StripeCardError') {
                 // The card has been declined
-                //TODO: Stop further execution
+                sendJSONresponse(res,401,{error: "Card was declined", declined:true});
+                return;
             }
             console.log(charge);
             user.pro = true;
@@ -184,7 +185,8 @@ router.post('/monthly', helpers.onlyLoggedIn, function (req, res) {
             if (err && err.type === 'StripeCardError') {
                 // The card has been declined
                 //TODO: Stop further execution
-                console.log(err);
+                sendJSONresponse(res,401,{error: "Card was declined", declined:true});
+                return;
             }
             console.log(customer);
             user.pro = true;
