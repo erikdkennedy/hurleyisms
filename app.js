@@ -55,14 +55,14 @@ function writeJSFiles() {
         'public/javascripts/shared.js',
         'public/javascripts/stripe.js',
         'public/javascripts/pro.js'
-    ]
+    ];
     minJSFiles(proClientFiles, 'public/javascripts/pro.min.js');
 
     var indexClientFiles = [
         'public/javascripts/auth.js',
         'public/javascripts/shared.js',
         'public/javascripts/marketing.js'
-    ]
+    ];
     minJSFiles(indexClientFiles, 'public/javascripts/index.min.js');
 
     var myAccountClientFiles = [
@@ -111,13 +111,13 @@ var forceHttps = function (req, res, next) {
         console.log('Request made over HTTP, redirecting to HTTPS');
         res.redirect('https://' + req.hostname);
     }
-}
+};
 app.use(forceHttps);
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 //Only log error responses
 app.use(logger('combined', {
-    skip: function (req, res) { return res.statusCode < 400 }
+    skip: function (req, res) { return res.statusCode < 400; }
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -168,7 +168,7 @@ if (app.get('env') === 'development') {
                 error: err
             });
     });
-};
+}
 
 // production error handler
 // no stacktraces leaked to user

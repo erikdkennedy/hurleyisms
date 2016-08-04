@@ -20,7 +20,7 @@ function onlyLoggedIn(req, res, next) {
     });
 }
 function isPro(req) {
-    console.log("is Pro: "+ (isLoggedIn(req) && req.payload.pro))
+    console.log("is Pro: "+ (isLoggedIn(req) && req.payload.pro));
     return isLoggedIn(req) && req.payload.pro;
 }
 function ensureAdmin(req, res, next) {
@@ -38,7 +38,12 @@ function ensureAdmin(req, res, next) {
     }
     
 }
-
+function databaseQueryTimeout(req, res, next) {
+  if (mongoose.connection.readyState !== 1) {
+    return res.status(500).json({error: "query timed out"});
+  }
+  next();
+}
 function ensureAdminJSON(req, res, next) {
     if (req.isAuthenticated() && req.user.admin) {
         return next();
@@ -66,5 +71,6 @@ module.exports = {
     loginRedirect: loginRedirect,
     isLoggedIn: isLoggedIn,
     onlyLoggedIn: onlyLoggedIn,
-    isPro: isPro
+    isPro: isPro,
+    databaseQueryTimeout:databaseQueryTimeout
 };

@@ -14,7 +14,7 @@ router.get('/', function(req, res) {
 });
 
 
-router.get('/data/:audience/:profanity', function(req, res) {
+router.get('/data/:audience/:profanity', helpers.databaseQueryTimeout, function(req, res) {
     console.log("audience " + req.params.audience);
     query = {};
     switch (Number(req.params.audience)) {
@@ -44,9 +44,9 @@ router.get('/data/:audience/:profanity', function(req, res) {
             break;
         case 4:
             query = {
-                weddings: true
+                groups: true
             };
-            console.log("weddings");
+            console.log("groups");
             break;
     }
     var profanityOn = JSON.parse(req.params.profanity);
@@ -63,7 +63,7 @@ router.get('/data/:audience/:profanity', function(req, res) {
     query.approved = true;
 
     //only show free to non-pro users
-    if (!helpers.isPro(req)) {query.free = true};
+    if (!helpers.isPro(req)) {query.free = true;}
 
     console.log(query);
     Lines.find(query, function(err, results) {
