@@ -64,12 +64,12 @@ $(document).ready(function () {
         $("body").toggleClass("is-monthly", auth.isMonthly());
         $("body").toggleClass("is-lifetime", auth.isLifeTime());
         if (auth.isLifeTime() || auth.isMonthly()) {
-            $(".if-in-purgatory").hide();
+            $(".if-purgatory").hide();
         } else {
             $("#lifetime").hide();
             $("#monthly").hide();
             $("#cancle").hide();
-            $(".if-in-purgatory").show();
+            $(".if-purgatory").show();
         }
     }
     setPage();

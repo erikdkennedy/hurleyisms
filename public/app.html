@@ -34,12 +34,15 @@
     <!-- SPLASH -->
     <section class="splash active">
         <div class="splash__header-area">
-            <div class="if-logged-out">
+            <div class="if-trial">
                 <a href="pro" class="banner banner--upgrade banner--splash">Enjoying the trial?  <span>Unlock the entire collection of Peter Hurley's lines now</span>!</a>
                 <p class="pro-catcher no-mobile">Have a pro account?  <a href="#" data-modal="login-modal">Log in</a>.</p>
             </div>
-            <div class="if-logged-in if-payment-error">
+            <div class="if-purgatory">
                 <a href="#" class="banner banner--error banner--splash">Your payment details are not valid.  <span>Fix them now to unlock all functionality</span>.</a>
+            </div>
+            <div class="if-cancelled">
+                <a href="#" class="banner banner--error banner--splash">You've cancelled your Pro subscription.  <span>Want full access again?</span>.</a>
             </div>
             <div class="if-logged-in no-mobile">
                 <a href="my-account" class="splash__settings-icon"><img src="images/gear.png" alt="My Account & Settings"></a>
@@ -64,7 +67,7 @@
             </div>
             <a href="my-account" class="btn mobile-only if-logged-in"><img src="images/gear-white.png"> Account</a>
             <a href="#" class="btn add-line">Submit a Line</a>
-            <p class="pro-catcher mobile-only if-logged-out">Have a pro account?  <a href="javascript:void(0)">Log in</a></p>
+            <p class="pro-catcher mobile-only if-trial">Have a pro account?  <a href="javascript:void(0)">Log in</a></p>
         </footer>
     </section>
 
@@ -75,7 +78,7 @@
             <h1>New Line</h1>
             <a href="#" class="btn--green add-line hidden">Submit</a>
         </header>
-        <div class="blue-box if-logged-out">
+        <div class="blue-box if-not-pro">
             <div class="submit__container">
                 <h2>Only Hurleyism Pros can use this feature</h2>
                 <p>Why go pro?  Pro users get the following:</p>
@@ -130,10 +133,10 @@
 
     <!-- LINE -->
     <section class="lines">
-        <div class="if-logged-out">
+        <div class="if-trial">
             <a href="pro" class="banner banner--upgrade banner--splash">Enjoying the trial?  <span>Unlock the entire collection of Peter Hurley's lines now</span>!</a>
         </div>
-        <div class="if-logged-in if-payment-error">
+        <div class="if-purgatory">
             <a href="#" class="banner banner--error banner--splash">Your payment details are not valid.  <span>Fix them now to unlock all functionality</span>.</a>
         </div>
         <header class="lines__header">
