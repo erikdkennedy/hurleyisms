@@ -1074,7 +1074,7 @@ section.splash {
 		background-size: contain;
 		background-position: center center;
 
-		.is-logged-in & {background-image: url(../images/hurleyisms-sm-pro.png);}
+		.is-pro & {background-image: url(../images/hurleyisms-sm-pro.png);}
 
 		@media ($short-mobile) {
 			margin-bottom: 50px;
@@ -1087,7 +1087,7 @@ section.splash {
 			padding-bottom: 19.7%;
 			background-image: url(../images/hurleyisms-basic.png);
 
-			.is-logged-in & {background-image: url(../images/hurleyisms-pro.png);}
+			.is-pro & {background-image: url(../images/hurleyisms-pro.png);}
 		}
 
 		@media (min-width: 600px) {
@@ -1100,7 +1100,7 @@ section.splash {
 			padding-bottom: 13.2%;
 			background-image: url(../images/hurleyisms-basic.png);
 
-			.is-logged-in & {background-image: url(../images/hurleyisms-pro.png);}
+			.is-pro & {background-image: url(../images/hurleyisms-pro.png);}
 		}
 
 		@media ($tablet) {
