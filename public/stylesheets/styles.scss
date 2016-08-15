@@ -1121,9 +1121,12 @@ section.splash {
 		@extend .semantic-ul;
 
 		justify-content: center;
+		flex-wrap: wrap;
 
 		> li {
+			flex-basis: 33.33%;
 			flex-shrink: 1;
+			max-width: 125px;
 
 			> a {
 				margin: 5px;
