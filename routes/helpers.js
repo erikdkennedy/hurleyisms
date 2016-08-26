@@ -36,6 +36,10 @@ function ensureAdmin(req, res, next) {
             }
         });
     }
+    else{
+                res.status(401).json({ status: 'error', message: 'You are not an admin' });
+            }
+            
     
 }
 function databaseQueryTimeout(req, res, next) {
