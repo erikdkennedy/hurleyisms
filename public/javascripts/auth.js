@@ -16,6 +16,8 @@ var auth = function () {
             user.email = $("#email").val();
             user.password = $("#password").val();
             user.name = $("#name").val();
+            var coupon = $("#coupon-code").val();
+            if(coupon) user.coupon = coupon;
             $.post('auth/register', user)
                 .done(function (data) {
                     //TODO Andrew, distinguish this flow for mobile vs. non-mobile users
