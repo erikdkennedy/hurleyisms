@@ -51,28 +51,27 @@ var getUser = function(req, res, callback) {
         return;
     }
 };
-var registerUser = function(req, res){
-    var user = new User();
-    user.name = xssFilters.inHTMLData(req.body.name);
-    user.email = xssFilters.inHTMLData(req.body.email);
-    if(req.body.coupon) user.coupon = xssFilters.inHTMLData(req.body.coupon);
-    user.signupip = req.headers['x-forwarded-for'] ||
-        req.connection.remoteAddress ||
-        req.socket.remoteAddress ||
-        req.connection.socket.remoteAddress;
-    user.setPassword(req.body.password);
-    user.save(function(err) {
-        if (err) {
-            sendJSONresponse(res, 404, err);
-        } else {
-            email.sendInitialEmail(user, function() {
-                sendUpdateCookie(res, user, {
-                    status: 'success'
-                });
-            });
+//Gets a coupon code from stripe.
+//If the coupon doesn't exists then callback
+var getCoupon = function(couponcode, callback) {
+    //If coupon code is null, then return the null callback
+    if (!couponcode) {
+        callback();
+    }
+    stripe.coupons.retrieve(
+        code,
+        function(err, coupon) {
+            if (err) {
+                callback();
+                return;
+            }
+            callback(coupon);
         }
-    });
+
+    );
+
 }
+
 router.post('/register', function(req, res) {
     console.log("Register called");
     if (!req.body.name || !req.body.email || !req.body.password) {
@@ -82,25 +81,34 @@ router.post('/register', function(req, res) {
         });
         return;
     }
-    if (req.body.coupon) {
-        //Validate coupon
-        var code = req.body.coupon;
-        stripe.coupons.retrieve(
-            code,
-            function(err, coupon) {
-                if (err) {
-                    sendJSONresponse(res, 404, {
-                        error: err
+    getCoupon(req.body.coupon, function(coupon) {
+        //If they presented a coupon but the coupon does not exist then send an error
+        if(!coupon  && req.body.coupon){
+            sendJSONresponse(res, 400, {"message":"Invalid Coupon"});
+            return;
+        }
+        if(coupon && !coupon.valid){
+            sendJSONresponse(res, 400, {"message":"Coupon is no longer valid"});
+            return;
+        }
+        var user = new User();
+        user.name = xssFilters.inHTMLData(req.body.name);
+        user.email = xssFilters.inHTMLData(req.body.email);
+        if (coupon){ user.couponcode = xssFilters.inHTMLData(req.body.coupon);}
+        user.signupip = helpers.getIpAddress;
+        user.setPassword(req.body.password);
+        user.save(function(err) {
+            if (err) {
+                sendJSONresponse(res, 404, err);
+            } else {
+                email.sendInitialEmail(user, function() {
+                    sendUpdateCookie(res, user, {
+                        status: 'success'
                     });
-                    return;
-                }
-                sendJSONresponse(res, 200, coupon)
+                });
             }
-
-        );
-    } else {
-        registerUser(req, res);
-    }
+        });
+    });
 
 });
 router.post('/login', function(req, res) {
@@ -155,6 +163,10 @@ router.post('/lifetime', helpers.onlyLoggedIn, function(req, res) {
             wasMonthly = true;
         }
         user.token = req.body.token;
+        var amount = 9900;
+        if (user.coupon) {
+
+        }
         stripe.charges.create({
             amount: 9900, // amount in cents
             currency: "usd",
@@ -376,7 +388,7 @@ router.post('/forgotPassword', function(req, res) {
         });
 });
 router.get('/coupon/:code', function(req, res) {
-    
+
 });
 
 module.exports = router;
