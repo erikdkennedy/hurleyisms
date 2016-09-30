@@ -42,7 +42,11 @@ section {
 
 body {
 	font-family: "Roboto", sans-serif;
-	font-size: 17px;
+	font-size: 15px;
+
+	@media ($tablet) {
+		font-size: 17px;
+	}
 }
 
 h1, h2, h3, h4, p {
@@ -1001,7 +1005,11 @@ body.has-modal-open {
 
 section.splash {
 	position: relative;
+	height: auto;
+	min-height: 100%;
 	padding: $mobile-padding;
+
+	padding-bottom: 95px; //footer height
 }
 
 	// .splash__banner {}
@@ -1063,11 +1071,9 @@ section.splash {
 		}
 
 	.splash__title {
-		$larger-splash-title: "min-width: 500px";
-
 		@include ir;
 
-		margin-bottom: 40px;
+		margin-bottom: 10px;
 		padding-bottom: 38%;
 		width: 100%;
 		height: 0;
@@ -1078,10 +1084,10 @@ section.splash {
 		.is-pro & {background-image: url(../images/hurleyisms-sm-pro.png);}
 
 		@media ($short-mobile) {
-			margin-bottom: 50px;
+			margin-bottom: 0px;
 		}
 
-		@media ($larger-splash-title) {
+		@media (min-width: 500px) and (min-height: 415px), (min-width: 800px) {
 			margin: 0 auto;
 			max-width: 600px;
 			width: auto;
@@ -1091,12 +1097,13 @@ section.splash {
 			.is-pro & {background-image: url(../images/hurleyisms-pro.png);}
 		}
 
-		@media (min-width: 600px) {
+		@media (min-width: 600px) and (min-height: 415px) and (max-width: 800px) {
+			margin-bottom: 40px;
 			height: 127px;
 			padding-bottom: 0;
 		}
 
-		@media ($mobile-flipped) {
+		@media ($mobile-flipped), (max-height: 415px) and (max-width: 800px) {
 			margin-bottom: 0;
 			padding-bottom: 13.2%;
 			background-image: url(../images/hurleyisms-basic.png);
@@ -1104,18 +1111,26 @@ section.splash {
 			.is-pro & {background-image: url(../images/hurleyisms-pro.png);}
 		}
 
-		@media ($tablet) {
+		@media ($tablet) and (min-height: 800px) {
 			margin: 15vh auto 7vh;
 		}
 	}
 
 	.splash__start-for {
-		margin-bottom: 28px;
+		margin-bottom: 10px;
 		font-size: 18px;
 		letter-spacing: 2px;
 		text-transform: uppercase;
 		opacity: .5;
 		text-align: center;
+
+		@media ($short-mobile) {
+			margin-bottom: 0;
+		}
+
+		@media ($tablet) {
+			margin-bottom: 28px;
+		}
 	}
 
 	.mode-selector {
@@ -1125,9 +1140,16 @@ section.splash {
 		flex-wrap: wrap;
 
 		> li {
-			flex-basis: 33.33%;
 			flex-shrink: 1;
 			max-width: 125px;
+
+			@media ($mobile) {
+				max-width: 100px;
+			}
+
+			@media ($mobile-flipped) {
+				max-width: 100px;
+			}
 
 			> a {
 				margin: 5px;
@@ -1150,6 +1172,7 @@ section.splash {
 				}
 
 				> p {
+					margin-bottom: 0;
 					color: black;
 					text-align: center;
 					text-transform: uppercase;
@@ -1178,15 +1201,13 @@ section.splash {
 
 			.btn {
 				padding: 11px;
-
-				@media ($mobile-flipped) {
-					order: 2;
-				}
 			}
 		}
 
 		@media ($mobile-flipped) {
-			position: static;
+			.pro-catcher {
+				flex-basis: 100%;
+			}
 		}
 
 		.btn {
