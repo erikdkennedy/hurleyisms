@@ -191,6 +191,12 @@ body:not(.is-unverified-email) .if-unverified-email {
 	}
 }
 
+@media (max-width: 300px) {
+	.no-watch {
+		display: none !important;
+	}
+}
+
 .no-underline {
     &,
     &:hover,
