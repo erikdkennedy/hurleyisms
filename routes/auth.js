@@ -57,9 +57,10 @@ var getCoupon = function(couponcode, callback) {
     //If coupon code is null, then return the null callback
     if (!couponcode) {
         callback();
+        return;
     }
     stripe.coupons.retrieve(
-        code,
+        couponcode,
         function(err, coupon) {
             if (err) {
                 callback();
@@ -71,7 +72,19 @@ var getCoupon = function(couponcode, callback) {
     );
 
 }
+var convertAmountForCoupon = function(amount, coupon) {
+    if (!coupon) return amount;
+    if (coupon.percent_off && coupon.percent_off != null) {
+        var newAmount = (amount * (100 - coupon.percent_off)) / 100;
+        if (newAmount >= 0) return newAmount;
+    }
+    if (coupon.amount_off && coupon.amount_off != null) {
+        var newAmount = amount - coupon.amount_off;
+        if (newAmount >= 0) return newAmount;
+    }
 
+    return amount;
+}
 router.post('/register', function(req, res) {
     console.log("Register called");
     if (!req.body.name || !req.body.email || !req.body.password) {
@@ -81,24 +94,31 @@ router.post('/register', function(req, res) {
         });
         return;
     }
-    getCoupon(req.body.coupon, function(coupon) {
+    getCoupon(req.body.couponcode, function(coupon) {
         //If they presented a coupon but the coupon does not exist then send an error
-        if(!coupon  && req.body.coupon){
-            sendJSONresponse(res, 400, {"message":"Invalid Coupon"});
+        if (!coupon && req.body.coupon) {
+            sendJSONresponse(res, 400, {
+                "message": "Invalid Coupon"
+            });
             return;
         }
-        if(coupon && !coupon.valid){
-            sendJSONresponse(res, 400, {"message":"Coupon is no longer valid"});
+        if (coupon && !coupon.valid) {
+            sendJSONresponse(res, 400, {
+                "message": "Coupon is no longer valid"
+            });
             return;
         }
         var user = new User();
         user.name = xssFilters.inHTMLData(req.body.name);
         user.email = xssFilters.inHTMLData(req.body.email);
-        if (coupon){ user.couponcode = xssFilters.inHTMLData(req.body.coupon);}
-        user.signupip = helpers.getIpAddress;
+        if (coupon) {
+            user.couponcode = xssFilters.inHTMLData(req.body.couponcode);
+        }
+        user.signupip = helpers.getIpAddress(req);
         user.setPassword(req.body.password);
         user.save(function(err) {
             if (err) {
+                console.log("error creating mongo user");
                 sendJSONresponse(res, 404, err);
             } else {
                 email.sendInitialEmail(user, function() {
@@ -164,45 +184,47 @@ router.post('/lifetime', helpers.onlyLoggedIn, function(req, res) {
         }
         user.token = req.body.token;
         var amount = 9900;
-        if (user.coupon) {
-
-        }
-        stripe.charges.create({
-            amount: 9900, // amount in cents
-            currency: "usd",
-            source: user.token,
-            description: "Life Time Access"
-        }, function(err, charge) {
-            if (err && err.type === 'StripeCardError') {
-                // The card has been declined
-                sendJSONresponse(res, 401, {
-                    error: "Card was declined",
-                    declined: true
-                });
-                return;
+        getCoupon(user.couponcode, function(coupon) {
+            if (coupon) {
+                amount = convertAmountForCoupon(amount, coupon);
             }
-            console.log(charge);
-            user.pro = true;
-            user.chargeid = charge.id;
-            user.type = "lifetime";
-            user.prodate = Date.now();
-            user.save(function(err) {
-                if (err) {
-                    sendJSONresponse(res, 404, err);
-                } else {
-                    if (wasMonthly) {
-                        email.sendUpgradeEmail(user, function() {
+            stripe.charges.create({
+                amount: amount, // amount in cents
+                currency: "usd",
+                source: user.token,
+                description: "Life Time Access"
+            }, function(err, charge) {
+                if (err && err.type === 'StripeCardError') {
+                    // The card has been declined
+                    sendJSONresponse(res, 401, {
+                        error: "Card was declined",
+                        declined: true
+                    });
+                    return;
+                }
+                console.log(charge);
+                user.pro = true;
+                user.chargeid = charge.id;
+                user.type = "lifetime";
+                user.prodate = Date.now();
+                user.save(function(err) {
+                    if (err) {
+                        sendJSONresponse(res, 404, err);
+                    } else {
+                        if (wasMonthly) {
+                            email.sendUpgradeEmail(user, function() {
+                                sendUpdateCookie(res, user, {
+                                    status: 'success'
+                                });
+                            });
+                        } else {
                             sendUpdateCookie(res, user, {
                                 status: 'success'
                             });
-                        });
-                    } else {
-                        sendUpdateCookie(res, user, {
-                            status: 'success'
-                        });
-                    }
+                        }
 
-                }
+                    }
+                });
             });
         });
     });
@@ -232,16 +254,27 @@ router.post('/monthly', helpers.onlyLoggedIn, function(req, res) {
             return;
         }
         user.token = req.body.token;
-        stripe.customers.create({
+        var customerReq = {
             source: user.token,
             plan: "Monthly",
             email: user.email
-        }, function(err, customer) {
+        };
+        if (user.couponcode) {
+            customReq.coupon = user.couponcode
+        };
+        stripe.customers.create(customerReq, function(err, customer) {
             if (err && err.type === 'StripeCardError') {
                 // The card has been declined
                 //TODO: Stop further execution
                 sendJSONresponse(res, 401, {
                     error: "Card was declined",
+                    declined: true
+                });
+                return;
+            }
+            if (err) {
+                sendJSONresponse(res, 401, {
+                    error: "Error processing payment",
                     declined: true
                 });
                 return;
@@ -260,6 +293,24 @@ router.post('/monthly', helpers.onlyLoggedIn, function(req, res) {
                         status: 'success'
                     });
                 }
+            });
+        });
+    });
+});
+router.get('/amount/:amount', helpers.onlyLoggedIn, function(req, res) {
+    console.log("amount called");
+    if (!req.params.amount) {
+        sendJSONresponse(res, 404, {
+            error: "Invalid Request"
+        });
+        return;
+    }
+    var amount = parseInt(req.params.amount);
+    getUser(req, res, function(req, res, user) {
+        getCoupon(user.couponcode, function(coupon) {
+            amount = convertAmountForCoupon(amount, coupon);
+            sendJSONresponse(res, 200, {
+                "amount": amount
             });
         });
     });
@@ -284,7 +335,7 @@ router.post('/cancel', helpers.onlyLoggedIn, function(req, res) {
                         email.sendCancellationEmail(user, function() {
                             sendUpdateCookie(res, user, {
                                 status: 'success'
-                            });
+                            })
                         });
                     }
                 });

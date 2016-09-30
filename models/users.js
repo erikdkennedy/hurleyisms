@@ -28,7 +28,7 @@ var userSchema = new mongoose.Schema({
     admin: { type: Boolean, "default": false },
     banned: { type: Boolean, required: true, "default": false },
     signupip: { type: String, required: true },
-    coupon:String,
+    couponcode:String,
 });
 
 userSchema.methods.setPassword = function (password) {

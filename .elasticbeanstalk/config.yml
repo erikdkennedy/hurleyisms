@@ -1,10 +1,12 @@
 branch-defaults:
+  default:
+    environment: hurleyisms-test
   master:
     environment: hurleyisms-dp
     group_suffix: null
 global:
   application_name: hurleyisms
-  default_ec2_keyname: TestKeyPair
+  default_ec2_keyname: null
   default_platform: Node.js
   default_region: us-west-2
   profile: eb-cli
