@@ -1018,6 +1018,11 @@ section.splash {
 	padding-bottom: 95px; //footer height
 }
 
+	.splash__non-footer-content {
+		margin-top: -1px;
+		border-top: 1px solid transparent;
+	}
+
 	// .splash__banner {}
 
 		.banner {
