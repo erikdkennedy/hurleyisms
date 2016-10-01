@@ -66,7 +66,12 @@ function loginRedirect(req, res, next) {
         return next();
     }
 }
-
+function getIpAddress(req){
+    return req.headers['x-forwarded-for'] ||
+            req.connection.remoteAddress ||
+            req.socket.remoteAddress ||
+            req.connection.socket.remoteAddress;
+}
 
 module.exports = {
     ensureAuthenticated: ensureAuthenticated,
@@ -76,5 +81,6 @@ module.exports = {
     isLoggedIn: isLoggedIn,
     onlyLoggedIn: onlyLoggedIn,
     isPro: isPro,
-    databaseQueryTimeout:databaseQueryTimeout
+    databaseQueryTimeout:databaseQueryTimeout,
+    getIpAddress:getIpAddress
 };

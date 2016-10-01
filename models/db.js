@@ -1,6 +1,7 @@
 ﻿var mongoose = require('mongoose');
 var gracefulShutdown;
 var dbURI = process.env.MONGODBSTRING;
+mongoose.Promise = global.Promise;
 mongoose.connect(dbURI, { config: { autoIndex: true }, replset:{rs_name:"hurleyisms_andrew_prod"}, server: { reconnectTries: Number.MAX_VALUE } });
 mongoose.connection.on('connected', function () {
     console.log('Mongoose connected to ' + dbURI);
