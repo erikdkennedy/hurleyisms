@@ -1121,10 +1121,6 @@ section.splash {
 
 			.is-pro & {background-image: url(../images/hurleyisms-pro.png);}
 		}
-
-		@media ($tablet) and (min-height: 800px) {
-			margin: 15vh auto 7vh;
-		}
 	}
 
 	.splash__start-for {
