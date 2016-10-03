@@ -260,7 +260,7 @@ router.post('/monthly', helpers.onlyLoggedIn, function(req, res) {
             email: user.email
         };
         if (user.couponcode) {
-            customReq.coupon = user.couponcode
+            customerReq.coupon = user.couponcode
         };
         stripe.customers.create(customerReq, function(err, customer) {
             if (err && err.type === 'StripeCardError') {
