@@ -1,5 +1,5 @@
 $(document).ready(function() {
-
+	$("body").toggleClass("is-trial", !auth.isLoggedIn());
 	function triggerScrollingAnimations() {
 
 		if (isMobile()) {
