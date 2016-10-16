@@ -939,6 +939,17 @@ body.has-modal-open {
 		}
 	}
 
+.video-title {
+	margin-top: 50px;
+	font-family: "Montserrat";
+	text-transform: uppercase;
+	text-align: center;
+
+	& + .youtube-video-wrapper {
+		margin-top: 0;
+	}
+}
+
 .gallery {
 	background-color: black;
 
