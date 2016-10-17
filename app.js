@@ -133,7 +133,6 @@ app.use(jwt({
     userProperty: 'payload',
     credentialsRequired: false,
     getToken: function fromCookie(req) {
-        console.log("checking cookie");
         if (req.cookies.auth) { return req.cookies.auth; }
         return null;
     }

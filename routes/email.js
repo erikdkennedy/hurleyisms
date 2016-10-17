@@ -41,9 +41,6 @@ var sendInitialEmail = function (user, callback) {
     request.body.template_id = "6717c2cb-73bd-48c4-b467-c2e039fb8e19";
     request.body.subject = "Welcome to Hurleyisms";
     sg.API(request, function (response) {
-        console.log(response.statusCode);
-            console.log(response.body);
-        console.log(response.headers);
         callback();
     });
 }
@@ -55,9 +52,6 @@ var sendVerifyEmail = function (user, callback) {
     request.body.template_id = "5da23ab1-12ac-49c8-a1bb-0d96c2fb4f5f";
     request.body.subject = "Verify your email Address";
     sg.API(request, function (response) {
-        console.log(response.statusCode)
-        console.log(response.body)
-        console.log(response.headers)
         callback();
     });
 }
@@ -69,9 +63,6 @@ var sendPasswordEmail = function (user, callback) {
     request.body.template_id = "7894b34d-40f7-45da-870d-e5e7e0704d6e";
     request.body.subject = "Reset your password";
     sg.API(request, function (response) {
-        console.log(response.statusCode);
-        console.log(response.body);
-        console.log(response.headers);
         callback();
     });
 }
@@ -81,9 +72,6 @@ var sendCancellationEmail = function (user, callback) {
     request.body.template_id = "51e69306-4ee0-4906-9029-8440ac52000e";
     request.body.subject = "Cancel Hurleyisms";
     sg.API(request, function (response) {
-        console.log(response.statusCode);
-        console.log(response.body);
-        console.log(response.headers);
         callback();
     });
 }
@@ -93,9 +81,6 @@ var sendUpgradeEmail = function (user, callback) {
     request.body.template_id = "4dd08203-d0bb-481f-8719-36d045e7af5a";
     request.body.subject = "Upgrade to Hurleyisms Lifetime Access";
     sg.API(request, function (response) {
-        console.log(response.statusCode);
-        console.log(response.body);
-        console.log(response.headers);
         callback();
     });
 }
