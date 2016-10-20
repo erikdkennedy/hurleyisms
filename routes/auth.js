@@ -86,7 +86,6 @@ var convertAmountForCoupon = function(amount, coupon) {
     return amount;
 }
 router.post('/register', function(req, res) {
-    console.log("Register called");
     if (!req.body.name || !req.body.email || !req.body.password) {
         console.log("All fields are not present");
         sendJSONresponse(res, 400, {
@@ -132,7 +131,6 @@ router.post('/register', function(req, res) {
 
 });
 router.post('/login', function(req, res) {
-    console.log("Login Called");
     if (!req.body.email || !req.body.password) {
         sendJSONresponse(res, 400, {
             "message": "All fields required"
@@ -202,7 +200,6 @@ router.post('/lifetime', helpers.onlyLoggedIn, function(req, res) {
                     });
                     return;
                 }
-                console.log(charge);
                 user.pro = true;
                 user.chargeid = charge.id;
                 user.type = "lifetime";
@@ -260,7 +257,7 @@ router.post('/monthly', helpers.onlyLoggedIn, function(req, res) {
             email: user.email
         };
         if (user.couponcode) {
-            customReq.coupon = user.couponcode
+            customerReq.coupon = user.couponcode
         };
         stripe.customers.create(customerReq, function(err, customer) {
             if (err && err.type === 'StripeCardError') {
@@ -279,7 +276,6 @@ router.post('/monthly', helpers.onlyLoggedIn, function(req, res) {
                 });
                 return;
             }
-            console.log(customer);
             user.pro = true;
             user.customerid = customer.id,
                 user.subscriptionid = customer.subscriptions.data[0].id;
@@ -298,7 +294,6 @@ router.post('/monthly', helpers.onlyLoggedIn, function(req, res) {
     });
 });
 router.get('/amount/:amount', helpers.onlyLoggedIn, function(req, res) {
-    console.log("amount called");
     if (!req.params.amount) {
         sendJSONresponse(res, 404, {
             error: "Invalid Request"

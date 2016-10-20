@@ -4,7 +4,6 @@ var mongoose = require('mongoose');
 var events = mongoose.model('events');
 var stripe = require("stripe")(process.env.STRIPE_KEY);
 router.post("/", function (req, res) {
-    console.log(req.body);
     if (req.body && req.body.id) {
         stripe.events.retrieve(req.body.id, function (err, event_recv) {
             if (err) {

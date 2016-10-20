@@ -22,7 +22,7 @@ $(document).ready(function () {
         },
         onSave: function (callback) {
             var email = $("input[type=email]").val();
-            updateEmailAddress(email, callback);
+            auth.updateEmailAddress(email, callback);
         }
     });
 
@@ -41,7 +41,7 @@ $(document).ready(function () {
         onSave: function (callback) {
             if ($("input[type=password]").requirify()) {
                 var password = $("input[type=password]").val();
-                updatePassword(password, callback);
+                auth.updatePassword(password, callback);
             }
         }
     });

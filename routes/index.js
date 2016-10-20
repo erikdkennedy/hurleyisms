@@ -6,7 +6,6 @@ var helpers = require('./helpers');
 
 
 router.get('/', function (req, res) {
-    console.log("getting index");
     if (helpers.isLoggedIn(req)) {
         res.redirect("app");
     }
@@ -16,7 +15,6 @@ router.get('/', function (req, res) {
 });
 
 router.get('/pro', function (req, res) {
-    console.log(req.payload);
     res.sendFile(path.join(__dirname, '../public', 'pro.html'));
 });
 

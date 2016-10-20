@@ -27,7 +27,6 @@ router.get('/email/:code', function (req, res) {
             });
         }
         else {
-            console.log("Verifying email ");
             User
             .findOne({ email: decoded.email })
             .exec(function (err, user) {
@@ -65,7 +64,6 @@ router.get('/password/:code', function (req, res) {
             });
         }
         else {
-            console.log("Verifying email ");
             User
             .findOne({ email: decoded.email })
             .exec(function (err, user) {
