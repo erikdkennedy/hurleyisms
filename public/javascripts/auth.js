@@ -153,7 +153,7 @@ var auth = function () {
             if (payload.exp > Date.now() / 1000) return payload.pro;
             return null;
         } else {
-            return null;
+            return false;
         }
     };
 

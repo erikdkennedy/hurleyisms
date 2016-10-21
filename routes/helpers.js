@@ -20,7 +20,6 @@ function onlyLoggedIn(req, res, next) {
     });
 }
 function isPro(req) {
-    console.log("is Pro: "+ (isLoggedIn(req) && req.payload.pro));
     return isLoggedIn(req) && req.payload.pro;
 }
 function ensureAdmin(req, res, next) {

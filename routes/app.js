@@ -15,38 +15,32 @@ router.get('/', function(req, res) {
 
 
 router.get('/data/:audience/:profanity', helpers.databaseQueryTimeout, function(req, res) {
-    console.log("audience " + req.params.audience);
     query = {};
     switch (Number(req.params.audience)) {
         case 0:
             query = {
                 men: true
             };
-            console.log("men");
             break;
         case 1:
             query = {
                 women: true
             };
-            console.log("women");
             break;
         case 2:
             query = {
                 kids: true
             };
-            console.log("kids");
             break;
         case 3:
             query = {
                 couples: true
             };
-            console.log("couples");
             break;
         case 4:
             query = {
                 groups: true
             };
-            console.log("groups");
             break;
     }
     var profanityOn = JSON.parse(req.params.profanity);
@@ -65,14 +59,12 @@ router.get('/data/:audience/:profanity', helpers.databaseQueryTimeout, function(
     //only show free to non-pro users
     if (!helpers.isPro(req)) {query.free = true;}
 
-    console.log(query);
+    console.log("/data/lines query:"+query);
     Lines.find(query, function(err, results) {
-        console.log("query returned " + results.length);
         res.json(results);
     });
 });
 router.post('/add', helpers.onlyLoggedIn, function(req, res) {
-    console.log("add called");
     var line = req.body;
 
     line.ipaddress = req.headers['x-forwarded-for'] ||
@@ -80,7 +72,6 @@ router.post('/add', helpers.onlyLoggedIn, function(req, res) {
         req.socket.remoteAddress ||
         req.connection.socket.remoteAddress;
     //Check to see if user has been banned
-    console.log(line);
 
     Users.findById(req.payload._id).exec(function(err, user) {
         if (user.banned) {
@@ -98,7 +89,6 @@ router.post('/add', helpers.onlyLoggedIn, function(req, res) {
             return;
         }
 
-        console.log("adding record " + line);
         //filter out any XSS data
         line.line = xssFilters.inHTMLData(line.line);
         line.author = user.name;
