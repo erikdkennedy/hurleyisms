@@ -70,7 +70,7 @@ $(document).ready(function () {
             $("#lifetime").hide();
             $("#monthly").hide();
             $("#cancle").hide();
-            $(".if-purgatory").show();
+            $(".if-purgatory").toggleClass("if-purgatory");
         }
     }
     setPage();
