@@ -63,6 +63,7 @@ $(document).ready(function () {
     var setPage = function () {
         $("body").toggleClass("is-monthly", auth.isMonthly());
         $("body").toggleClass("is-lifetime", auth.isLifeTime());
+        
         if (auth.isLifeTime() || auth.isMonthly()) {
             $(".if-purgatory").hide();
         } else {
@@ -75,7 +76,9 @@ $(document).ready(function () {
     setPage();
     var mthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     var pdate = auth.proDate();
-    $(".started").html("Started " + mthNames[pdate.getMonth()] + " " + pdate.getFullYear());
+    if (pdate) {
+        $(".started").html("Started " + mthNames[pdate.getMonth()] + " " + pdate.getFullYear());
+    }
     $("#logout").click(auth.logout);
     $("#cancel").click(function () {
         auth.cancel(function () {
