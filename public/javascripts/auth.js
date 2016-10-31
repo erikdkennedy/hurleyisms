@@ -19,6 +19,10 @@ var auth = function () {
             if(coupon) user.couponcode = coupon;
             $.post('auth/register', user)
                 .done(function (data) {
+                    if (data.coupon)
+                    {
+                        window.coupon = data.coupon;
+                    }
                     //TODO Andrew, distinguish this flow for mobile vs. non-mobile users
                     $.openModal("checkout-modal");
                 })
