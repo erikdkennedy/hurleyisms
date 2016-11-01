@@ -19,6 +19,10 @@ var auth = function () {
             if(coupon) user.couponcode = coupon;
             $.post('auth/register', user)
                 .done(function (data) {
+                    if (data.coupon)
+                    {
+                        window.coupon = data.coupon;
+                    }
                     //TODO Andrew, distinguish this flow for mobile vs. non-mobile users
                     $.openModal("checkout-modal");
                 })
@@ -139,7 +143,9 @@ var auth = function () {
         var token = getToken();
         if (token) {
             var payload = JSON.parse(window.atob(token.split('.')[1]));
-            if (payload.exp > Date.now() / 1000) return new Date(payload.prodate);
+            if (payload.prodate) {
+                if (payload.exp > Date.now() / 1000) return new Date(payload.prodate);
+            }
             return null;
         } else {
             return null;
@@ -150,8 +156,8 @@ var auth = function () {
         var token = getToken();
         if (token) {
             var payload = JSON.parse(window.atob(token.split('.')[1]));
-            if (payload.exp > Date.now() / 1000) return payload.pro;
-            return null;
+            if (payload.pro && payload.exp > Date.now() / 1000) return payload.pro;
+            return false;
         } else {
             return false;
         }

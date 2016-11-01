@@ -101,11 +101,18 @@ router.post('/register', function(req, res) {
             });
             return;
         }
+       
         if (coupon && !coupon.valid) {
             sendJSONresponse(res, 400, {
                 "message": "Coupon is no longer valid"
             });
             return;
+        }
+        if (coupon && coupon.valid)
+        {
+            var clientCoupon = {};
+            clientCoupon["amount_off"] = coupon.amount_off;
+            clientCoupon["percent_off"] = coupon.percent_off;
         }
         var user = new User();
         user.name = xssFilters.inHTMLData(req.body.name);
@@ -122,7 +129,8 @@ router.post('/register', function(req, res) {
             } else {
                 email.sendInitialEmail(user, function() {
                     sendUpdateCookie(res, user, {
-                        status: 'success'
+                        status: 'success',
+                        coupon: clientCoupon
                     });
                 });
             }
@@ -201,7 +209,7 @@ router.post('/lifetime', helpers.onlyLoggedIn, function(req, res) {
                     return;
                 }
                 user.pro = true;
-                user.chargeid = charge.id;
+                if (charge) { user.chargeid = charge.id; }
                 user.type = "lifetime";
                 user.prodate = Date.now();
                 user.save(function(err) {
@@ -278,7 +286,7 @@ router.post('/monthly', helpers.onlyLoggedIn, function(req, res) {
             }
             user.pro = true;
             user.customerid = customer.id,
-                user.subscriptionid = customer.subscriptions.data[0].id;
+            user.subscriptionid = customer.subscriptions.data[0].id;
             user.type = "monthly";
             user.prodate = Date.now();
             user.save(function(err) {
@@ -289,23 +297,6 @@ router.post('/monthly', helpers.onlyLoggedIn, function(req, res) {
                         status: 'success'
                     });
                 }
-            });
-        });
-    });
-});
-router.get('/amount/:amount', helpers.onlyLoggedIn, function(req, res) {
-    if (!req.params.amount) {
-        sendJSONresponse(res, 404, {
-            error: "Invalid Request"
-        });
-        return;
-    }
-    var amount = parseInt(req.params.amount);
-    getUser(req, res, function(req, res, user) {
-        getCoupon(user.couponcode, function(coupon) {
-            amount = convertAmountForCoupon(amount, coupon);
-            sendJSONresponse(res, 200, {
-                "amount": amount
             });
         });
     });

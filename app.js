@@ -21,6 +21,44 @@ var fs = require('fs');
 var app = express();
 var sass = require('node-sass');
 
+
+var filterLog = function (req) {
+    return req.originalUrl.startsWith("/images")
+          || req.originalUrl.startsWith("/javascripts")
+          || req.originalUrl.startsWith("/stylesheets")
+}
+//Logging Information
+var winston = require('winston');
+require('winston-loggly-bulk');
+expressWinston = require('express-winston');
+winston.add(winston.transports.Loggly, {
+    token: "87424c34-9a93-4eeb-b10b-a23adb4e8e6e",
+    subdomain: "LimeyJohnson",
+    tags: [process.env.WINSTON_TAG],
+    json: true
+});
+
+app.use(expressWinston.logger({
+    transports: [
+     new winston.transports.Console({
+         json: true,
+         colorize: true
+     }),
+     new winston.transports.Loggly({
+         subdomain: 'limeyjohnson',
+         inputToken: '87424c34-9a93-4eeb-b10b-a23adb4e8e6e',
+         json: true,
+         tags: [process.env.WINSTON_TAG]
+     })
+    ],
+    meta: false, // optional: control whether you want to log the meta data about the request (default to true) 
+    msg: "HTTP StatusCode={{res.statusCode}} Method={{req.method}} {{res.responseTime}}ms URL={{req.url}} LoggedIn={{req.payload != null}}", // optional: customize the default logging message. E.g. "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}" 
+    expressFormat: false, // Use the default Express/morgan request formatting. Enabling this will override any msg if true. Will only output colors with colorize set to true 
+    colorize: true, // Color the text and status code, using the Express/morgan color palette (text: gray, status: default green, 3XX cyan, 4XX yellow, 5XX red). 
+    ignoreRoute: function (req, res) { return filterLog(req); } // optional: allows to skip some log messages based on request and/or response 
+}));
+
+
 function minJSFiles(files, target) {
     var beautify = process.env.NODE_ENV === 'development';
     try {
