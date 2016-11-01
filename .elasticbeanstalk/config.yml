@@ -2,7 +2,7 @@ branch-defaults:
   default:
     environment: hurleyisms-test
   master:
-    environment: hurleyisms-dp
+    environment: hurleyisms-test
     group_suffix: null
 global:
   application_name: hurleyisms
