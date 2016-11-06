@@ -305,4 +305,3 @@ $(document).ready(function () {
 
 ga('create', 'UA-77534503-1', 'auto');
 ga('send', 'pageview');
-
