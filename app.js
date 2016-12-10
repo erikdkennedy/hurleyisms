@@ -146,7 +146,8 @@ var forceHttps = function (req, res, next) {
     if (req.secure || req.headers['x-forwarded-proto'] === 'https' || req.headers['x-arr-ssl']) {
         next();
     } else {
-        console.log('Request made over HTTP, redirecting to HTTPS');
+        console.log('Request made over HTTP, redirecting to HTTPS '+req.hostname);
+        
         res.redirect('https://' + req.hostname);
     }
 };

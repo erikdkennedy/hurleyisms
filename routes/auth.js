@@ -9,29 +9,29 @@ var xssFilters = require('xss-filters');
 var email = require("./email");
 var crypto = require('crypto');
 
-var sendJSONresponse = function(res, status, content) {
+var sendJSONresponse = function (res, status, content) {
     res.status(status);
     res.json(content);
 };
-var sendUpdateCookie = function(res, user, content) {
+var sendUpdateCookie = function (res, user, content) {
     setCookie(res, user);
     sendJSONresponse(res, 200, content);
 };
 
-var setCookie = function(res, user) {
+var setCookie = function (res, user) {
     token = user.generateJwt();
     res.cookie('auth', token, {
         secure: true,
         maxAge: 604800000
     });
 };
-var getUser = function(req, res, callback) {
+var getUser = function (req, res, callback) {
     if (req.payload && req.payload.email) {
         User
             .findOne({
                 email: req.payload.email
             })
-            .exec(function(err, user) {
+            .exec(function (err, user) {
                 if (!user) {
                     sendJSONresponse(res, 404, {
                         "message": "User not found"
@@ -53,7 +53,7 @@ var getUser = function(req, res, callback) {
 };
 //Gets a coupon code from stripe.
 //If the coupon doesn't exists then callback
-var getCoupon = function(couponcode, callback) {
+var getCoupon = function (couponcode, callback) {
     //If coupon code is null, then return the null callback
     if (!couponcode) {
         callback();
@@ -61,7 +61,7 @@ var getCoupon = function(couponcode, callback) {
     }
     stripe.coupons.retrieve(
         couponcode,
-        function(err, coupon) {
+        function (err, coupon) {
             if (err) {
                 callback();
                 return;
@@ -72,7 +72,7 @@ var getCoupon = function(couponcode, callback) {
     );
 
 }
-var convertAmountForCoupon = function(amount, coupon) {
+var convertAmountForCoupon = function (amount, coupon) {
     if (!coupon) return amount;
     if (coupon.percent_off && coupon.percent_off != null) {
         var newAmount = (amount * (100 - coupon.percent_off)) / 100;
@@ -85,7 +85,7 @@ var convertAmountForCoupon = function(amount, coupon) {
 
     return amount;
 }
-router.post('/register', function(req, res) {
+router.post('/register', function (req, res) {
     if (!req.body.name || !req.body.email || !req.body.password) {
         console.log("All fields are not present");
         sendJSONresponse(res, 400, {
@@ -93,7 +93,7 @@ router.post('/register', function(req, res) {
         });
         return;
     }
-    getCoupon(req.body.couponcode, function(coupon) {
+    getCoupon(req.body.couponcode, function (coupon) {
         //If they presented a coupon but the coupon does not exist then send an error
         if (!coupon && req.body.coupon) {
             sendJSONresponse(res, 400, {
@@ -101,15 +101,14 @@ router.post('/register', function(req, res) {
             });
             return;
         }
-       
+
         if (coupon && !coupon.valid) {
             sendJSONresponse(res, 400, {
                 "message": "Coupon is no longer valid"
             });
             return;
         }
-        if (coupon && coupon.valid)
-        {
+        if (coupon && coupon.valid) {
             var clientCoupon = {};
             clientCoupon["amount_off"] = coupon.amount_off;
             clientCoupon["percent_off"] = coupon.percent_off;
@@ -122,12 +121,12 @@ router.post('/register', function(req, res) {
         }
         user.signupip = helpers.getIpAddress(req);
         user.setPassword(req.body.password);
-        user.save(function(err) {
+        user.save(function (err) {
             if (err) {
                 console.log("error creating mongo user");
                 sendJSONresponse(res, 404, err);
             } else {
-                email.sendInitialEmail(user, function() {
+                email.sendInitialEmail(user, function () {
                     sendUpdateCookie(res, user, {
                         status: 'success',
                         coupon: clientCoupon
@@ -138,7 +137,7 @@ router.post('/register', function(req, res) {
     });
 
 });
-router.post('/login', function(req, res) {
+router.post('/login', function (req, res) {
     if (!req.body.email || !req.body.password) {
         sendJSONresponse(res, 400, {
             "message": "All fields required"
@@ -146,7 +145,7 @@ router.post('/login', function(req, res) {
         return;
     }
 
-    passport.authenticate('local', function(err, user, info) {
+    passport.authenticate('local', function (err, user, info) {
         var token;
 
         if (err) {
@@ -164,7 +163,7 @@ router.post('/login', function(req, res) {
 
     })(req, res);
 });
-router.post('/lifetime', helpers.onlyLoggedIn, function(req, res) {
+router.post('/lifetime', helpers.onlyLoggedIn, function (req, res) {
     if (!(req.payload && req.payload.email)) {
         sendJSONresponse(res, 401);
         return;
@@ -175,7 +174,7 @@ router.post('/lifetime', helpers.onlyLoggedIn, function(req, res) {
         });
         return;
     }
-    getUser(req, res, function(req, res, user) {
+    getUser(req, res, function (req, res, user) {
         var wasMonthly = false;
         if (user.isLifetime()) {
             sendJSONresponse(res, 404, {
@@ -190,7 +189,7 @@ router.post('/lifetime', helpers.onlyLoggedIn, function(req, res) {
         }
         user.token = req.body.token;
         var amount = 9900;
-        getCoupon(user.couponcode, function(coupon) {
+        getCoupon(user.couponcode, function (coupon) {
             if (coupon) {
                 amount = convertAmountForCoupon(amount, coupon);
             }
@@ -199,7 +198,7 @@ router.post('/lifetime', helpers.onlyLoggedIn, function(req, res) {
                 currency: "usd",
                 source: user.token,
                 description: "Life Time Access"
-            }, function(err, charge) {
+            }, function (err, charge) {
                 if (err && err.type === 'StripeCardError') {
                     // The card has been declined
                     sendJSONresponse(res, 401, {
@@ -212,12 +211,12 @@ router.post('/lifetime', helpers.onlyLoggedIn, function(req, res) {
                 if (charge) { user.chargeid = charge.id; }
                 user.type = "lifetime";
                 user.prodate = Date.now();
-                user.save(function(err) {
+                user.save(function (err) {
                     if (err) {
                         sendJSONresponse(res, 404, err);
                     } else {
                         if (wasMonthly) {
-                            email.sendUpgradeEmail(user, function() {
+                            email.sendUpgradeEmail(user, function () {
                                 sendUpdateCookie(res, user, {
                                     status: 'success'
                                 });
@@ -234,7 +233,7 @@ router.post('/lifetime', helpers.onlyLoggedIn, function(req, res) {
         });
     });
 });
-router.post('/monthly', helpers.onlyLoggedIn, function(req, res) {
+router.post('/monthly', helpers.onlyLoggedIn, function (req, res) {
     if (!(req.payload && req.payload.email)) {
         sendJSONresponse(res, 401);
         return;
@@ -245,7 +244,7 @@ router.post('/monthly', helpers.onlyLoggedIn, function(req, res) {
         });
         return;
     }
-    getUser(req, res, function(req, res, user) {
+    getUser(req, res, function (req, res, user) {
         if (user.isMonthly()) {
             sendJSONresponse(res, 404, {
                 error: "You are already a monthly subscriber"
@@ -267,7 +266,7 @@ router.post('/monthly', helpers.onlyLoggedIn, function(req, res) {
         if (user.couponcode) {
             customerReq.coupon = user.couponcode
         };
-        stripe.customers.create(customerReq, function(err, customer) {
+        stripe.customers.create(customerReq, function (err, customer) {
             if (err && err.type === 'StripeCardError') {
                 // The card has been declined
                 //TODO: Stop further execution
@@ -286,10 +285,10 @@ router.post('/monthly', helpers.onlyLoggedIn, function(req, res) {
             }
             user.pro = true;
             user.customerid = customer.id,
-            user.subscriptionid = customer.subscriptions.data[0].id;
+                user.subscriptionid = customer.subscriptions.data[0].id;
             user.type = "monthly";
             user.prodate = Date.now();
-            user.save(function(err) {
+            user.save(function (err) {
                 if (err) {
                     sendJSONresponse(res, 404, err);
                 } else {
@@ -301,8 +300,8 @@ router.post('/monthly', helpers.onlyLoggedIn, function(req, res) {
         });
     });
 });
-router.post('/cancel', helpers.onlyLoggedIn, function(req, res) {
-    getUser(req, res, function(req, res, user) {
+router.post('/cancel', helpers.onlyLoggedIn, function (req, res) {
+    getUser(req, res, function (req, res, user) {
         if (!user.isMonthly()) {
             sendJSONresponse(res, 404, {
                 error: "You are not a monthly subscriber"
@@ -310,15 +309,15 @@ router.post('/cancel', helpers.onlyLoggedIn, function(req, res) {
             return;
         }
 
-        stripe.subscriptions.del(user.subscriptionid, function(error, confirmation) {
+        stripe.subscriptions.del(user.subscriptionid, function (error, confirmation) {
             if (!error) {
                 user.pro = false;
                 user.type = undefined;
-                user.save(function(err) {
+                user.save(function (err) {
                     if (err) {
                         sendJSONresponse(res, 404, err);
                     } else {
-                        email.sendCancellationEmail(user, function() {
+                        email.sendCancellationEmail(user, function () {
                             sendUpdateCookie(res, user, {
                                 status: 'success'
                             })
@@ -334,32 +333,32 @@ router.post('/cancel', helpers.onlyLoggedIn, function(req, res) {
 
     });
 });
-router.get('/verifyemail', helpers.onlyLoggedIn, function(req, res) {
-    getUser(req, res, function(req, res, user) {
-        email.sendVerifyEmail(user, function() {
+router.get('/verifyemail', helpers.onlyLoggedIn, function (req, res) {
+    getUser(req, res, function (req, res, user) {
+        email.sendVerifyEmail(user, function () {
             sendUpdateCookie(res, user, {
                 status: 'success'
             });
         });
     });
 });
-router.post('/email', helpers.onlyLoggedIn, function(req, res) {
+router.post('/email', helpers.onlyLoggedIn, function (req, res) {
     if (!req.body.email) {
         sendJSONresponse(res, 400, {
             "message": "All fields required"
         });
         return;
     }
-    getUser(req, res, function(req, res, user) {
+    getUser(req, res, function (req, res, user) {
         user.email = xssFilters.inHTMLData(req.body.email);
         user.email_code = crypto.randomBytes(100).toString('hex');
         user.emailverified = false;
-        user.save(function(err) {
+        user.save(function (err) {
             if (err) {
 
                 sendJSONresponse(res, 404, err);
             } else {
-                email.sendInitialEmail(user, function() {
+                email.sendInitialEmail(user, function () {
                     sendUpdateCookie(res, user, {
                         status: 'success'
                     });
@@ -368,16 +367,16 @@ router.post('/email', helpers.onlyLoggedIn, function(req, res) {
         });
     });
 });
-router.post('/password', helpers.onlyLoggedIn, function(req, res) {
+router.post('/password', helpers.onlyLoggedIn, function (req, res) {
     if (!req.body.password) {
         sendJSONresponse(res, 400, {
             "message": "All fields required"
         });
         return;
     }
-    getUser(req, res, function(req, res, user) {
+    getUser(req, res, function (req, res, user) {
         user.setPassword(req.body.password);
-        user.save(function(err) {
+        user.save(function (err) {
             if (err) {
                 sendJSONresponse(res, 404, err);
             } else {
@@ -388,13 +387,31 @@ router.post('/password', helpers.onlyLoggedIn, function(req, res) {
         });
     });
 });
-router.post('/logout', function(req, res) {
+router.post('/coupon', helpers.onlyLoggedIn, function (req, res) {
+    if (req.body.couponcode) {
+        getCoupon(req.body.couponcode, function (coupon) {
+            getUser(req, res, function (req, res, user) {
+                user.couponcode = req.body.couponcode;
+                user.save(function (err) {
+                    if (err) {
+                        sendJSONresponse(res, 404, err);
+                    } else {
+                        sendUpdateCookie(res, user, {
+                            status: 'success', coupon:coupon
+                        });
+                    }
+                });
+            });
+        });
+    }
+});
+router.post('/logout', function (req, res) {
     res.clearCookie('auth');
     sendJSONresponse(res, 200, {
         status: 'success'
     });
 });
-router.post('/forgotPassword', function(req, res) {
+router.post('/forgotPassword', function (req, res) {
     if (!req.body.email) {
         sendJSONresponse(res, 400, {
             "message": "email required"
@@ -406,7 +423,7 @@ router.post('/forgotPassword', function(req, res) {
         .findOne({
             email: emailAddr
         })
-        .exec(function(err, user) {
+        .exec(function (err, user) {
             if (!user) {
                 sendJSONresponse(res, 404, {
                     "message": "User not found"
@@ -417,15 +434,13 @@ router.post('/forgotPassword', function(req, res) {
                 sendJSONresponse(res, 404, err);
                 return;
             }
-            email.sendPasswordEmail(user, function() {
+            email.sendPasswordEmail(user, function () {
                 sendJSONresponse(res, 200, {
                     status: "success"
                 });
             });
         });
 });
-router.get('/coupon/:code', function(req, res) {
 
-});
 
 module.exports = router;

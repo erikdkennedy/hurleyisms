@@ -58,6 +58,7 @@ userSchema.methods.generateJwt = function () {
         admin: this.admin,
         type: this.type,
         emailverified: this.emailverified,
+        coupon:this.couponcode,
         exp: parseInt(expiry.getTime() / 1000),
     }, process.env.JWT_SECRET); // DO NOT KEEP YOUR SECRET IN THE CODE!
 };

@@ -1,8 +1,8 @@
 var auth = function () {
     var auth = {};
     var validateRegisterForm = function () {
-        var fields =  $("#signup-modal input[type=email]").emailify() &&
-            $("#signup-modal input[required]").requirify(); 
+        var fields = $("#signup-modal input[type=email]").emailify() &&
+            $("#signup-modal input[required]").requirify();
         var terms = $("#chk_terms").requirifyCheck("You must accept the terms and privacy policy");
         return terms && fields;
     };
@@ -16,14 +16,12 @@ var auth = function () {
             user.password = $("#password").val();
             user.name = $("#name").val();
             var coupon = $("#coupon-code").val();
-            if(coupon) user.couponcode = coupon;
+            if (coupon) user.couponcode = coupon;
             $.post('auth/register', user)
                 .done(function (data) {
-                    if (data.coupon)
-                    {
+                    if (data.coupon) {
                         window.coupon = data.coupon;
-                    }
-                    //TODO Andrew, distinguish this flow for mobile vs. non-mobile users
+                    }                    //TODO Andrew, distinguish this flow for mobile vs. non-mobile users
                     $.openModal("checkout-modal");
                 })
                 .error(function (error) {
@@ -47,7 +45,21 @@ var auth = function () {
             });
         }
     };
-    
+    auth.addCoupon = function () {
+        var coupon = $("#coupon-code").val();
+        if (coupon) {
+            $.post('auth/coupon', { couponcode: coupon }).done(function (data) {
+                if (data.coupon) {
+                    window.coupon = data.coupon;
+                }
+                //TODO Andrew, distinguish this flow for mobile vs. non-mobile users
+                $.openModal("checkout-modal");
+            })
+                .error(function (error) {
+                    $("#coupon-modal input[type=text]").addError("This email has already been taken.  <a href='#' data-modal='login-modal'>Login</a> if it's yours");
+                });
+        }
+    }
     auth.logout = function () {
         $.post('auth/logout').done(function () {
             document.location.href = '/';
@@ -76,7 +88,7 @@ var auth = function () {
             if (callback) callback();
         });
     };
-    
+
     auth.isLoggedIn = function () {
         var token = getToken();
         if (token) {
@@ -162,6 +174,16 @@ var auth = function () {
             return false;
         }
     };
+    auth.coupon = function () {
+        var token = getToken();
+        if (token) {
+            var payload = JSON.parse(window.atob(token.split('.')[1]));
+            if (payload.coupon && payload.exp > Date.now() / 1000) return payload.coupon;
+            return null;
+        } else {
+            return null;
+        }
+    };
 
 
     var getToken = function () {
@@ -183,13 +205,13 @@ var auth = function () {
         return null;
     };
     return auth;
-}();
-$(function() {
+} ();
+$(function () {
     $("#btn_register").click(auth.register);
+    $("#btn_couponauth").click(auth.addCoupon);
     $("#btn_login").click(auth.login);
-    $("#login-modal input[type=password]").keyup(function(e){
-        if(e.keyCode == 13)
-        {
+    $("#login-modal input[type=password]").keyup(function (e) {
+        if (e.keyCode == 13) {
             auth.login();
         }
     });
@@ -205,7 +227,7 @@ $(function() {
     $("#btn_verifyPass").click(function (e) {
         var emailAddress = $("#forgot__email-address").val();
         if (emailAddress) {
-            auth.forgotPassword(emailAddress,function(){
+            auth.forgotPassword(emailAddress, function () {
                 $.closeModal();
                 $.createToast("A password reset link has been sent to you");
             });

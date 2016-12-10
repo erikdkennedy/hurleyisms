@@ -63,7 +63,10 @@ $(document).ready(function () {
     var setPage = function () {
         $("body").toggleClass("is-monthly", auth.isMonthly());
         $("body").toggleClass("is-lifetime", auth.isLifeTime());
-        
+        $("#coupon-code").val(auth.coupon())
+        $("#btn_checkout").click(function(){
+            window.lifetime = true;
+            stripe.launch()});
         if (auth.isLifeTime() || auth.isMonthly()) {
             $(".if-purgatory").hide();
         } else {
@@ -88,7 +91,6 @@ $(document).ready(function () {
         });
     });
 
-    $("#btnLifeTime").click(function () { stripe.launchlifetime(auth.loggedInEmail()); });
     $(".privacy").click(function () {
         window.open("/privacy")
     });

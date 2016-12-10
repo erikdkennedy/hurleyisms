@@ -49,7 +49,8 @@
     };
     stripe.launchlifetime = function (email) {
         var total = 9900
-        if (window.coupon) {
+        var coupon = auth.coupon();
+        if (coupon) {
             total = convertAmountForCoupon(total, window.coupon)
         }
         // Open Checkout with further options:
@@ -63,7 +64,8 @@
     };
     stripe.launchmonthly = function (email) {
         var total = 499
-        if (window.coupon) {
+        var coupon = auth.coupon();
+        if (coupon) {
             total = convertAmountForCoupon(total, window.coupon)
         }
         stripe.handler.open({
@@ -78,5 +80,6 @@
     $(window).on('popstate', function () {
         stripe.handler.close();
     });
+    $("#btn_checkout").click(stripe.launch);
     return stripe;
 }();
