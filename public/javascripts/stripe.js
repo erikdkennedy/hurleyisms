@@ -80,6 +80,6 @@
     $(window).on('popstate', function () {
         stripe.handler.close();
     });
-    $("#btn_checkout").click(stripe.launch);
+   
     return stripe;
 }();
