@@ -8,7 +8,8 @@ router.post("/", function (req, res) {
         stripe.events.retrieve(req.body.id, function (err, event_recv) {
             if (err) {
                 console.error(err);
-                res.sendStatus(404);
+                //We need to fail with a 200 so that stripe will keep sending
+                res.sendStatus(200);
             }
             else {
                 var event = {};
