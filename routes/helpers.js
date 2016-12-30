@@ -43,6 +43,7 @@ function ensureAdmin(req, res, next) {
 }
 function databaseQueryTimeout(req, res, next) {
   if (mongoose.connection.readyState !== 1) {
+    console.error("Testing error here");
     return res.status(500).json({error: "query timed out"});
   }
   next();
@@ -72,6 +73,29 @@ function getIpAddress(req){
             req.connection.socket.remoteAddress;
 }
 
+
+var sendErrorResponse = function(res,status,errorMessage)
+{
+    res.status(status);
+    res.json({"error": errorMessage});
+}
+
+var sendJSONResponse = function (res, status, content) {
+    res.status(status);
+    res.json(content);
+};
+var sendUpdateCookie = function (res, user, content) {
+    setCookie(res, user);
+    sendJSONResponse(res, 200, content);
+};
+
+var setCookie = function (res, user) {
+    token = user.generateJwt();
+    res.cookie('auth', token, {
+        secure: true,
+        maxAge: 604800000
+    });
+};
 module.exports = {
     ensureAuthenticated: ensureAuthenticated,
     ensureAdmin: ensureAdmin,
@@ -81,5 +105,9 @@ module.exports = {
     onlyLoggedIn: onlyLoggedIn,
     isPro: isPro,
     databaseQueryTimeout:databaseQueryTimeout,
-    getIpAddress:getIpAddress
+    getIpAddress:getIpAddress,
+    sendErrorResponse:sendErrorResponse,
+    sendJSONResponse:sendJSONResponse,
+    sendUpdateCookie:sendUpdateCookie,
+    setCookie:setCookie
 };

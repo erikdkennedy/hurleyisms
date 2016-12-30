@@ -9,22 +9,8 @@ var xssFilters = require('xss-filters');
 var email = require("./email");
 var crypto = require('crypto');
 
-var sendJSONresponse = function (res, status, content) {
-    res.status(status);
-    res.json(content);
-};
-var sendUpdateCookie = function (res, user, content) {
-    setCookie(res, user);
-    sendJSONresponse(res, 200, content);
-};
 
-var setCookie = function (res, user) {
-    token = user.generateJwt();
-    res.cookie('auth', token, {
-        secure: true,
-        maxAge: 604800000
-    });
-};
+
 var getUser = function (req, res, callback) {
     if (req.payload && req.payload.email) {
         User
@@ -33,19 +19,19 @@ var getUser = function (req, res, callback) {
             })
             .exec(function (err, user) {
                 if (!user) {
-                    sendJSONresponse(res, 404, {
+                    helpers.sendJSONResponse(res, 404, {
                         "message": "User not found"
                     });
                     return;
                 } else if (err) {
                     console.log(err);
-                    sendJSONresponse(res, 404, err);
+                    helpers.sendJSONResponse(res, 404, err);
                     return;
                 }
                 callback(req, res, user);
             });
     } else {
-        sendJSONresponse(res, 404, {
+        helpers.sendJSONResponse(res, 404, {
             "message": "User not found"
         });
         return;
@@ -88,32 +74,41 @@ var convertAmountForCoupon = function (amount, coupon) {
 router.post('/register', function (req, res) {
     if (!req.body.name || !req.body.email || !req.body.password) {
         console.log("All fields are not present");
-        sendJSONresponse(res, 400, {
-            "message": "All fields required"
+        helpers.sendJSONResponse(res, 400, {
+            "error": "All fields required"
         });
         return;
     }
     getCoupon(req.body.couponcode, function (coupon) {
         //If they presented a coupon but the coupon does not exist then send an error
         if (!coupon && req.body.coupon) {
-            sendJSONresponse(res, 400, {
-                "message": "Invalid Coupon"
+            helpers.sendJSONResponse(res, 400, {
+                "error": "Invalid Coupon"
             });
             return;
         }
 
         if (coupon && !coupon.valid) {
-            sendJSONresponse(res, 400, {
-                "message": "Coupon is no longer valid"
+            helpers.sendJSONResponse(res, 400, {
+                "error": "Coupon is no longer valid"
             });
             return;
         }
+        var user = new User();
         if (coupon && coupon.valid) {
+            console.log(coupon)
             var clientCoupon = {};
             clientCoupon["amount_off"] = coupon.amount_off;
             clientCoupon["percent_off"] = coupon.percent_off;
+            if(coupon.percent_off === 100)
+            {
+                //We do not need to show a Credit Card prompt because there is no charge
+                console.log("Trial User Created");
+                user.pro = true;
+                user.type = "trial";
+                user.prodate = Date.now();
+            }
         }
-        var user = new User();
         user.name = xssFilters.inHTMLData(req.body.name);
         user.email = xssFilters.inHTMLData(req.body.email);
         if (coupon) {
@@ -123,11 +118,11 @@ router.post('/register', function (req, res) {
         user.setPassword(req.body.password);
         user.save(function (err) {
             if (err) {
-                console.log("error creating mongo user");
-                sendJSONresponse(res, 404, err);
+                console.log();
+                helpers.sendErrorResponse(res, 500, "This email has already been taken.  <a href='#' data-modal='login-modal'>Login</a> if it's yours");
             } else {
                 email.sendInitialEmail(user, function () {
-                    sendUpdateCookie(res, user, {
+                    helpers.sendUpdateCookie(res, user, {
                         status: 'success',
                         coupon: clientCoupon
                     });
@@ -139,7 +134,7 @@ router.post('/register', function (req, res) {
 });
 router.post('/login', function (req, res) {
     if (!req.body.email || !req.body.password) {
-        sendJSONresponse(res, 400, {
+        helpers.sendJSONResponse(res, 400, {
             "message": "All fields required"
         });
         return;
@@ -149,27 +144,27 @@ router.post('/login', function (req, res) {
         var token;
 
         if (err) {
-            sendJSONresponse(res, 404, err);
+            helpers.sendJSONResponse(res, 404, err);
             return;
         }
 
         if (user) {
-            sendUpdateCookie(res, user, {
+            helpers.sendUpdateCookie(res, user, {
                 status: 'success'
             });
         } else {
-            sendJSONresponse(res, 401, info);
+            helpers.sendJSONResponse(res, 401, info);
         }
 
     })(req, res);
 });
 router.post('/lifetime', helpers.onlyLoggedIn, function (req, res) {
     if (!(req.payload && req.payload.email)) {
-        sendJSONresponse(res, 401);
+        helpers.sendJSONResponse(res, 401);
         return;
     }
     if (!req.body.token) {
-        sendJSONresponse(res, 400, {
+        helpers.sendJSONResponse(res, 400, {
             "message": "All fields required"
         });
         return;
@@ -177,7 +172,7 @@ router.post('/lifetime', helpers.onlyLoggedIn, function (req, res) {
     getUser(req, res, function (req, res, user) {
         var wasMonthly = false;
         if (user.isLifetime()) {
-            sendJSONresponse(res, 404, {
+            helpers.sendJSONResponse(res, 404, {
                 error: "You are already a lifetime subscriber"
             });
             return;
@@ -201,7 +196,7 @@ router.post('/lifetime', helpers.onlyLoggedIn, function (req, res) {
             }, function (err, charge) {
                 if (err && err.type === 'StripeCardError') {
                     // The card has been declined
-                    sendJSONresponse(res, 401, {
+                    helpers.sendJSONResponse(res, 401, {
                         error: "Card was declined",
                         declined: true
                     });
@@ -213,16 +208,16 @@ router.post('/lifetime', helpers.onlyLoggedIn, function (req, res) {
                 user.prodate = Date.now();
                 user.save(function (err) {
                     if (err) {
-                        sendJSONresponse(res, 404, err);
+                        helpers.sendJSONResponse(res, 404, err);
                     } else {
                         if (wasMonthly) {
                             email.sendUpgradeEmail(user, function () {
-                                sendUpdateCookie(res, user, {
+                                helpers.sendUpdateCookie(res, user, {
                                     status: 'success'
                                 });
                             });
                         } else {
-                            sendUpdateCookie(res, user, {
+                            helpers.sendUpdateCookie(res, user, {
                                 status: 'success'
                             });
                         }
@@ -235,24 +230,24 @@ router.post('/lifetime', helpers.onlyLoggedIn, function (req, res) {
 });
 router.post('/monthly', helpers.onlyLoggedIn, function (req, res) {
     if (!(req.payload && req.payload.email)) {
-        sendJSONresponse(res, 401);
+        helpers.sendJSONResponse(res, 401);
         return;
     }
     if (!req.body.token) {
-        sendJSONresponse(res, 400, {
+        helpers.sendJSONResponse(res, 400, {
             "message": "All fields required"
         });
         return;
     }
     getUser(req, res, function (req, res, user) {
         if (user.isMonthly()) {
-            sendJSONresponse(res, 404, {
+            helpers.sendJSONResponse(res, 404, {
                 error: "You are already a monthly subscriber"
             });
             return;
         }
         if (user.isLifetime()) {
-            sendJSONresponse(res, 404, {
+            helpers.sendJSONResponse(res, 404, {
                 error: "You are already a lifetime subscriber"
             });
             return;
@@ -270,14 +265,14 @@ router.post('/monthly', helpers.onlyLoggedIn, function (req, res) {
             if (err && err.type === 'StripeCardError') {
                 // The card has been declined
                 //TODO: Stop further execution
-                sendJSONresponse(res, 401, {
+                helpers.sendJSONResponse(res, 401, {
                     error: "Card was declined",
                     declined: true
                 });
                 return;
             }
             if (err) {
-                sendJSONresponse(res, 401, {
+                helpers.sendJSONResponse(res, 401, {
                     error: "Error processing payment",
                     declined: true
                 });
@@ -290,9 +285,9 @@ router.post('/monthly', helpers.onlyLoggedIn, function (req, res) {
             user.prodate = Date.now();
             user.save(function (err) {
                 if (err) {
-                    sendJSONresponse(res, 404, err);
+                    helpers.sendJSONResponse(res, 404, err);
                 } else {
-                    sendUpdateCookie(res, user, {
+                    helpers.sendUpdateCookie(res, user, {
                         status: 'success'
                     });
                 }
@@ -303,7 +298,7 @@ router.post('/monthly', helpers.onlyLoggedIn, function (req, res) {
 router.post('/cancel', helpers.onlyLoggedIn, function (req, res) {
     getUser(req, res, function (req, res, user) {
         if (!user.isMonthly()) {
-            sendJSONresponse(res, 404, {
+            helpers.sendJSONResponse(res, 404, {
                 error: "You are not a monthly subscriber"
             });
             return;
@@ -315,17 +310,17 @@ router.post('/cancel', helpers.onlyLoggedIn, function (req, res) {
                 user.type = undefined;
                 user.save(function (err) {
                     if (err) {
-                        sendJSONresponse(res, 404, err);
+                        helpers.sendJSONResponse(res, 404, err);
                     } else {
                         email.sendCancellationEmail(user, function () {
-                            sendUpdateCookie(res, user, {
+                            helpers.sendUpdateCookie(res, user, {
                                 status: 'success'
                             })
                         });
                     }
                 });
             } else {
-                sendJSONresponse(res, 404, error);
+                helpers.sendJSONResponse(res, 404, error);
             }
 
         });
@@ -336,7 +331,7 @@ router.post('/cancel', helpers.onlyLoggedIn, function (req, res) {
 router.get('/verifyemail', helpers.onlyLoggedIn, function (req, res) {
     getUser(req, res, function (req, res, user) {
         email.sendVerifyEmail(user, function () {
-            sendUpdateCookie(res, user, {
+            helpers.sendUpdateCookie(res, user, {
                 status: 'success'
             });
         });
@@ -344,7 +339,7 @@ router.get('/verifyemail', helpers.onlyLoggedIn, function (req, res) {
 });
 router.post('/email', helpers.onlyLoggedIn, function (req, res) {
     if (!req.body.email) {
-        sendJSONresponse(res, 400, {
+        helpers.sendJSONResponse(res, 400, {
             "message": "All fields required"
         });
         return;
@@ -356,10 +351,10 @@ router.post('/email', helpers.onlyLoggedIn, function (req, res) {
         user.save(function (err) {
             if (err) {
 
-                sendJSONresponse(res, 404, err);
+                helpers.sendJSONResponse(res, 404, err);
             } else {
                 email.sendInitialEmail(user, function () {
-                    sendUpdateCookie(res, user, {
+                    helpers.sendUpdateCookie(res, user, {
                         status: 'success'
                     });
                 });
@@ -369,7 +364,7 @@ router.post('/email', helpers.onlyLoggedIn, function (req, res) {
 });
 router.post('/password', helpers.onlyLoggedIn, function (req, res) {
     if (!req.body.password) {
-        sendJSONresponse(res, 400, {
+        helpers.sendJSONResponse(res, 400, {
             "message": "All fields required"
         });
         return;
@@ -378,9 +373,9 @@ router.post('/password', helpers.onlyLoggedIn, function (req, res) {
         user.setPassword(req.body.password);
         user.save(function (err) {
             if (err) {
-                sendJSONresponse(res, 404, err);
+                helpers.sendJSONResponse(res, 404, err);
             } else {
-                sendUpdateCookie(res, user, {
+                helpers.sendUpdateCookie(res, user, {
                     status: 'success'
                 });
             }
@@ -394,9 +389,9 @@ router.post('/coupon', helpers.onlyLoggedIn, function (req, res) {
                 user.couponcode = req.body.couponcode;
                 user.save(function (err) {
                     if (err) {
-                        sendJSONresponse(res, 404, err);
+                        helpers.sendJSONResponse(res, 404, err);
                     } else {
-                        sendUpdateCookie(res, user, {
+                        helpers.sendUpdateCookie(res, user, {
                             status: 'success', coupon:coupon
                         });
                     }
@@ -407,13 +402,13 @@ router.post('/coupon', helpers.onlyLoggedIn, function (req, res) {
 });
 router.post('/logout', function (req, res) {
     res.clearCookie('auth');
-    sendJSONresponse(res, 200, {
+    helpers.sendJSONResponse(res, 200, {
         status: 'success'
     });
 });
 router.post('/forgotPassword', function (req, res) {
     if (!req.body.email) {
-        sendJSONresponse(res, 400, {
+        helpers.sendJSONResponse(res, 400, {
             "message": "email required"
         });
         return;
@@ -425,17 +420,17 @@ router.post('/forgotPassword', function (req, res) {
         })
         .exec(function (err, user) {
             if (!user) {
-                sendJSONresponse(res, 404, {
+                helpers.sendJSONResponse(res, 404, {
                     "message": "User not found"
                 });
                 return;
             } else if (err) {
                 console.log(err);
-                sendJSONresponse(res, 404, err);
+                helpers.sendJSONResponse(res, 404, err);
                 return;
             }
             email.sendPasswordEmail(user, function () {
-                sendJSONresponse(res, 200, {
+                helpers.sendJSONResponse(res, 200, {
                     status: "success"
                 });
             });

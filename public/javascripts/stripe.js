@@ -13,12 +13,7 @@
             $.post(postUrl, {
                 token: token.id
             }).done(function (data) {
-                $.createToast("Thanks for joining Hurleyisms Pro.  We're redirecting you <a href='app'>back to the app</a> in a few seconds", 5000);
-
-                console.log('redirecting');
-                setTimeout(function () {
-                    document.location.href = '/app';
-                }, 5000);
+               stripe.finish();
             }).
             error(function (error) {
                 $.createToast("There was a problem processing your card. Please <a href='javascript:stripe.launch()'>try again</a>", 10000);
@@ -37,6 +32,16 @@
         }
 
         return amount;
+    }
+    //Executed when the transaction is complete
+    stripe.finish = function()
+    {
+        $.createToast("Thanks for joining Hurleyisms Pro.  We're redirecting you <a href='app'>back to the app</a> in a few seconds", 5000);
+
+                console.log('redirecting');
+                setTimeout(function () {
+                    document.location.href = '/app';
+                }, 5000);
     }
     stripe.launch = function (e) {
         if (e) e.preventDefault();

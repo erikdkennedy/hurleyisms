@@ -19,13 +19,25 @@ var auth = function () {
             if (coupon) user.couponcode = coupon;
             $.post('auth/register', user)
                 .done(function (data) {
-                    if (data.coupon) {
-                        window.coupon = data.coupon;
-                    }                    //TODO Andrew, distinguish this flow for mobile vs. non-mobile users
-                    $.openModal("checkout-modal");
+                   
+                    if(auth.isPro())
+                    {
+                        $.closeModal();
+                        stripe.finish();
+                    }   
+                    else
+                    {
+                         if (data.coupon) {
+                            window.coupon = data.coupon;
+                        }
+                        $.openModal("checkout-modal");
+                    }                
+                    
                 })
-                .error(function (error) {
-                    $("#signup-modal input[type=email]").addError("This email has already been taken.  <a href='#' data-modal='login-modal'>Login</a> if it's yours");
+                .fail(function (error, status,data) {
+                    if(error.responseJSON){
+                        $("#signup-modal input[type=email]").addError(error.responseJSON.error);
+                    }   
                 });
         }
     };
