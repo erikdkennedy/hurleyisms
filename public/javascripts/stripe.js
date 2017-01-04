@@ -13,12 +13,7 @@
             $.post(postUrl, {
                 token: token.id
             }).done(function (data) {
-                $.createToast("Thanks for joining Hurleyisms Pro.  We're redirecting you <a href='app'>back to the app</a> in a few seconds", 5000);
-
-                console.log('redirecting');
-                setTimeout(function () {
-                    document.location.href = '/app';
-                }, 5000);
+               stripe.finish();
             }).
             error(function (error) {
                 $.createToast("There was a problem processing your card. Please <a href='javascript:stripe.launch()'>try again</a>", 10000);
@@ -38,6 +33,16 @@
 
         return amount;
     }
+    //Executed when the transaction is complete
+    stripe.finish = function()
+    {
+        $.createToast("Thanks for joining Hurleyisms Pro.  We're redirecting you <a href='app'>back to the app</a> in a few seconds", 5000);
+
+                console.log('redirecting');
+                setTimeout(function () {
+                    document.location.href = '/app';
+                }, 5000);
+    }
     stripe.launch = function (e) {
         if (e) e.preventDefault();
         $.closeModal();
@@ -49,7 +54,8 @@
     };
     stripe.launchlifetime = function (email) {
         var total = 9900
-        if (window.coupon) {
+        var coupon = auth.coupon();
+        if (coupon) {
             total = convertAmountForCoupon(total, window.coupon)
         }
         // Open Checkout with further options:
@@ -63,7 +69,8 @@
     };
     stripe.launchmonthly = function (email) {
         var total = 499
-        if (window.coupon) {
+        var coupon = auth.coupon();
+        if (coupon) {
             total = convertAmountForCoupon(total, window.coupon)
         }
         stripe.handler.open({
@@ -78,5 +85,6 @@
     $(window).on('popstate', function () {
         stripe.handler.close();
     });
+   
     return stripe;
 }();

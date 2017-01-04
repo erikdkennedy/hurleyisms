@@ -146,7 +146,8 @@ var forceHttps = function (req, res, next) {
     if (req.secure || req.headers['x-forwarded-proto'] === 'https' || req.headers['x-arr-ssl']) {
         next();
     } else {
-        console.log('Request made over HTTP, redirecting to HTTPS');
+        console.log('Request made over HTTP, redirecting to HTTPS '+req.hostname);
+        
         res.redirect('https://' + req.hostname);
     }
 };
@@ -200,7 +201,7 @@ app.use(function (req, res, next) {
 
 // development error handler
 // will print stacktrace
-if (app.get('env') === 'development') {
+if(process.env.NODE_ENV === 'development') {
     app.use(function (err, req, res, next) {
         console.error(err);
         res.status(err.status || 500)
@@ -214,6 +215,7 @@ if (app.get('env') === 'development') {
 // production error handler
 // no stacktraces leaked to user
 app.use(function (err, req, res, next) {
+    console.log("in prod error handler");
     res.status(err.status || 500)
         .send({
             message: err.message,

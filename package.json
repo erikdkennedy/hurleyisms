@@ -6,7 +6,8 @@
     "start": "node ./bin/www",
     "load": "node ./models/load.js",
     "remove-all-lines": "node ./models/removelines",
-    "remove-all-users": "node ./models/removeUsers"
+    "remove-all-users": "node ./models/removeUsers",
+    "test-user": "node ./models/couponUser.js"
   },
   "dependencies": {
     "body-parser": "~1.13.2",
