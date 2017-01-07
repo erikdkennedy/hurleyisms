@@ -84,10 +84,21 @@ var sendUpgradeEmail = function (user, callback) {
         callback();
     });
 }
+var sendVIPEmail = function (user, callback) {
+    var request = sg.emptyRequest();
+    getBaseRequest(request, user);
+    request.body.personalizations[0].substitutions.email_url = email_url;
+    request.body.template_id = "ade58951-549e-4d21-9961-b79bf89419b2";
+    request.body.subject = "Welcome to Hurleyisms";
+    sg.API(request, function (response) {
+        callback();
+    });
+}
 module.exports = {
     sendInitialEmail: sendInitialEmail,
     sendVerifyEmail: sendVerifyEmail,
     sendPasswordEmail: sendPasswordEmail,
     sendCancellationEmail: sendCancellationEmail,
-    sendUpgradeEmail: sendUpgradeEmail
+    sendUpgradeEmail: sendUpgradeEmail,
+    sendVIPEmail:sendVIPEmail
 };

@@ -9,6 +9,7 @@ var xssFilters = require('xss-filters');
 var email = require("./email");
 var crypto = require('crypto');
 
+var vip = require("./vip");
 
 
 var getUser = function (req, res, callback) {
@@ -79,7 +80,7 @@ router.post('/register', function (req, res) {
         });
         return;
     }
-    getCoupon(req.body.couponcode, function (coupon) {
+    getCoupon(req.body.couponcode.trim(), function (coupon) {
         //If they presented a coupon but the coupon does not exist then send an error
         if (!coupon && req.body.coupon) {
             helpers.sendJSONResponse(res, 400, {
@@ -95,20 +96,6 @@ router.post('/register', function (req, res) {
             return;
         }
         var user = new User();
-        if (coupon && coupon.valid) {
-            console.log(coupon)
-            var clientCoupon = {};
-            clientCoupon["amount_off"] = coupon.amount_off;
-            clientCoupon["percent_off"] = coupon.percent_off;
-            if(coupon.percent_off === 100)
-            {
-                //We do not need to show a Credit Card prompt because there is no charge
-                console.log("Trial User Created");
-                user.pro = true;
-                user.type = "trial";
-                user.prodate = Date.now();
-            }
-        }
         user.name = xssFilters.inHTMLData(req.body.name);
         user.email = xssFilters.inHTMLData(req.body.email);
         if (coupon) {
@@ -116,6 +103,18 @@ router.post('/register', function (req, res) {
         }
         user.signupip = helpers.getIpAddress(req);
         user.setPassword(req.body.password);
+        if (coupon && coupon.valid) {
+            console.log(coupon)
+            var clientCoupon = {};
+            clientCoupon["amount_off"] = coupon.amount_off;
+            clientCoupon["percent_off"] = coupon.percent_off;
+            if(coupon.percent_off === 100)
+            {
+                vip.createVIPMembership(user,req,res);
+                return;
+            }
+        }
+        
         user.save(function (err) {
             if (err) {
                 console.log();
