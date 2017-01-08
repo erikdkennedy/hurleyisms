@@ -12,17 +12,31 @@ var createVIPMembership = function (user, req, res) {
     user.pro = true;
     user.type = "vip";
     user.prodate = Date.now();
-    user.save(function (err) {
-        if (err) {
-            console.log();
-            helpers.sendErrorResponse(res, 500, "This email has already been taken.  <a href='#' data-modal='login-modal'>Login</a> if it's yours");
-        } else {
-            email.sendInitialEmail(user, function () {
-                helpers.sendUpdateCookie(res, user, {
-                    status: 'success'
-                });
-            });
+    var customerReq = {
+        plan: "HurleyismsVIP",
+        email: user.email
+    };
+    if (user.couponcode) {
+        customerReq.coupon = user.couponcode
+    };
+    stripe.customers.create(customerReq, function (stripeerr, customer) {
+        if(stripeerr)
+        {
+            helpers.sendErrorResponse(res,500,"User could not be created");
+            return;
         }
+        user.save(function (err) {
+            if (err) {
+                console.log();
+                helpers.sendErrorResponse(res, 500, "This email has already been taken.  <a href='#' data-modal='login-modal'>Login</a> if it's yours");
+            } else {
+                email.sendVIPEmail(user, function () {
+                    helpers.sendUpdateCookie(res, user, {
+                        status: 'success'
+                    });
+                });
+            }
+        });
     });
 }
 

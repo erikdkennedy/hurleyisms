@@ -104,7 +104,6 @@ router.post('/register', function (req, res) {
         user.signupip = helpers.getIpAddress(req);
         user.setPassword(req.body.password);
         if (coupon && coupon.valid) {
-            console.log(coupon)
             var clientCoupon = {};
             clientCoupon["amount_off"] = coupon.amount_off;
             clientCoupon["percent_off"] = coupon.percent_off;
