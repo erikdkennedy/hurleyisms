@@ -17,7 +17,6 @@ router.get('/', function (req, res) {
 router.get('/pro', function (req, res) {
     res.sendFile(path.join(__dirname, '../public', 'pro.html'));
 });
-
 router.get('/my-account', helpers.onlyLoggedIn, function (req, res) {
     res.sendFile(path.join(__dirname, '../public', 'my-account.html'));
 });
@@ -26,6 +25,9 @@ router.get('/terms', function (req, res) {
 });
 router.get('/privacy', function (req, res) {
     res.sendFile(path.join(__dirname, '../public', 'privacy.html'));
+});
+router.get('/vip', function (req, res) {
+    res.redirect("pro?vip=true");
 });
 
 module.exports = router;
