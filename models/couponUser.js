@@ -1,4 +1,4 @@
-require('dotenv').config();
+    require('dotenv').config();
 require('./db.js');
 var mongoose = require('mongoose');
 var userModel = mongoose.model('User');
@@ -17,10 +17,10 @@ userModel.remove({}, function (err, count) {
         __v: 0,
         customerid: "cus_9fFqBk3jpPHxRZ",
         pro: true,
-        prodate: "12/01/2016 06:15:02 AM (-0800)",
+        prodate: "01/06/2017 06:15:02 AM (-0800)",
         subscriptionid: "sub_9fFqpa36qSxGKa",
         token: "tok_19LvKyJKWqhH9miDaBziwTMo",
-        type: "monthly",
+        type: "lifetime",
         couponcode:"HeadShotCrew75"
        })
     user.save(function () {
