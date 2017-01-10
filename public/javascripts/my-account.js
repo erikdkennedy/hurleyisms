@@ -64,7 +64,7 @@ $(document).ready(function () {
             $("#vip").hide();
             $("#basic").hide();
             $("#cancle").hide();
-    console.log(auth.type() + " type");
+    //console.log(auth.type() + " type");
     switch(auth.type())
     {
         case "monthly":
@@ -103,9 +103,9 @@ $(document).ready(function () {
     setPage();
     var mthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     var pdate = auth.proDate();
-    console.log("prodate: "+pdate);
+    //console.log("prodate: "+pdate);
     if (pdate) {
-        console.log("have pdate");
+        //console.log("have pdate");
         $(".started").html("Started " + mthNames[pdate.getMonth()] + " " + pdate.getFullYear());
         $(".ending").html("Ending " + mthNames[pdate.getMonth()] + " " + (1 + pdate.getFullYear()));
     }
