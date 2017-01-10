@@ -80,7 +80,8 @@ router.post('/register', function (req, res) {
         });
         return;
     }
-    getCoupon(req.body.couponcode.trim(), function (coupon) {
+    if(req.body.couponcode){req.body.couponcode = req.body.couponcode.trim()}
+    getCoupon(req.body.couponcode, function (coupon) {
         //If they presented a coupon but the coupon does not exist then send an error
         if (!coupon && req.body.coupon) {
             helpers.sendJSONResponse(res, 400, {
