@@ -63,14 +63,20 @@ $(document).ready(function () {
             $("#monthly").hide();
             $("#vip").hide();
             $("#basic").hide();
+            $("#cancle").hide();
     console.log(auth.type() + " type");
     switch(auth.type())
     {
         case "monthly":
             $("#monthly").show();
+            $("#cancle").show();
+            $("body").toggleClass("is-monthly", true);
+            $("body").toggleClass("is-lifetime",false);
             break;
         case "lifetime":
             $("#lifetime").show();
+            $("body").toggleClass("is-lifetime",true);
+             $("body").toggleClass("is-monthly", false);
             break;
         case "vip":
             $("#vip").show();
