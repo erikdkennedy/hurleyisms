@@ -120,7 +120,20 @@ var auth = function () {
             return false;
         }
     };
+    auth.type = function() {
+       var token = getToken();
+        if (token) {
+            var payload = JSON.parse(window.atob(token.split('.')[1]));
+            if(payload.exp > Date.now() / 1000)
+            {
+                return payload.type;
 
+            }
+        else {
+            return null;
+        } 
+    }
+    }
     auth.isMonthly = function () {
         var token = getToken();
         if (token) {
