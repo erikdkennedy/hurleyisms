@@ -15,12 +15,9 @@ userModel.remove({}, function (err, count) {
         emailverified: false,
         joined: "12/01/2016 06:14:45 AM (-0800)",
         __v: 0,
-        customerid: "cus_9fFqBk3jpPHxRZ",
         pro: true,
         prodate: "12/01/2016 06:15:02 AM (-0800)",
-        subscriptionid: "sub_9fFqpa36qSxGKa",
-        token: "tok_19LvKyJKWqhH9miDaBziwTMo",
-        type: "monthly",
+        type: "trial",
         couponcode:"HeadShotCrew75"
        })
     user.save(function () {
