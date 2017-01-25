@@ -27,7 +27,7 @@ router.get('/privacy', function (req, res) {
     res.sendFile(path.join(__dirname, '../public', 'privacy.html'));
 });
 router.get('/vip', function (req, res) {
-    res.redirect("pro?vip=true");
+    res.redirect("pro?coupon=5DAYDEAL");
 });
 
 module.exports = router;
