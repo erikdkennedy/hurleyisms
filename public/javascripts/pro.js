@@ -38,12 +38,12 @@ $(document).ready(function () {
 		}
 		return false;
 	}
-
+	
 	//check for "Enter new password" query string
-	if (getQueryStringValue("vip") === "true") {
+	if (getQueryStringValue("coupon") !=false) {
 		window.lifetime = false;
-
+		console.log("Coupon is there");
 		$.openModal("signup-modal");
-
+		$("#coupon-code").val(getQueryStringValue("coupon"));
 	}
 });
