@@ -15,7 +15,6 @@ userModel.remove({}, function (err, count) {
         emailverified: false,
         joined: "12/01/2016 06:14:45 AM (-0800)",
         __v: 0,
-        customerid: "cus_9fFqBk3jpPHxRZ",
         pro: true,
         prodate: "01/06/2017 06:15:02 AM (-0800)",
         subscriptionid: "sub_9fFqpa36qSxGKa",
