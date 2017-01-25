@@ -1,5 +1,8 @@
 /// <reference path="public/javascripts/pro.js" />
+if(!process.env.NODE_ENV){
+    console.log("loading .env");
 require('dotenv').config();
+}
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
