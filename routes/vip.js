@@ -25,6 +25,7 @@ var createVIPMembership = function (user, req, res) {
             helpers.sendErrorResponse(res,500,"User could not be created");
             return;
         }
+        user.customerid = customer.id;
         user.save(function (err) {
             if (err) {
                 console.log();

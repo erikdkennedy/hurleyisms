@@ -5,6 +5,7 @@ var lines = mongoose.model('Line');
 var users = mongoose.model('User');
 var path = require('path');
 var helpers = require('./helpers');
+var vip = require("./vip");
 
 router.get('/', helpers.ensureAdmin, function (req, res, next) {
     res.sendFile(path.join(__dirname, '../public', 'admin.html'));
@@ -63,7 +64,32 @@ router.post('/:id/updatetext', helpers.ensureAdmin, function (req, res) {
         sendJSONresponse(res, 200, line);
     });
 });
-
+router.post('/makevip', helpers.ensureAdmin, function (req, res) {
+    if (!req.body.email) {
+        sendJSONresponse(res, 400, {
+            "message": "All fields required"
+        });
+        return;
+    }
+    users
+            .findOne({
+                email: req.body.email
+            })
+            .exec(function (err, user) {
+                if (!user) {
+                    helpers.sendJSONResponse(res, 404, {
+                        "message": "User not found"
+                    });
+                    return;
+                } else if (err) {
+                    console.log(err);
+                    helpers.sendJSONResponse(res, 404, err);
+                    return;
+                }
+                user.couponcode = "5DAYDEAL"
+                vip.createVIPMembership(user,req,res);
+            });
+});
 var modifyline = function (line) {
     if (line.indexOf("]") > -1 && line.indexOf("]") > -1) {
         line = line.replace("[", "<br/><I>-");
