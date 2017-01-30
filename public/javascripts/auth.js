@@ -57,21 +57,6 @@ var auth = function () {
             });
         }
     };
-    auth.addCoupon = function () {
-        var coupon = $("#coupon-code").val();
-        if (coupon) {
-            $.post('auth/coupon', { couponcode: coupon }).done(function (data) {
-                if (data.coupon) {
-                    window.coupon = data.coupon;
-                }
-                //TODO Andrew, distinguish this flow for mobile vs. non-mobile users
-                $.openModal("checkout-modal");
-            })
-                .error(function (error) {
-                    $("#coupon-modal input[type=text]").addError("This email has already been taken.  <a href='#' data-modal='login-modal'>Login</a> if it's yours");
-                });
-        }
-    }
     auth.logout = function () {
         $.post('auth/logout').done(function () {
             document.location.href = '/';
@@ -233,7 +218,6 @@ var auth = function () {
 } ();
 $(function () {
     $("#btn_register").click(auth.register);
-    $("#btn_couponauth").click(auth.addCoupon);
     $("#btn_login").click(auth.login);
     $("#login-modal input[type=password]").keyup(function (e) {
         if (e.keyCode == 13) {

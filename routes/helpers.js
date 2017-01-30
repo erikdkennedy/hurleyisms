@@ -86,16 +86,6 @@ function getCoupon (req, res, next) {
     return next();
   }
 }
-function findUserByCustId (req, res, next) {
-  if (req.body && req.body.customerid) {
-    User.findOne({ customerid: req.customer }).exec(function (err, user) {
-      if (!err && user) {
-        req.user = user
-        return next()
-      }
-    })
-  }
-}
 function databaseQueryTimeout (req, res, next) {
   if (mongoose.connection.readyState !== 1) {
     console.error('Testing error here')
@@ -164,6 +154,5 @@ module.exports = {
   sendJSONResponse: sendJSONResponse,
   sendUpdateCookie: sendUpdateCookie,
   setCookie: setCookie,
-  findUserByCustId: findUserByCustId,
   getCoupon:getCoupon
 }
