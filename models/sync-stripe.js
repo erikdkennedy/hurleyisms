@@ -1,24 +1,76 @@
-require('dotenv').config()
+require('dotenv').config({path:"/Users/andrew/Development/hurleyisms/prod.env"})
 require('./db.js')
 var mongoose = require('mongoose')
 var userModel = mongoose.model('User')
 var stripe = require('stripe')(process.env.STRIPE_KEY)
 
 var customers = []
-
-function queryCustomers (lastCustomer) {
-  var params = {limit: 100}
+var dupeCount = 0;
+function queryCustomers(lastCustomer) {
+  var params = { limit: 100 }
   if (lastCustomer) params.starting_after = lastCustomer
   stripe.customers.list(params, function (err, resp) {
-    console.log("recieved resp: " +resp.data.length)
+    if(err){
+  console.error(err)
+  process.exit();
+
+    }
+    console.log("recieved resp: " + resp.data.length)
     for (var x in resp.data) {
       customers.push(resp.data[x])
     }
     if (resp.data.length == 100) {
-      queryCustomers(resp.data[resp.data.length - 1])
-    }else {
-      console.log(customers)
+      queryCustomers(resp.data[resp.data.length - 1].id)
+    } else {
+      testDupes();
     }
   })
 }
+
+function findCustomer(email) {
+  var result = null;
+  for (var x in customers) {
+    var cust = customers[x];
+    if (cust.email == email) {
+      if (result) {
+        console.log(email);
+        dupeCount += 1;
+      }
+      result = cust;
+    }
+  }
+  return result;
+}
+function testDupes()
+{
+  console.log("dupes");
+  for(var x in customers)
+  {
+    findCustomer(customers[x].email);
+  }
+  console.log("dupe count " + dupeCount)
+  match();
+}
+function match() {
+  userModel.find({ customerid: { $exists: false } }, function (err, users) {
+    for (var x in users) {
+      var customer = findCustomer(users[x].email);
+      if (customer) {
+        if (customer.id == users[x].customerid) {
+          console.log(customer.email + " is in sync");
+        }
+        else {
+          console.error(customer.email + " is not in sync")
+          users[x].customerid = customer.id;
+          users[x].save();
+        }
+      }
+      else {
+        console.error(users[x].email + " is not in stripe");
+      }
+    }
+//process.exit();
+  })
+}
+
 queryCustomers();

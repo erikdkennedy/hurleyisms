@@ -33,6 +33,7 @@ function verifyCanRegister (req, res, next) {
       'error': 'All fields required'
     })
   }
+  req.body.email = req.body.email.toLowerCase();
   User.findOne({email: req.body.email}).exec(function (err, user) {
     if (err || !user) {
       return next()
@@ -42,7 +43,7 @@ function verifyCanRegister (req, res, next) {
   }
   )
 }
-router.post('/register', helpers.getCoupon, function (req, res) {
+router.post('/register', [helpers.getCoupon,verifyCanRegister], function (req, res) {
 
   // If they presented a coupon but the coupon does not exist then send an error
   if (!req.coupon && req.body.coupon) {
@@ -59,7 +60,7 @@ router.post('/register', helpers.getCoupon, function (req, res) {
   }
   var user = new User()
   user.name = xssFilters.inHTMLData(req.body.name)
-  user.email = xssFilters.inHTMLData(req.body.email)
+  user.email = xssFilters.inHTMLData(req.body.email).toLowerCase();
   user.signupip = helpers.getIpAddress(req)
   user.setPassword(req.body.password)
 
@@ -147,9 +148,9 @@ router.post('/lifetime', [helpers.onlyLoggedIn, helpers.getCoupon], function (re
 
   stripe.customers.update(req.user.customerid,
     {source: req.body.token}, function (err, customer) {
-      if(err){
-          helpers.sendErrorResponse(res, 400, "Could not update user");
-          return;
+      if (err) {
+        helpers.sendErrorResponse(res, 400, 'Could not update user')
+        return
       }
       stripe.charges.create({
         amount: amount, // amount in cents
@@ -214,48 +215,55 @@ router.post('/monthly', [helpers.onlyLoggedIn, helpers.getCoupon], function (req
     return
   }
   req.user.token = req.body.token
-  var customerReq = {
-    source: req.user.token,
-    plan: 'Monthly',
-    email: req.user.email
-  }
-  if (req.coupon) {
-    customerReq.coupon = req.coupon.id
-  }
-  stripe.customers.create(customerReq, function (err, customer) {
-    if (err && err.type === 'StripeCardError') {
-      console.error(err)
-      // The card has been declined
-      // TODO: Stop further execution
-      helpers.sendJSONResponse(res, 401, {
-        error: 'Card was declined',
-        declined: true
-      })
-      return
-    }
-    if (err) {
-      console.error(err)
-      helpers.sendJSONResponse(res, 401, {
-        error: 'Error processing payment',
-        declined: true
-      })
-      return
-    }
-    req.user.pro = true
-    req.user.customerid = customer.id,
-    req.user.subscriptionid = customer.subscriptions.data[0].id
-    req.user.type = 'monthly'
-    req.user.prodate = Date.now()
-    req.user.save(function (err) {
+
+  stripe.customers.update(req.user.customerid,
+    {source: req.body.token}, function (err, customer) {
       if (err) {
-        helpers.sendJSONResponse(res, 404, err)
-      } else {
-        helpers.sendUpdateCookie(res, req.user, {
-          status: 'success'
-        })
+        helpers.sendErrorResponse(res, 400, 'Could not update user')
+        return
       }
+      var customerReq = {
+        customer: req.user.customerid,
+        plan: 'Monthly'
+      }
+      if (req.coupon) {
+        customerReq.coupon = req.coupon.id
+      }
+      stripe.subscriptions.create(customerReq, function (err, sub) {
+        if (err && err.type === 'StripeCardError') {
+          console.error(err)
+          // The card has been declined
+          // TODO: Stop further execution
+          helpers.sendJSONResponse(res, 401, {
+            error: 'Card was declined',
+            declined: true
+          })
+          return
+        }
+        if (err) {
+          console.error(err)
+          helpers.sendJSONResponse(res, 401, {
+            error: 'Error processing payment',
+            declined: true
+          })
+          return
+        }
+        req.user.pro = true
+
+        req.user.subscriptionid = sub.id
+        req.user.type = 'monthly'
+        req.user.prodate = Date.now()
+        req.user.save(function (err) {
+          if (err) {
+            helpers.sendJSONResponse(res, 404, err)
+          } else {
+            helpers.sendUpdateCookie(res, req.user, {
+              status: 'success'
+            })
+          }
+        })
+      })
     })
-  })
 })
 router.post('/cancel', helpers.onlyLoggedIn, function (req, res) {
   var user = req.user
@@ -334,6 +342,22 @@ router.post('/password', helpers.onlyLoggedIn, function (req, res) {
         status: 'success'
       })
     }
+  })
+})
+router.post('/coupon', [helpers.onlyLoggedIn, helpers.getCoupon], function (req, res) {
+  if (!req.coupon || !req.user) {
+    helpers.sendErrorResponse(res, 404, 'Cannot find coupon')
+  }
+  req.user.couponcode = req.body.coupon
+  req.user.save(function (err) {
+    if (err) {
+      helpers.sendJSONResponse(res, 404, err)
+    } else {
+      helpers.sendUpdateCookie(res, req.user, {
+        status: 'success', coupon: req.coupon
+      })
+    }
+    return
   })
 })
 router.post('/logout', function (req, res) {
