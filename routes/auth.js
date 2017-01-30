@@ -144,51 +144,58 @@ router.post('/lifetime', [helpers.onlyLoggedIn, helpers.getCoupon], function (re
   if (req.coupon) {
     amount = convertAmountForCoupon(amount, req.coupon)
   }
-  stripe.charges.create({
-    amount: amount, // amount in cents
-    currency: 'usd',
-    source: req.user.token,
-    description: 'Life Time Access',
-    customer: req.user.customerid
-  }, function (err, charge) {
-    console.log('stripe error: ' + err)
-    if (err && err.type === 'StripeCardError') {
-      // The card has been declined
-      helpers.sendErrorResponse(res, 401, {
-        error: 'Card was declined',
-        declined: true
-      })
-      return
-    }
-    if (err) {
-      helpers.sendErrorResponse(res, 401, {
-        error: 'Transaction could not be processed',
-        declined: true
-      })
-      return
-    }
-    req.user.pro = true
-    if (charge) { req.user.chargeid = charge.id; }
-    req.user.type = 'lifetime'
-    req.user.prodate = Date.now()
-    req.user.save(function (err) {
-      if (err) {
-        helpers.sendJSONResponse(res, 404, err)
-      } else {
-        if (wasMonthly) {
-          email.sendUpgradeEmail(user, function () {
-            helpers.sendUpdateCookie(res, req.user, {
-              status: 'success'
-            })
-          })
-        } else {
-          helpers.sendUpdateCookie(res, req.user, {
-            status: 'success'
-          })
-        }
+
+  stripe.customers.update(req.user.customerid,
+    {source: req.body.token}, function (err, customer) {
+      if(err){
+          helpers.sendErrorResponse(res, 400, "Could not update user");
+          return;
       }
+      stripe.charges.create({
+        amount: amount, // amount in cents
+        currency: 'usd',
+        description: 'Life Time Access',
+        customer: req.user.customerid
+      }, function (err, charge) {
+        console.log('stripe error: ' + err)
+        if (err && err.type === 'StripeCardError') {
+          // The card has been declined
+          helpers.sendErrorResponse(res, 401, {
+            error: 'Card was declined',
+            declined: true
+          })
+          return
+        }
+        if (err) {
+          helpers.sendErrorResponse(res, 401, {
+            error: 'Transaction could not be processed',
+            declined: true
+          })
+          return
+        }
+        req.user.pro = true
+        if (charge) { req.user.chargeid = charge.id; }
+        req.user.type = 'lifetime'
+        req.user.prodate = Date.now()
+        req.user.save(function (err) {
+          if (err) {
+            helpers.sendJSONResponse(res, 404, err)
+          } else {
+            if (wasMonthly) {
+              email.sendUpgradeEmail(user, function () {
+                helpers.sendUpdateCookie(res, req.user, {
+                  status: 'success'
+                })
+              })
+            } else {
+              helpers.sendUpdateCookie(res, req.user, {
+                status: 'success'
+              })
+            }
+          }
+        })
+      })
     })
-  })
 })
 router.post('/monthly', [helpers.onlyLoggedIn, helpers.getCoupon], function (req, res) {
   if (!req.body.token) {
@@ -197,97 +204,95 @@ router.post('/monthly', [helpers.onlyLoggedIn, helpers.getCoupon], function (req
     })
     return
   }
- 
-    if (req.user.isMonthly()) {
-      helpers.sendErrorResponse(res, 404, 'You are already a monthly subscriber')
-      return
-    }
-    if (req.user.isLifetime()) {
-      helpers.sendJSONResponse(res, 404,'You are already a lifetime subscriber')
-      return
-    }
-    req.user.token = req.body.token
-    var customerReq = {
-      source: req.user.token,
-      plan: 'Monthly',
-      email: req.user.email
-    }
-    if (req.coupon) {
-      customerReq.coupon = req.coupon.id;
-    }
-    stripe.customers.create(customerReq, function (err, customer) {
-      if (err && err.type === 'StripeCardError') {
-        console.error(err);
-        // The card has been declined
-        // TODO: Stop further execution
-        helpers.sendJSONResponse(res, 401, {
-          error: 'Card was declined',
-          declined: true
-        })
-        return;
-      }
-      if (err) {
-          console.error(err);
-        helpers.sendJSONResponse(res, 401, {
-          error: 'Error processing payment',
-          declined: true
-        })
-        return;
-      }
-      req.user.pro = true
-      req.user.customerid = customer.id,
-      req.user.subscriptionid = customer.subscriptions.data[0].id
-      req.user.type = 'monthly'
-      req.user.prodate = Date.now()
-      req.user.save(function (err) {
-        if (err) {
-          helpers.sendJSONResponse(res, 404, err)
-        } else {
-          helpers.sendUpdateCookie(res, req.user, {
-            status: 'success'
-          })
-        }
+
+  if (req.user.isMonthly()) {
+    helpers.sendErrorResponse(res, 404, 'You are already a monthly subscriber')
+    return
+  }
+  if (req.user.isLifetime()) {
+    helpers.sendJSONResponse(res, 404, 'You are already a lifetime subscriber')
+    return
+  }
+  req.user.token = req.body.token
+  var customerReq = {
+    source: req.user.token,
+    plan: 'Monthly',
+    email: req.user.email
+  }
+  if (req.coupon) {
+    customerReq.coupon = req.coupon.id
+  }
+  stripe.customers.create(customerReq, function (err, customer) {
+    if (err && err.type === 'StripeCardError') {
+      console.error(err)
+      // The card has been declined
+      // TODO: Stop further execution
+      helpers.sendJSONResponse(res, 401, {
+        error: 'Card was declined',
+        declined: true
       })
+      return
+    }
+    if (err) {
+      console.error(err)
+      helpers.sendJSONResponse(res, 401, {
+        error: 'Error processing payment',
+        declined: true
+      })
+      return
+    }
+    req.user.pro = true
+    req.user.customerid = customer.id,
+    req.user.subscriptionid = customer.subscriptions.data[0].id
+    req.user.type = 'monthly'
+    req.user.prodate = Date.now()
+    req.user.save(function (err) {
+      if (err) {
+        helpers.sendJSONResponse(res, 404, err)
+      } else {
+        helpers.sendUpdateCookie(res, req.user, {
+          status: 'success'
+        })
+      }
+    })
   })
 })
 router.post('/cancel', helpers.onlyLoggedIn, function (req, res) {
- var user = req.user;
-    if (!user.isMonthly()) {
-      helpers.sendJSONResponse(res, 404, {
-        error: 'You are not a monthly subscriber'
-      })
-      return;
-    }
+  var user = req.user
+  if (!user.isMonthly()) {
+    helpers.sendJSONResponse(res, 404, {
+      error: 'You are not a monthly subscriber'
+    })
+    return
+  }
 
-    stripe.subscriptions.del(user.subscriptionid, function (error, confirmation) {
-      if (!error) {
-        user.pro = false
-        user.type = undefined
-        user.save(function (err) {
-          if (err) {
-            helpers.sendJSONResponse(res, 404, err)
-          } else {
-            email.sendCancellationEmail(user, function () {
-              helpers.sendUpdateCookie(res, user, {
-                status: 'success'
-              })
+  stripe.subscriptions.del(user.subscriptionid, function (error, confirmation) {
+    if (!error) {
+      user.pro = false
+      user.type = undefined
+      user.save(function (err) {
+        if (err) {
+          helpers.sendJSONResponse(res, 404, err)
+        } else {
+          email.sendCancellationEmail(user, function () {
+            helpers.sendUpdateCookie(res, user, {
+              status: 'success'
             })
-          }
-        })
-      } else {
-        helpers.sendJSONResponse(res, 404, error)
-      }
-    
+          })
+        }
+      })
+    } else {
+      helpers.sendJSONResponse(res, 404, error)
+    }
   })
 })
 router.get('/verifyemail', helpers.onlyLoggedIn, function (req, res) {
-  var user = req.user;
-    email.sendVerifyEmail(user, function () {
-      helpers.sendUpdateCookie(res, user, {
-        status: 'success'
-      })
+  var user = req.user
+  email.sendVerifyEmail(user, function () {
+    helpers.sendUpdateCookie(res, user, {
+      status: 'success'
     })
-  
+  })
 })
 router.post('/email', helpers.onlyLoggedIn, function (req, res) {
   if (!req.body.email) {
@@ -296,21 +301,20 @@ router.post('/email', helpers.onlyLoggedIn, function (req, res) {
     })
     return
   }
-  var user = req.user;
-    user.email = xssFilters.inHTMLData(req.body.email)
-    user.email_code = crypto.randomBytes(100).toString('hex')
-    user.emailverified = false
-    user.save(function (err) {
-      if (err) {
-        helpers.sendJSONResponse(res, 404, err)
-      } else {
-        email.sendInitialEmail(user, function () {
-          helpers.sendUpdateCookie(res, user, {
-            status: 'success'
-          })
+  var user = req.user
+  user.email = xssFilters.inHTMLData(req.body.email)
+  user.email_code = crypto.randomBytes(100).toString('hex')
+  user.emailverified = false
+  user.save(function (err) {
+    if (err) {
+      helpers.sendJSONResponse(res, 404, err)
+    } else {
+      email.sendInitialEmail(user, function () {
+        helpers.sendUpdateCookie(res, user, {
+          status: 'success'
         })
-      }
-    
+      })
+    }
   })
 })
 router.post('/password', helpers.onlyLoggedIn, function (req, res) {
@@ -320,17 +324,16 @@ router.post('/password', helpers.onlyLoggedIn, function (req, res) {
     })
     return
   }
-  var user = req.user;
-    user.setPassword(req.body.password)
-    user.save(function (err) {
-      if (err) {
-        helpers.sendJSONResponse(res, 404, err)
-      } else {
-        helpers.sendUpdateCookie(res, user, {
-          status: 'success'
-        })
-      }
-    
+  var user = req.user
+  user.setPassword(req.body.password)
+  user.save(function (err) {
+    if (err) {
+      helpers.sendJSONResponse(res, 404, err)
+    } else {
+      helpers.sendUpdateCookie(res, user, {
+        status: 'success'
+      })
+    }
   })
 })
 router.post('/logout', function (req, res) {
