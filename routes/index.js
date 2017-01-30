@@ -6,7 +6,7 @@ var helpers = require('./helpers');
 
 
 router.get('/', function (req, res) {
-    if (helpers.isLoggedIn(req)) {
+    if (req.user) {
         res.redirect("app");
     }
     else {
