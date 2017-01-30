@@ -36,9 +36,11 @@ router.post('/', findUserByCustId, function (req, res) {
       console.log(err)
       
       if (event_recv.type == 'customer.subscription.created') {
-        setSubscription(req, res, event_recv)
-        return;
+        setSubscription(req, res, event_recv, function(){
+
+        });
       }
+      else{res.sendStatus(200); return}
     })
   })
 })
