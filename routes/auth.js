@@ -148,7 +148,8 @@ router.post('/lifetime', [helpers.onlyLoggedIn, helpers.getCoupon], function (re
     amount: amount, // amount in cents
     currency: 'usd',
     source: req.user.token,
-    description: 'Life Time Access'
+    description: 'Life Time Access',
+    customer: req.user.customerid
   }, function (err, charge) {
     console.log('stripe error: ' + err)
     if (err && err.type === 'StripeCardError') {
