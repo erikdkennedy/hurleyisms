@@ -1,6 +1,6 @@
 ﻿var mongoose = require('mongoose')
 var User = mongoose.model('User')
-var stripe = require('stripe')(process.env.STRIPE_KEY);
+var stripe = require('stripe')(process.env.STRIPE_KEY)
 function ensureAuthenticated (req, res, next) {
   if (req.isAuthenticated()) {
     return next()
@@ -17,10 +17,9 @@ function loggedIn (req, res, next) {
         if (user && !err) {
           req.user = user
         }
-        else if(req.payload && req.payload.email)
-        {
-            //they had a valid auth cookie, but no user delete the cookie.
-            res.clearCookie('auth')
+        else if (req.payload && req.payload.email) {
+          // they had a valid auth cookie, but no user delete the cookie.
+          res.clearCookie('auth')
         }
         return next()
       }
@@ -34,27 +33,18 @@ function onlyLoggedIn (req, res, next) {
     return next()
   } else {
     res.status(401).json({
-    status: 'error',
-    message: 'You must log in first.'
-  });
-
+      status: 'error',
+      message: 'You must log in first.'
+    })
   }
 }
 function isPro (req) {
   return (req.user && req.user.pro)
 }
 function ensureAdmin (req, res, next) {
-  if (isLoggedIn(req) && req.payload.admin) {
-    User
-      .findOne({ email: req.payload.email })
-      .exec(function (err, user) {
-        if (!err && user && user.admin) {
-          return next()
-        } else {
-          res.status(401).json({ status: 'error', message: 'You are not an admin' })
-        }
-      })
-  } else {
+  if (req.user && req.user.admin) {
+    return next()
+  }else {
     res.status(401).json({ status: 'error', message: 'You are not an admin' })
   }
 }
@@ -63,7 +53,7 @@ function ensureAdmin (req, res, next) {
 function getCoupon (req, res, next) {
   // If coupon code is null, then return the null callback
   // case where coupon code is in request
-  console.log("Checking Coupon");
+  console.log('Checking Coupon')
   var code = null
   if (req.body.couponcode) {
     code = req.body.couponcode.trim().toUpperCase()
@@ -83,7 +73,7 @@ function getCoupon (req, res, next) {
     )
   } else {
     // no coupon that we can apply
-    return next();
+    return next()
   }
 }
 function databaseQueryTimeout (req, res, next) {
@@ -120,8 +110,8 @@ function getIpAddress (req) {
 
 var sendErrorResponse = function (res, status, errorMessage) {
   res.status(status)
-  res.json({ 'error': errorMessage });
-  res.end();
+  res.json({ 'error': errorMessage })
+  res.end()
 }
 
 var sendJSONResponse = function (res, status, content) {
@@ -141,7 +131,7 @@ var setCookie = function (res, user) {
   })
 }
 module.exports = {
-  loggedIn:loggedIn,
+  loggedIn: loggedIn,
   ensureAuthenticated: ensureAuthenticated,
   ensureAdmin: ensureAdmin,
   ensureAdminJSON: ensureAdminJSON,
@@ -154,5 +144,5 @@ module.exports = {
   sendJSONResponse: sendJSONResponse,
   sendUpdateCookie: sendUpdateCookie,
   setCookie: setCookie,
-  getCoupon:getCoupon
+  getCoupon: getCoupon
 }
