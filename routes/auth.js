@@ -230,6 +230,7 @@ router.post('/monthly', [helpers.onlyLoggedIn, helpers.getCoupon], function (req
         customerReq.coupon = req.coupon.id
       }
       stripe.subscriptions.create(customerReq, function (err, sub) {
+        console.log(sub)
         if (err && err.type === 'StripeCardError') {
           console.error(err)
           // The card has been declined
