@@ -17,12 +17,13 @@ function queryCustomers(lastCustomer) {
     }
     console.log("recieved resp: " + resp.data.length)
     for (var x in resp.data) {
+     // console.log(resp.data[x])
       customers.push(resp.data[x])
     }
     if (resp.data.length == 100) {
       queryCustomers(resp.data[resp.data.length - 1].id)
     } else {
-      testDupes();
+      updateSubscriptions();
     }
   })
 }
@@ -41,6 +42,44 @@ function findCustomer(email) {
   }
   return result;
 }
+function findCustomerbyid(id) {
+  var result = null;
+  for (var x in customers) {
+    var cust = customers[x];
+    if (cust.id == id) {
+      result = cust;
+    }
+  }
+  return result;
+}
+function updateSubscriptions()
+{
+    userModel.find({type:"monthly",pro:true, subscriptionid:{$regex:"si.*"}}, function (err, users) {
+    for(var x in users){
+      dbUser = users[x];
+      stUser = findCustomerbyid(dbUser.customerid)
+      if(stUser && stUser.subscriptions && stUser.subscriptions.data && stUser.subscriptions.data[0] && stUser.subscriptions.data[0].id)
+      {
+        var id = stUser.subscriptions.data[0].id
+        if(id !== dbUser.subscriptionid)
+        {
+          console.log(id + ","+ dbUser.subscriptionid);
+          dbUser.subscriptionid = id;
+          dbUser.save();
+        }
+      }
+      else{
+        console.log(dbUser.subscriptionid )
+        dbUser.pro = false
+        dbUser.prodate = undefined;
+        dbUser.type = undefined;
+        dbUser.subscriptionid = undefined;
+        dbUser.save();
+      }
+    }
+
+    });
+}
 function testDupes()
 {
   console.log("dupes");
@@ -52,7 +91,7 @@ function testDupes()
   match();
 }
 function match() {
-  userModel.find({ customerid: { $exists: false } }, function (err, users) {
+  userModel.find({ customerid: { $exists: true } }, function (err, users) {
     for (var x in users) {
       var customer = findCustomer(users[x].email);
       if (customer) {
