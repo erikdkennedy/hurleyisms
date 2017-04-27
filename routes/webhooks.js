@@ -48,8 +48,8 @@ function setSubscription (req, res, event) {
     console.log("subscription event");
   // get the subscription they have been added to
   if (req.user && event && event.data && event.data.object && event.data.object.items && event.data.object.items && event.data.object.items.data && event.data.object.items.data[0] && event.data.object.items.data[0].plan.id) {
-    var subscription = event.data.object.items.data[0].plan.id
-    req.user.subscriptionid = event.data.object.items.data[0].id
+    var subscription = event.data.object.items.data[0].plan.id;
+    req.user.subscriptionid = event.data.object.id;
     req.user.pro = true
     req.user.prodate = Date.now()
 
