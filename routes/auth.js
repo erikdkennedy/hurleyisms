@@ -183,7 +183,7 @@ router.post('/lifetime', [helpers.onlyLoggedIn, helpers.getCoupon], function (re
             helpers.sendJSONResponse(res, 404, err)
           } else {
             if (wasMonthly) {
-              email.sendUpgradeEmail(user, function () {
+              email.sendUpgradeEmail(req.user, function () {
                 helpers.sendUpdateCookie(res, req.user, {
                   status: 'success'
                 })
@@ -348,8 +348,9 @@ router.post('/password', helpers.onlyLoggedIn, function (req, res) {
 router.post('/coupon', [helpers.onlyLoggedIn, helpers.getCoupon], function (req, res) {
   if (!req.coupon || !req.user) {
     helpers.sendErrorResponse(res, 404, 'Cannot find coupon')
+    return
   }
-  req.user.couponcode = req.body.coupon
+  req.user.couponcode = req.coupon.id
   req.user.save(function (err) {
     if (err) {
       helpers.sendJSONResponse(res, 404, err)
