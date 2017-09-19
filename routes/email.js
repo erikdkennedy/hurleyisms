@@ -4,7 +4,7 @@ var sg = require('sendgrid').SendGrid(process.env.SENDGRID_API_KEY)
 
 
 var getBaseRequest = function (request, user) {
-    var imageUrl = process.env.BASE_URL + "https://hurleyisms.com/images/hurleyisms-xsm.png";
+    var imageUrl = process.env.BASE_URL + "/images/hurleyisms-xsm.png";
     var proUrl = process.env.BASE_URL + "/pro";
     request.body = {};
     request.body.from = {
