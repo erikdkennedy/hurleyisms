@@ -7,8 +7,8 @@ var config = {
     s3:{
         bucket:'hurleyismsprodbackup',
         folder:'backups',
-        key: "AKIAI63G7L7QCUJUDYKQ",
-        secret: "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"
+        key: "[Key]",
+        secret: "[Secret]"
     }
 };
  
