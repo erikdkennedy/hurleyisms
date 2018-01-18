@@ -1,5 +1,8 @@
 /// <reference path="public/javascripts/pro.js" />
+if(!process.env.NODE_ENV){
+    console.log("loading .env");
 require('dotenv').config();
+}
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -8,6 +11,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 require('./models/db');
 require('./config/passport');
+require('./config/generatejs');
 var routes = require('./routes/index');
 var admin = require('./routes/admin');
 var appRoute = require('./routes/app');
@@ -15,11 +19,10 @@ var authRoute = require('./routes/auth');
 var mailRoute = require('./routes/mail');
 var webhookRoute = require('./routes/webhooks');
 var passport = require('passport');
-var uglifyJs = require("uglify-js");
 var jwt = require('express-jwt');
-var fs = require('fs');
+
 var app = express();
-var sass = require('node-sass');
+var helpers = require('./routes/helpers')
 
 
 var filterLog = function (req) {
@@ -51,94 +54,18 @@ app.use(expressWinston.logger({
          tags: [process.env.WINSTON_TAG]
      })
     ],
-    meta: false, // optional: control whether you want to log the meta data about the request (default to true) 
+    meta: true, // optional: control whether you want to log the meta data about the request (default to true) 
     msg: "HTTP StatusCode={{res.statusCode}} Method={{req.method}} {{res.responseTime}}ms URL={{req.url}} LoggedIn={{req.payload != null}}", // optional: customize the default logging message. E.g. "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}" 
-    expressFormat: false, // Use the default Express/morgan request formatting. Enabling this will override any msg if true. Will only output colors with colorize set to true 
+    expressFormat: true, // Use the default Express/morgan request formatting. Enabling this will override any msg if true. Will only output colors with colorize set to true 
     colorize: true, // Color the text and status code, using the Express/morgan color palette (text: gray, status: default green, 3XX cyan, 4XX yellow, 5XX red). 
-    ignoreRoute: function (req, res) { return filterLog(req); } // optional: allows to skip some log messages based on request and/or response 
+    ignoreRoute: function (req, res) { return filterLog(req); }, // optional: allows to skip some log messages based on request and/or response 
+    dynamicMeta: function (req,res) { 
+        if(req.user) {
+            return {user: req.user.email, pro:req.user.pro, loggedin:true, type:req.user.type}} 
+            return {loggedin:false}
+        },
+    requestFilter: function (req, propName) { if(propName === "headers") {return undefined;} return req[propName]  } 
 }));
-
-
-function minJSFiles(files, target) {
-    var beautify = process.env.NODE_ENV === 'development';
-    try {
-        var uglified = uglifyJs.minify(files, { compress: false, mangle: false, output: { beautify: beautify } });
-
-        fs.writeFile(target, uglified.code, function (err) {
-            if (err) {
-                console.log("error found");
-                console.log(err);
-            } else {
-                console.log("Script generated and saved:", target);
-            }
-        });
-    }
-    catch (error) {
-        console.log(error);
-    }
-}
-function writeJSFiles() {
-    //combine JS for SPA
-    var appClientFiles = [
-      'public/javascripts/auth.js',
-      'public/javascripts/shared.js',
-      'public/javascripts/app.js'
-
-    ];
-    minJSFiles(appClientFiles, 'public/javascripts/hurleyisms.min.js');
-
-    var proClientFiles = [
-        'public/javascripts/config.min.js',
-        'public/javascripts/auth.js',
-        'public/javascripts/shared.js',
-        'public/javascripts/stripe.js',
-        'public/javascripts/pro.js'
-    ];
-    minJSFiles(proClientFiles, 'public/javascripts/pro.min.js');
-
-    var indexClientFiles = [
-        'public/javascripts/auth.js',
-        'public/javascripts/shared.js',
-        'public/javascripts/marketing.js'
-    ];
-    minJSFiles(indexClientFiles, 'public/javascripts/index.min.js');
-
-    var myAccountClientFiles = [
-      'public/javascripts/config.min.js',
-      'public/javascripts/auth.js',
-      'public/javascripts/shared.js',
-      'public/javascripts/stripe.js',
-      'public/javascripts/my-account.js'
-    ];
-    minJSFiles(myAccountClientFiles, 'public/javascripts/myaccount.min.js');
-}
-//Create Configuration Javascript
-var configJsonString = require("./routes/configuration").getConfig();
-fs.writeFile('public/javascripts/config.min.js', configJsonString, function (err) {
-    if (err) {
-        console.log(err);
-    }
-    writeJSFiles();
-});
-
-sass.render({
-    file: 'public/stylesheets/styles.scss'
-}, function (error, result) { // node-style callback from v3.0.0 onwards
-    if (!error) {
-        // No errors during the compilation, write this result on the disk
-        fs.writeFile('public/stylesheets/styles.css', result.css, function (err) {
-            if (!err) {
-                console.log("styles.css written on disk");
-            }
-            else {
-                console.error(err);
-            }
-        });
-    }
-    else {
-        console.error(error);
-    }
-});
 
 
 // Ensure the page is secure. Since AWS forwards to non-http we need to check request headers
@@ -180,7 +107,7 @@ app.use(jwt({
         return null;
     }
 }));
-
+app.use(helpers.loggedIn);
 
 // ROUTING SECTION
 app.use('/', routes);

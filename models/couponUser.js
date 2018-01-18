@@ -1,33 +1,48 @@
-require('dotenv').config();
-require('./db.js');
-var mongoose = require('mongoose');
-var userModel = mongoose.model('User');
+require('dotenv').config()
+require('./db.js')
+var mongoose = require('mongoose')
+var userModel = mongoose.model('User')
 userModel.remove({}, function (err, count) {
-    console.log("removed " + count + " users ");
-    var user = new userModel({
-        hash: "eb50ce6f00719100af3db38717da4cec9fc4653eb94cac4bfa4589868e87a527409e0baa153df576747f7a1df5880825fbc36b4dfc32facc50d3e7cb84a7d651",
-        salt: "107f646e7defd5d203afb838d2bc9306",
-        signupip: "::1",
-        email: "limeyjohnson@gmail.com",
-        name: "Andrew Johnson",
-        banned: false,
-        admin: false,
-        emailverified: false,
-        joined: "12/01/2016 06:14:45 AM (-0800)",
-        __v: 0,
-        customerid: "cus_9fFqBk3jpPHxRZ",
-        pro: true,
-        prodate: "12/01/2016 06:15:02 AM (-0800)",
-        subscriptionid: "sub_9fFqpa36qSxGKa",
-        token: "tok_19LvKyJKWqhH9miDaBziwTMo",
-        type: "monthly",
-        couponcode:"HeadShotCrew75"
-       })
-    user.save(function () {
-        if (err) {
-            console.log("error creating mongo user");
-            sendJSONresponse(res, 404, err);
-        }
-        process.exit();
-    });
-});
+  console.log('removed ' + count + ' users ')
+
+  users = [
+    {
+      'hash': 'f60d1d5c9a25e32716189cb2c0cf795f17ee6099358834d5c63855caa7edc4cc1edbf8a3cb0eff1dc9285f23c727cf5ddb4b16a1eb0dbc28ff4c08cc679f01d9',
+      'salt': '527892dbe2e98ff0e5c9d3aa56d9fdf1',
+      'signupip': '75.134.225.153, 172.31.18.0',
+      'email': 'email@email.com',
+      'name': 'some name',
+      'banned': false,
+      'admin': false,
+      'emailverified': true,
+      'joined': '2017-01-23T17:31:21.233Z'
+    },
+    {
+      'hash': '33f147818983bec78df6635ff7bb20fcf41f38aeb9ac075a3dbaf7a41b5088cb4a47b7a5cedacaccd487cbb06ef5d113d51435377157f3e75d3d9602841991f0',
+      'salt': '0cc76b9d12bc771b58ad078619cd190b',
+      'signupip': '::1',
+      'email': 'limeyjohnson@gmail.com',
+      'name': 'Andrew Johnson',
+      'banned': false,
+      'admin': true,
+      'emailverified': false,
+      'joined': '2017-01-26T14:06:42.844Z',
+      'chargeid': 'ch_19gDtsJKWqhH9miDdQYX7h3f',
+      'pro': true,
+      'prodate': '2017-01-26T14:06:56.951Z',
+      'token': 'tok_19gDtpJKWqhH9miD4uMQgTyV',
+      'type': 'lifetime'
+
+    }
+  ]
+  usersave = 0
+  console.log(users)
+  users.forEach(function (userJson) {
+    console.log(userJson)
+    userModel(userJson).save(function () {
+      if (err) {
+        console.log('error creating mongo user')
+      }
+    })
+  })
+})

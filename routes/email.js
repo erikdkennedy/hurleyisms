@@ -38,7 +38,7 @@ var sendInitialEmail = function (user, callback) {
     var request = sg.emptyRequest();
     getBaseRequest(request, user);
     request.body.personalizations[0].substitutions.email_url = email_url;
-    request.body.template_id = "6717c2cb-73bd-48c4-b467-c2e039fb8e19";
+    request.body.template_id = "eab8ce54-c3d1-4a5a-a470-7fe9acdf0730";
     request.body.subject = "Welcome to Hurleyisms";
     sg.API(request, function (response) {
         callback();
@@ -49,7 +49,7 @@ var sendVerifyEmail = function (user, callback) {
     var request = sg.emptyRequest();
     getBaseRequest(request, user);
     request.body.personalizations[0].substitutions.email_url = email_url;
-    request.body.template_id = "5da23ab1-12ac-49c8-a1bb-0d96c2fb4f5f";
+    request.body.template_id = "66a2a8dd-7867-4cc5-9398-2fc24bd564c2";
     request.body.subject = "Verify your email Address";
     sg.API(request, function (response) {
         callback();
@@ -60,16 +60,17 @@ var sendPasswordEmail = function (user, callback) {
     var request = sg.emptyRequest();
     getBaseRequest(request, user);
     request.body.personalizations[0].substitutions.email_url = email_url;
-    request.body.template_id = "7894b34d-40f7-45da-870d-e5e7e0704d6e";
+    request.body.template_id = "fd16d99c-27c4-4088-af12-fdb1a9b4d013";
     request.body.subject = "Reset your password";
     sg.API(request, function (response) {
+        console.log(response);
         callback();
     });
 }
 var sendCancellationEmail = function (user, callback) {
     var request = sg.emptyRequest();
     getBaseRequest(request, user);
-    request.body.template_id = "51e69306-4ee0-4906-9029-8440ac52000e";
+    request.body.template_id = "5a5c2361e-352e-4522-8b70-46602a260e1d";
     request.body.subject = "Cancel Hurleyisms";
     sg.API(request, function (response) {
         callback();
@@ -78,8 +79,17 @@ var sendCancellationEmail = function (user, callback) {
 var sendUpgradeEmail = function (user, callback) {
     var request = sg.emptyRequest();
     getBaseRequest(request, user);
-    request.body.template_id = "4dd08203-d0bb-481f-8719-36d045e7af5a";
+    request.body.template_id = "7591524c-3ea0-4eb6-8aa2-1d402c63c840";
     request.body.subject = "Upgrade to Hurleyisms Lifetime Access";
+    sg.API(request, function (response) {
+        callback();
+    });
+}
+var sendVIPEmail = function (user, callback) {
+    var request = sg.emptyRequest();
+    getBaseRequest(request, user);
+    request.body.template_id = "6f31cb12-df6f-47e7-bbbf-c0d9a673f481";
+    request.body.subject = "Welcome to Hurleyisms";
     sg.API(request, function (response) {
         callback();
     });
@@ -89,5 +99,6 @@ module.exports = {
     sendVerifyEmail: sendVerifyEmail,
     sendPasswordEmail: sendPasswordEmail,
     sendCancellationEmail: sendCancellationEmail,
-    sendUpgradeEmail: sendUpgradeEmail
+    sendUpgradeEmail: sendUpgradeEmail,
+    sendVIPEmail:sendVIPEmail
 };

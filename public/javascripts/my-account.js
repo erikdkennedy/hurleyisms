@@ -59,10 +59,34 @@ $(document).ready(function () {
     $(".show-password").click(function () {
         $(this).toggleText("Show password", "Hide password");
     });
-
+            $("#lifetime").hide();
+            $("#monthly").hide();
+            $("#vip").hide();
+            $("#basic").hide();
+            $("#cancle").hide();
+    //console.log(auth.type() + " type");
+    switch(auth.type())
+    {
+        case "monthly":
+            $("#monthly").show();
+            $("#cancle").show();
+            $("body").toggleClass("is-monthly", true);
+            $("body").toggleClass("is-lifetime",false);
+            break;
+        case "lifetime":
+            $("#lifetime").show();
+            $("body").toggleClass("is-lifetime",true);
+             $("body").toggleClass("is-monthly", false);
+            break;
+        case "vip":
+            $("#vip").show();
+            break;
+        default:
+            $("#basic").show();
+    }
     var setPage = function () {
-        $("body").toggleClass("is-monthly", auth.isMonthly());
-        $("body").toggleClass("is-lifetime", auth.isLifeTime());
+        //$("body").toggleClass("is-monthly", auth.isMonthly());
+        //$("body").toggleClass("is-lifetime", auth.isLifeTime());
         $("#coupon-code").val(auth.coupon())
         $("#btn_checkout").click(function(){
             window.lifetime = true;
@@ -79,8 +103,11 @@ $(document).ready(function () {
     setPage();
     var mthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     var pdate = auth.proDate();
+    //console.log("prodate: "+pdate);
     if (pdate) {
+        //console.log("have pdate");
         $(".started").html("Started " + mthNames[pdate.getMonth()] + " " + pdate.getFullYear());
+        $(".ending").html("Ending " + mthNames[pdate.getMonth()] + " " + (1 + pdate.getFullYear()));
     }
     $("#logout").click(auth.logout);
     $("#cancel").click(function () {

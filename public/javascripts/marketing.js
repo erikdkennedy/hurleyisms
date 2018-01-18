@@ -27,7 +27,7 @@ $(document).ready(function() {
 	}
 
 	function isMobile() {
-		return window.matchMedia("(max-width: 568px)").matches;
+		return window.matchMedia("(max-width: 800px)").matches;
 	}
 
 	function removeScrollListener() {
